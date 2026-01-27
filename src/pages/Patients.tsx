@@ -43,6 +43,9 @@ import { Odontogram } from "@/components/dental/Odontogram";
 import { Patient } from "@/types";
 
 import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
+
+const Patients = () => {
+  const navigate = useNavigate();
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
