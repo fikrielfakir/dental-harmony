@@ -25,6 +25,7 @@ interface AppState {
   prescriptions: Prescription[];
   quotations: Quotation[];
   services: MedicalService[];
+  dentalChart: DentalChartEntry[];
   
   // UI State
   sidebarCollapsed: boolean;
@@ -72,6 +73,11 @@ interface AppState {
   updateService: (id: string, service: Partial<MedicalService>) => void;
   deleteService: (id: string) => void;
   
+  // Actions - Dental Chart
+  addDentalChartEntry: (entry: DentalChartEntry) => void;
+  updateDentalChartEntry: (id: string, entry: Partial<DentalChartEntry>) => void;
+  deleteDentalChartEntry: (id: string) => void;
+  
   // Actions - UI
   toggleSidebar: () => void;
   setCurrentUser: (user: Staff | null) => void;
@@ -94,6 +100,7 @@ export const useStore = create<AppState>()(
         { id: '3', name: 'Composite Filling', code: 'FILL-01', price: 150, category: 'Restorative' },
         { id: '4', name: 'Root Canal Therapy', code: 'ROOT-01', price: 600, category: 'Endodontics' },
       ],
+      dentalChart: [],
       
       // UI State
       sidebarCollapsed: false,
@@ -282,6 +289,18 @@ export const useStore = create<AppState>()(
       deleteService: (id) =>
         set((state) => ({ services: state.services.filter((s) => s.id !== id) })),
       
+      // Dental Chart actions
+      addDentalChartEntry: (entry) =>
+        set((state) => ({ dentalChart: [...state.dentalChart, entry] })),
+      updateDentalChartEntry: (id, updates) =>
+        set((state) => ({
+          dentalChart: state.dentalChart.map((e) =>
+            e.id === id ? { ...e, ...updates } : e
+          ),
+        })),
+      deleteDentalChartEntry: (id) =>
+        set((state) => ({ dentalChart: state.dentalChart.filter((e) => e.id !== id) })),
+      
       // UI actions
       toggleSidebar: () =>
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
@@ -299,6 +318,7 @@ export const useStore = create<AppState>()(
         prescriptions: state.prescriptions,
         quotations: state.quotations,
         services: state.services,
+        dentalChart: state.dentalChart,
         sidebarCollapsed: state.sidebarCollapsed,
       }),
     }
