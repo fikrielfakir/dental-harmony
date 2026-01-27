@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { Receipt, Plus, Search, Download, Filter } from "lucide-react";
+import { 
+  Plus, Search, Download, Filter, 
+  Receipt, CreditCard, FileText, 
+  TrendingUp, AlertCircle, History,
+  MoreVertical, CheckCircle2, Clock
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -21,249 +27,333 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useStore } from "@/store";
-import { Invoice } from "@/types";
+import { Invoice, Quotation } from "@/types";
 
 const Billing = () => {
-  const { patients, invoices, addInvoice } = useStore();
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const { patients, invoices, addInvoice, quotations, addQuotation } = useStore();
+  const [activeTab, setActiveTab] = useState("invoices");
+  const [isAddInvoiceOpen, setIsAddInvoiceOpen] = useState(false);
+  const [isAddQuotationOpen, setIsAddQuotationOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
-  const [newInvoice, setNewInvoice] = useState({
+  const [formData, setFormData] = useState({
     patientId: "",
     amount: "",
-    method: "Credit Card" as const,
-    status: "Pending" as const,
+    status: "pending" as any,
   });
 
   const resetForm = () => {
-    setNewInvoice({
+    setFormData({
       patientId: "",
       amount: "",
-      method: "Credit Card",
-      status: "Pending",
+      status: "pending",
     });
   };
 
-  const handleAddInvoice = () => {
+  const handleCreateInvoice = () => {
     const invoice: Invoice = {
       id: `INV-${new Date().getFullYear()}-${String(invoices.length + 1).padStart(3, '0')}`,
-      patientId: newInvoice.patientId,
+      patientId: formData.patientId,
       invoiceNumber: `INV-${new Date().getFullYear()}-${String(invoices.length + 1).padStart(3, '0')}`,
       items: [],
-      totalAmount: parseFloat(newInvoice.amount),
+      totalAmount: parseFloat(formData.amount),
       taxAmount: 0,
       discountAmount: 0,
-      paymentStatus: newInvoice.status.toLowerCase() as any,
+      paymentStatus: formData.status,
       payments: [],
       invoiceDate: new Date().toISOString(),
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
     addInvoice(invoice);
-    setIsAddDialogOpen(false);
+    setIsAddInvoiceOpen(false);
     resetForm();
   };
 
-  const filteredInvoices = invoices.filter((invoice) => {
-    const patient = patients.find(p => p.id === invoice.patientId);
-    const patientName = patient ? `${patient.firstName} ${patient.lastName}` : "Unknown";
-    const query = searchQuery.toLowerCase();
-    return (
-      patientName.toLowerCase().includes(query) ||
-      invoice.id.toLowerCase().includes(query)
-    );
+  const handleCreateQuotation = () => {
+    const quotation: Quotation = {
+      id: `QUO-${new Date().getFullYear()}-${String(quotations.length + 1).padStart(3, '0')}`,
+      patientId: formData.patientId,
+      quotationNumber: `QUO-${new Date().getFullYear()}-${String(quotations.length + 1).padStart(3, '0')}`,
+      items: [],
+      totalAmount: parseFloat(formData.amount),
+      status: 'draft',
+      validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    addQuotation(quotation);
+    setIsAddQuotationOpen(false);
+    resetForm();
+  };
+
+  const filteredInvoices = invoices.filter((inv) => {
+    const patient = patients.find(p => p.id === inv.patientId);
+    const name = patient ? `${patient.firstName} ${patient.lastName}`.toLowerCase() : "";
+    return name.includes(searchQuery.toLowerCase()) || inv.id.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  const filteredQuotations = quotations.filter((quo) => {
+    const patient = patients.find(p => p.id === quo.patientId);
+    const name = patient ? `${patient.firstName} ${patient.lastName}`.toLowerCase() : "";
+    return name.includes(searchQuery.toLowerCase()) || quo.id.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   const totalOutstanding = invoices
     .filter(inv => inv.paymentStatus === 'pending' || inv.paymentStatus === 'overdue')
     .reduce((sum, inv) => sum + inv.totalAmount, 0);
 
+  const monthlyRevenue = invoices
+    .filter(inv => inv.paymentStatus === 'paid' && new Date(inv.createdAt).getMonth() === new Date().getMonth())
+    .reduce((sum, inv) => sum + inv.totalAmount, 0);
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Billing & Invoicing</h1>
-          <p className="text-muted-foreground">
-            Manage patient invoices, payments, and financial history
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight">Billing & Financials</h1>
+          <p className="text-muted-foreground">Manage invoices, treatment estimates, and payments</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            Export
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="hidden sm:flex">
+            <Download className="h-4 w-4 mr-2" /> Export
           </Button>
-          <Button className="flex items-center gap-2" onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="h-4 w-4" />
-            New Invoice
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-primary">
+                <Plus className="h-4 w-4 mr-2" /> New Action
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setIsAddInvoiceOpen(true)}>Create Invoice</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsAddQuotationOpen(true)}>Create Quotation</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="bg-destructive/5 border-destructive/20">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Outstanding</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-destructive" /> Outstanding
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">${totalOutstanding.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+            <div className="text-2xl font-bold">${totalOutstanding.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-green-500/5 border-green-500/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-green-600" /> Revenue (MTD)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">${monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Revenue (Monthly)</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Clock className="h-4 w-4 text-amber-500" /> Pending Invoices
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">$42,300.00</div>
+            <div className="text-2xl font-bold">{invoices.filter(i => i.paymentStatus === 'pending').length}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Pending Insurance</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-blue-500" /> Draft Estimates
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">$15,200.00</div>
+            <div className="text-2xl font-bold">{quotations.length}</div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search invoices or patients..." 
+            placeholder="Search by patient name or ID..." 
             className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="flex items-center gap-2">
-          <Filter className="h-4 w-4" />
-          Filter
+        <Button variant="outline" className="sm:w-32">
+          <Filter className="h-4 w-4 mr-2" /> Filters
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Invoices</CardTitle>
-          <CardDescription>Manage and track recent billing activities.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Invoice ID</TableHead>
-                <TableHead>Patient</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredInvoices.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                    No invoices found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredInvoices.map((invoice) => {
-                  const patient = patients.find(p => p.id === invoice.patientId);
-                  return (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-mono text-xs">{invoice.id}</TableCell>
-                      <TableCell className="font-medium">
-                        {patient ? `${patient.firstName} ${patient.lastName}` : "Unknown Patient"}
-                      </TableCell>
-                      <TableCell>${invoice.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</TableCell>
-                      <TableCell>{new Date(invoice.createdAt).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        <Badge variant={invoice.paymentStatus === "paid" ? "default" : invoice.paymentStatus === "pending" ? "secondary" : "destructive"}>
-                          {invoice.paymentStatus}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">Details</Button>
-                      </TableCell>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 sm:w-[400px]">
+          <TabsTrigger value="invoices">Invoices</TabsTrigger>
+          <TabsTrigger value="quotations">Estimates</TabsTrigger>
+          <TabsTrigger value="payments">History</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="invoices" className="mt-4">
+          <Card>
+            <CardHeader className="pb-0">
+              <CardTitle>Invoice Management</CardTitle>
+              <CardDescription>View and track all patient billing records</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Invoice #</TableHead>
+                    <TableHead>Patient</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredInvoices.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No invoices found</TableCell>
                     </TableRow>
-                  );
-                })
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                  ) : (
+                    filteredInvoices.map((inv) => {
+                      const patient = patients.find(p => p.id === inv.patientId);
+                      return (
+                        <TableRow key={inv.id}>
+                          <TableCell className="font-mono text-xs">{inv.invoiceNumber}</TableCell>
+                          <TableCell className="font-medium">{patient ? `${patient.firstName} ${patient.lastName}` : "N/A"}</TableCell>
+                          <TableCell>${inv.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</TableCell>
+                          <TableCell>{new Date(inv.invoiceDate).toLocaleDateString()}</TableCell>
+                          <TableCell>
+                            <Badge variant={inv.paymentStatus === 'paid' ? 'default' : inv.paymentStatus === 'pending' ? 'secondary' : 'destructive'}>
+                              {inv.paymentStatus}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-md">
+        <TabsContent value="quotations" className="mt-4">
+          <Card>
+            <CardHeader className="pb-0">
+              <CardTitle>Treatment Estimates</CardTitle>
+              <CardDescription>Manage draft and accepted quotations</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Quotation #</TableHead>
+                    <TableHead>Patient</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredQuotations.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">No estimates found</TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredQuotations.map((quo) => {
+                      const patient = patients.find(p => p.id === quo.patientId);
+                      return (
+                        <TableRow key={quo.id}>
+                          <TableCell className="font-mono text-xs">{quo.quotationNumber}</TableCell>
+                          <TableCell className="font-medium">{patient ? `${patient.firstName} ${patient.lastName}` : "N/A"}</TableCell>
+                          <TableCell>${quo.totalAmount.toLocaleString()}</TableCell>
+                          <TableCell><Badge variant="outline">{quo.status}</Badge></TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="ghost" size="sm">Convert</Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Add Invoice Dialog */}
+      <Dialog open={isAddInvoiceOpen} onOpenChange={setIsAddInvoiceOpen}>
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>New Invoice</DialogTitle>
-            <DialogDescription>
-              Create a new invoice for a patient.
-            </DialogDescription>
+            <DialogTitle>Create New Invoice</DialogTitle>
+            <DialogDescription>Enter invoice details for a patient record.</DialogDescription>
           </DialogHeader>
-
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="patient">Patient</Label>
-              <Select
-                value={newInvoice.patientId}
-                onValueChange={(value) => setNewInvoice({ ...newInvoice, patientId: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a patient" />
-                </SelectTrigger>
+              <Label>Patient</Label>
+              <Select value={formData.patientId} onValueChange={(val) => setFormData({...formData, patientId: val})}>
+                <SelectTrigger><SelectValue placeholder="Select patient" /></SelectTrigger>
                 <SelectContent>
-                  {patients.map((patient) => (
-                    <SelectItem key={patient.id} value={patient.id}>
-                      {patient.firstName} {patient.lastName}
-                    </SelectItem>
-                  ))}
+                  {patients.map(p => <SelectItem key={p.id} value={p.id}>{p.firstName} {p.lastName}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-
             <div className="space-y-2">
-              <Label htmlFor="amount">Amount ($)</Label>
-              <Input
-                id="amount"
-                type="number"
-                placeholder="0.00"
-                value={newInvoice.amount}
-                onChange={(e) => setNewInvoice({ ...newInvoice, amount: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select
-                value={newInvoice.status}
-                onValueChange={(value: any) => setNewInvoice({ ...newInvoice, status: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="paid">Paid</SelectItem>
-                  <SelectItem value="overdue">Overdue</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Amount ($)</Label>
+              <Input type="number" value={formData.amount} onChange={(e) => setFormData({...formData, amount: e.target.value})} />
             </div>
           </div>
-
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleAddInvoice}
-              disabled={!newInvoice.patientId || !newInvoice.amount}
-            >
-              Create Invoice
-            </Button>
+            <Button variant="outline" onClick={() => setIsAddInvoiceOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateInvoice} disabled={!formData.patientId || !formData.amount}>Create Invoice</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Quotation Dialog */}
+      <Dialog open={isAddQuotationOpen} onOpenChange={setIsAddQuotationOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>New Treatment Estimate</DialogTitle>
+            <DialogDescription>Create a quotation for a planned procedure.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label>Patient</Label>
+              <Select value={formData.patientId} onValueChange={(val) => setFormData({...formData, patientId: val})}>
+                <SelectTrigger><SelectValue placeholder="Select patient" /></SelectTrigger>
+                <SelectContent>
+                  {patients.map(p => <SelectItem key={p.id} value={p.id}>{p.firstName} {p.lastName}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Estimated Total ($)</Label>
+              <Input type="number" value={formData.amount} onChange={(e) => setFormData({...formData, amount: e.target.value})} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddQuotationOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateQuotation} disabled={!formData.patientId || !formData.amount}>Create Estimate</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,0 +1,110 @@
+billing system for a dental practice with these features:
+Core Features
+
+Invoices - Create, send, track, mark paid, download PDF
+Payments - Record payments (cash, card, check, transfer), track history
+Quotations - Create treatment estimates, convert to invoices
+Payment Plans - Set up installment agreements with schedules
+Reports - Revenue trends, outstanding balance, overdue invoices, tax summary
+Insurance Claims - Track insurance reimbursements
+Credit Notes - Handle refunds and overpayments
+
+Database Tables
+
+invoices - Invoice data (number, date, amount, status, patient_id)
+invoice_items - Line items (service, quantity, price)
+payments - Payment records (invoice_id, amount, method, date)
+quotations - Estimates (patient_id, items, amount, status)
+payment_plans - Installment plans (invoice_id, count, amount, frequency)
+installments - Individual installments (payment_plan_id, due_date, amount, status)
+services - Service catalog (name, code, price, category)
+insurance_claims - Claims (invoice_id, provider, claim_number, status, reimbursement)
+credit_notes - Refunds (invoice_id, reason, amount, status)
+financial_settings - Cabinet info, invoice templates, email settings
+
+Main Components
+
+InvoiceCreator - Form to create invoices with line items
+InvoiceList - Table with filters, search, quick actions
+InvoiceDetail - View, edit, send, download PDF
+RecordPaymentModal - Quick payment entry form
+PaymentList - Payment history and tracking
+PaymentPlanSetup - Create installment schedules
+QuotationCreator - Build treatment estimates
+BillingDashboard - KPIs, revenue chart, overdue alert
+ReceivablesReport - Aging analysis, overdue invoices
+RevenueReport - Revenue trends by period/service
+
+Key Functionality
+
+Auto-calculate totals with tax
+Apply discounts (amount or percentage)
+Professional PDF invoices with cabinet logo
+Email invoices and reminders
+Mark invoices paid, partially paid, overdue
+Track patient balance
+Multiple payment methods
+Payment plan with auto-calculated installments
+Quotation to invoice conversion
+Insurance reimbursement tracking
+Financial dashboard with key metrics
+Export reports to Excel/CSV
+Audit logging of financial transactions
+
+Design
+
+Use Shadcn/ui components
+TailwindCSS styling
+Responsive design
+Color scheme: Blue primary, Green success, Red errors, Amber warnings
+Dark mode support
+Professional medical aesthetic
+
+API Endpoints
+POST   /invoices                 - Create invoice
+GET    /invoices                 - List invoices
+GET    /invoices/:id             - Invoice detail
+PUT    /invoices/:id             - Update invoice
+POST   /invoices/:id/send        - Send via email
+POST   /invoices/:id/pdf         - Download PDF
+POST   /payments                 - Record payment
+GET    /payments                 - List payments
+POST   /quotations               - Create quotation
+GET    /quotations               - List quotations
+POST   /quotations/:id/convert   - Convert to invoice
+POST   /payment-plans            - Create plan
+GET    /payment-plans/:id/installments - Get schedule
+POST   /insurance-claims         - Submit claim
+GET    /reports/dashboard        - KPI dashboard
+GET    /reports/revenue          - Revenue report
+GET    /reports/receivables-aging - Aging analysis
+GET    /reports/tax              - Tax report
+Validation
+
+Invoice number: Auto-generated, unique
+Due date >= Invoice date
+Line items: Minimum 1 required
+Total: Subtotal + Tax - Discount
+Payment amount: > 0, <= outstanding balance
+Quotation validity: Until date >= quotation date
+
+Security
+
+Row-level security (Supabase RLS)
+Role-based access control
+Audit logging for all transactions
+Encrypt sensitive data
+GDPR compliant
+
+Implementation Order
+
+Services catalog & Settings
+Invoice creation & list
+Invoice PDF & email
+Payment recording & tracking
+Quotations
+Payment plans & installments
+Insurance claims
+Credit notes
+Dashboard & reports
+Advanced features & optimizations

@@ -6,7 +6,9 @@ import {
   Staff, 
   ClinicalNote, 
   Invoice, 
-  Prescription 
+  Prescription,
+  Quotation,
+  MedicalService
 } from '@/types';
 import { mockPatients, mockStaff, mockAppointments } from '@/data/mockData';
 
@@ -18,6 +20,8 @@ interface AppState {
   clinicalNotes: ClinicalNote[];
   invoices: Invoice[];
   prescriptions: Prescription[];
+  quotations: Quotation[];
+  services: MedicalService[];
   
   // UI State
   sidebarCollapsed: boolean;
@@ -52,6 +56,16 @@ interface AppState {
   addPrescription: (prescription: Prescription) => void;
   updatePrescription: (id: string, prescription: Partial<Prescription>) => void;
   deletePrescription: (id: string) => void;
+
+  // Actions - Quotations
+  addQuotation: (quotation: Quotation) => void;
+  updateQuotation: (id: string, quotation: Partial<Quotation>) => void;
+  deleteQuotation: (id: string) => void;
+
+  // Actions - Services
+  addService: (service: MedicalService) => void;
+  updateService: (id: string, service: Partial<MedicalService>) => void;
+  deleteService: (id: string) => void;
   
   // Actions - UI
   toggleSidebar: () => void;
@@ -68,6 +82,13 @@ export const useStore = create<AppState>()(
       clinicalNotes: [],
       invoices: [],
       prescriptions: [],
+      quotations: [],
+      services: [
+        { id: '1', name: 'General Consultation', code: 'CONS-01', price: 50, category: 'General' },
+        { id: '2', name: 'Professional Cleaning', code: 'CLEAN-01', price: 80, category: 'Hygiene' },
+        { id: '3', name: 'Composite Filling', code: 'FILL-01', price: 150, category: 'Restorative' },
+        { id: '4', name: 'Root Canal Therapy', code: 'ROOT-01', price: 600, category: 'Endodontics' },
+      ],
       
       // UI State
       sidebarCollapsed: false,
@@ -144,6 +165,30 @@ export const useStore = create<AppState>()(
         })),
       deletePrescription: (id) =>
         set((state) => ({ prescriptions: state.prescriptions.filter((p) => p.id !== id) })),
+
+      // Quotation actions
+      addQuotation: (quotation) =>
+        set((state) => ({ quotations: [...state.quotations, quotation] })),
+      updateQuotation: (id, updates) =>
+        set((state) => ({
+          quotations: state.quotations.map((q) =>
+            q.id === id ? { ...q, ...updates, updatedAt: new Date().toISOString() } : q
+          ),
+        })),
+      deleteQuotation: (id) =>
+        set((state) => ({ quotations: state.quotations.filter((q) => q.id !== id) })),
+
+      // Service actions
+      addService: (service) =>
+        set((state) => ({ services: [...state.services, service] })),
+      updateService: (id, updates) =>
+        set((state) => ({
+          services: state.services.map((s) =>
+            s.id === id ? { ...s, ...updates } : s
+          ),
+        })),
+      deleteService: (id) =>
+        set((state) => ({ services: state.services.filter((s) => s.id !== id) })),
       
       // UI actions
       toggleSidebar: () =>
@@ -160,6 +205,8 @@ export const useStore = create<AppState>()(
         clinicalNotes: state.clinicalNotes,
         invoices: state.invoices,
         prescriptions: state.prescriptions,
+        quotations: state.quotations,
+        services: state.services,
         sidebarCollapsed: state.sidebarCollapsed,
       }),
     }

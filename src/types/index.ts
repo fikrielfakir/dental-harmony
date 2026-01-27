@@ -164,9 +164,12 @@ export interface Invoice {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+  insuranceClaim?: InsuranceClaim;
 }
 
 export interface InvoiceItem {
+  id: string;
+  serviceId?: string;
   description: string;
   quantity: number;
   unitPrice: number;
@@ -195,6 +198,42 @@ export type PaymentMethod =
   | 'check'
   | 'transfer'
   | 'insurance';
+
+// Quotation types
+export interface Quotation {
+  id: string;
+  patientId: string;
+  patient?: Patient;
+  quotationNumber: string;
+  items: InvoiceItem[];
+  totalAmount: number;
+  status: 'draft' | 'sent' | 'accepted' | 'declined' | 'converted';
+  validUntil: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Insurance types
+export interface InsuranceClaim {
+  id: string;
+  invoiceId: string;
+  provider: string;
+  claimNumber: string;
+  status: 'draft' | 'submitted' | 'processing' | 'paid' | 'rejected';
+  reimbursementAmount?: number;
+  submittedAt?: string;
+  processedAt?: string;
+}
+
+// Service Catalog
+export interface MedicalService {
+  id: string;
+  name: string;
+  code: string;
+  price: number;
+  category: string;
+}
 
 // Prescription types
 export interface Prescription {
