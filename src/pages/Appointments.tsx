@@ -221,13 +221,13 @@ const Appointments = () => {
         <ScrollArea className="flex-1">
           <div className="relative min-h-[720px]">
             {/* Background grid lines */}
-            <div className="absolute inset-0 pt-14">
+            <div className="absolute inset-0">
               {HOURS.map((hour) => (
                 <div key={hour} className="h-[60px] border-b border-border/5" />
               ))}
             </div>
             
-            <div className="relative pt-14 px-4 h-full">
+            <div className="relative px-4 h-full">
               {dayAppointments.map((appointment) => {
                 const { top, height } = getAppointmentPosition(appointment);
                 const patient = getPatient(appointment.patientId);
