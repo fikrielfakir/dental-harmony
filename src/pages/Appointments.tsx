@@ -282,7 +282,7 @@ const Appointments = () => {
                             <div
                               key={appointment.id}
                               className={cn(
-                                "absolute left-1 right-1 rounded-md p-1.5 cursor-pointer transition-transform hover:scale-[1.02] overflow-hidden",
+                                "absolute left-1 right-1 rounded-md p-1.5 cursor-pointer transition-transform hover:scale-[1.02] overflow-hidden flex flex-col justify-between",
                                 statusColors[appointment.status]
                               )}
                               style={{
@@ -292,14 +292,29 @@ const Appointments = () => {
                               }}
                               onClick={() => setSelectedAppointment(appointment)}
                             >
-                              <p className="text-xs font-medium truncate text-white">
-                                {patient?.firstName} {patient?.lastName}
-                              </p>
-                              {height >= 40 && (
-                                <p className="text-xs truncate text-white/80">
-                                  {appointmentTypes.find((t) => t.value === appointment.appointmentType)?.label}
+                              <div>
+                                <p className="text-xs font-medium truncate text-white">
+                                  {patient?.firstName} {patient?.lastName}
                                 </p>
-                              )}
+                                {height >= 40 && (
+                                  <p className="text-xs truncate text-white/80">
+                                    {appointmentTypes.find((t) => t.value === appointment.appointmentType)?.label}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="mt-auto">
+                                <Badge 
+                                  variant="secondary" 
+                                  className={cn(
+                                    "text-[10px] h-4 px-1 py-0 uppercase bg-white/20 text-white border-none hover:bg-white/30",
+                                    appointment.status === 'completed' && "bg-green-500/50",
+                                    appointment.status === 'cancelled' && "bg-red-500/50",
+                                    appointment.status === 'no-show' && "bg-gray-500/50"
+                                  )}
+                                >
+                                  {appointment.status.replace("-", " ")}
+                                </Badge>
+                              </div>
                             </div>
                           );
                         })}
