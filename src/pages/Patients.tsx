@@ -105,6 +105,29 @@ const Patients = () => {
     updatePatient(selectedPatient.id, { ...newPatient });
     setIsEditDialogOpen(false);
     setSelectedPatient(null);
+    resetForm();
+  };
+
+  const handleAddPatient = () => {
+    const patient: Patient = {
+      id: crypto.randomUUID(),
+      ...newPatient,
+      medicalHistory: {
+        conditions: [],
+        surgeries: [],
+        familyHistory: [],
+      },
+      allergies: [],
+      medications: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    addPatient(patient);
+    setIsAddDialogOpen(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
     setNewPatient({
       firstName: "",
       lastName: "",
@@ -115,6 +138,19 @@ const Patients = () => {
       insuranceProvider: "",
       policyNumber: "",
     });
+  };
+
+  const closeAddDialog = (open: boolean) => {
+    setIsAddDialogOpen(open);
+    if (!open) resetForm();
+  };
+
+  const closeEditDialog = (open: boolean) => {
+    setIsEditDialogOpen(open);
+    if (!open) {
+      setSelectedPatient(null);
+      resetForm();
+    }
   };
 
   const handleDeletePatient = (id: string) => {
@@ -438,7 +474,7 @@ const Patients = () => {
       </Dialog>
 
       {/* Add Patient Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <Dialog open={isAddDialogOpen} onOpenChange={closeAddDialog}>
         <DialogContent className="max-w-sm sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl">Add New Patient</DialogTitle>
@@ -577,7 +613,7 @@ const Patients = () => {
       </Dialog>
 
       {/* Edit Patient Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog open={isEditDialogOpen} onOpenChange={closeEditDialog}>
         <DialogContent className="max-w-sm sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl">Edit Patient</DialogTitle>
