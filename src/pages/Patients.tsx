@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Pill,
   ChevronRight,
+  FileText
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "@/store";
@@ -39,10 +40,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Odontogram } from "@/components/dental/Odontogram";
+import { Patient } from "@/types";
 
-const Patients = () => {
-  const navigate = useNavigate();
-  // ... rest of imports
+import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);

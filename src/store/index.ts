@@ -8,7 +8,10 @@ import {
   Invoice, 
   Prescription,
   Quotation,
-  MedicalService
+  MedicalService,
+  DentalChartEntry,
+  Payment,
+  PaymentStatus
 } from '@/types';
 import { mockPatients, mockStaff, mockAppointments } from '@/data/mockData';
 

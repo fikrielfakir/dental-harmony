@@ -224,7 +224,9 @@ const ClinicalRecords = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>View Note</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { notes: record.notes })}>
+                            View Note
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { status: 'Completed' })}>
                             Mark as Completed
                           </DropdownMenuItem>
