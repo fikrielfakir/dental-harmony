@@ -1,0 +1,317 @@
+ billing system for a dental practice with these features:
+Core Features
+
+Invoices - Create, send, track, mark paid, download PDF
+Payments - Record payments (cash, card, check, transfer), track history
+Partial Payments - Pay invoices in multiple installments, track remaining balance
+Quotations - Create treatment estimates, convert to invoices
+Payment Plans - Set up installment agreements with schedules
+Procedure-Based Billing - Auto-generate invoices from completed treatments/appointments
+Reports - Revenue trends, outstanding balance, overdue invoices, tax summary
+Insurance Claims - Track insurance reimbursements
+Credit Notes - Handle refunds and overpayments
+
+Database Tables
+
+invoices - Invoice data (number, date, amount, status, patient_id, type: full/partial)
+invoice_items - Line items (service, quantity, price, appointment_id)
+appointments - Appointment/procedure data (patient_id, type, status, cost, date)
+treatments - Completed treatments (appointment_id, dentist_id, procedure_id, cost, date)
+payments - Payment records (invoice_id, amount, method, date, remaining_balance)
+payment_schedules - Track payment history per invoice (invoice_id, paid_amount, balance, timestamp)
+quotations - Estimates (patient_id, items, amount, status)
+payment_plans - Installment plans (invoice_id, count, amount, frequency)
+installments - Individual installments (payment_plan_id, due_date, amount, status, paid_date)
+services - Service catalog (name, code, price, category)
+procedures - Dental procedures (name, code, cost, category, tooth_number)
+insurance_claims - Claims (invoice_id, provider, claim_number, status, reimbursement)
+credit_notes - Refunds (invoice_id, reason, amount, status)
+financial_settings - Cabinet info, invoice templates, email settings
+
+Main Components
+Invoice Management
+
+InvoiceCreator - Form to create invoices with line items
+InvoiceList - Table with filters, search, quick actions
+InvoiceDetail - View, edit, send, download PDF, payment tracking
+
+Partial Payment System
+
+RecordPaymentModal - Payment entry form with:
+
+Amount input (pre-filled with balance or custom)
+Remaining balance display
+Payment method selector
+Multiple payments per invoice support
+
+
+PartialPaymentTracker - Show payment history and remaining balance
+
+Timeline of all payments
+Remaining amount
+Progress bar
+Next due date if plan exists
+
+
+PaymentHistory - Detailed payment records per invoice
+
+Procedure-Based Billing
+
+TreatmentBillingComponent - Auto-bill completed treatments
+
+Select appointment/treatment
+Auto-populate cost from procedure
+Generate invoice from completed treatments
+Bulk billing from multiple treatments
+
+
+AppointmentBillingSync - Link appointments to invoices
+
+Show appointment procedure details on invoice
+Link costs to specific treatments
+Tooth-specific billing
+
+
+BulkInvoiceGenerator - Create multiple invoices from treatments
+
+Date range filter
+Status filter
+Auto-calculate totals
+Generate and send batch invoices
+
+
+
+Payment Plans & Installments
+
+PaymentPlanSetup - Create installment schedules
+PaymentPlanTracker - Track individual installments
+InstallmentPaymentForm - Record payment for specific installment
+
+Quotations
+
+QuotationCreator - Build treatment estimates
+QuotationList - List and filter quotations
+
+Reports & Dashboard
+
+BillingDashboard - KPIs with:
+
+Total revenue
+Partial payments pending
+Outstanding balance by status
+Procedure-based billing stats
+
+
+ReceivablesReport - Aging analysis, overdue invoices
+RevenueReport - Revenue trends by period/procedure
+ProcedureBillingReport - Billing status by procedure type
+PartialPaymentReport - Invoices with partial payments status
+
+Key Functionality
+Partial Payment Features
+
+Record multiple payments against single invoice
+Auto-calculate remaining balance after each payment
+Payment history timeline
+Auto-update invoice status (paid/partially_paid/overdue)
+Support for:
+
+Full payment
+Partial upfront payment
+Multiple installment payments
+Overpayment handling (create credit note)
+
+
+Payment reminders for outstanding balance
+Partial payment analytics
+
+Procedure-Based Billing Features
+
+Automatically generate invoice items from completed appointments
+Pull costs from procedure catalog
+Link invoices to specific appointments/treatments
+Track which procedures are billed/unbilled
+Auto-populate patient and date info from appointment
+Bulk generate invoices from treatment list
+Show procedure details on invoice line items (tooth number, type)
+Support for:
+
+Immediate billing after treatment
+Deferred billing (bill later)
+Group treatments on single invoice
+
+
+Report showing billing rate by procedure type
+
+Combined Features
+
+Partial payments on procedure-based invoices
+Payment plans for treatments
+Quotation from procedures → Convert to invoice → Track partial payments
+Insurance claims linked to procedure-based invoices
+Procedure-specific payment tracking
+
+Calculation Logic
+Invoice Status Flow:
+- Draft → Issued → (Partial Payment) → (Partial Payment) → Paid
+- Overdue status: If due_date < today and status != Paid
+
+Remaining Balance Calculation:
+- Remaining = Total Amount - Sum of All Payments
+
+Payment Recording:
+- If payment_amount >= remaining_balance → Status = Paid
+- If payment_amount > 0 and < remaining_balance → Status = Partial_Paid
+- If payment_amount > remaining_balance → Create credit note for overpayment
+
+Procedure-Based Invoice:
+- Auto-link treatments to invoice items
+- Cost = procedure cost from catalog or custom override
+- Auto-calculate total from procedures
+- Mark procedure as billed after invoice issued
+Database Relationships
+appointment → treatments → procedures
+appointment → invoice_items (link via appointment_id)
+invoice → invoice_items
+invoice → payments (multiple)
+invoice → payment_schedules (history)
+payment_plan → installments
+treatments → procedures (cost lookup)
+insurance_claims → invoice
+Main Components Interaction
+Workflow 1: Procedure-Based Billing with Partial Payments
+1. Complete appointment/treatment
+2. Auto-generate invoice from treatment
+3. Send invoice to patient
+4. Patient makes partial payment
+5. Record payment (remaining balance auto-calculated)
+6. Send reminder for balance
+7. Patient pays remaining
+8. Mark invoice as paid
+
+Workflow 2: Quotation → Invoice → Partial Payments
+1. Create quotation for procedures
+2. Patient accepts quotation
+3. Convert to invoice
+4. Patient pays partially
+5. Set up payment plan for balance
+6. Track installments
+7. Complete payment
+API Endpoints
+POST   /invoices                      - Create invoice
+GET    /invoices                      - List invoices
+GET    /invoices/:id                  - Invoice detail
+PUT    /invoices/:id                  - Update invoice
+POST   /invoices/:id/send             - Send via email
+POST   /invoices/:id/pdf              - Download PDF
+
+POST   /payments                      - Record payment (partial or full)
+GET    /payments                      - List payments
+GET    /payments/invoice/:id          - Get payments for invoice
+GET    /invoices/:id/payment-history  - Payment timeline
+GET    /invoices/:id/remaining-balance - Get remaining amount
+
+POST   /invoices/from-treatments      - Generate invoice from treatments
+POST   /invoices/bulk-from-treatments - Generate multiple invoices
+GET    /appointments/:id/billing-status - Get if appointment is billed
+GET    /treatments/:id/billing-status - Get if treatment is billed
+
+POST   /quotations                    - Create quotation
+GET    /quotations                    - List quotations
+POST   /quotations/:id/convert        - Convert to invoice
+
+POST   /payment-plans                 - Create plan
+GET    /payment-plans/:id/installments - Get schedule
+POST   /installments/:id/pay          - Record installment payment
+
+GET    /reports/dashboard             - KPI dashboard
+GET    /reports/revenue               - Revenue report
+GET    /reports/receivables-aging     - Aging analysis
+GET    /reports/partial-payments      - Partial payment status
+GET    /reports/procedure-billing     - Billing by procedure
+GET    /reports/unbilled-procedures   - List unbilled treatments
+Validation Rules
+
+Invoice number: Auto-generated, unique
+Due date >= Invoice date
+Line items: Minimum 1 required
+Total: Subtotal + Tax - Discount
+Payment amount: > 0, <= outstanding balance
+Partial payment: Must update remaining balance
+Procedure cost: Must be > 0
+Multiple payments: Each reduces outstanding balance
+Overpayment: Auto-create credit note
+
+Invoice Status Workflow
+Draft → Issued → Partially Paid → Paid
+                 ↓
+              Overdue (if due_date passed)
+
+Draft → Cancelled (if patient cancels)
+Payment Statuses
+
+pending - Not yet processed
+completed - Successfully recorded
+failed - Failed transaction
+partial - Not covering full balance
+overpayment - Amount exceeds balance
+
+Invoice Statuses
+
+draft - Not sent to patient
+issued - Sent to patient
+partially_paid - Some payments received
+paid - Fully paid
+overdue - Past due date and not paid
+cancelled - Cancelled by admin
+
+Design
+
+Use Shadcn/ui components
+TailwindCSS styling
+Responsive design
+Color scheme:
+
+Blue primary
+Green success (paid)
+Red errors/overdue
+Amber warnings (partial payment due)
+Purple procedure-specific
+
+
+Dark mode support
+Professional medical aesthetic
+
+Key UI Elements
+
+Payment progress bar on invoice detail
+Remaining balance indicator
+Partial payment history timeline
+Procedure-to-invoice linking indicator
+Payment status badge (Draft, Partial, Paid, Overdue)
+Procedure billing status indicator (Billed/Unbilled)
+Next payment due date highlight
+Outstanding balance summary on dashboard
+
+Security
+
+Row-level security (Supabase RLS)
+Role-based access control (Admin, Dentist, Receptionist)
+Audit logging for all transactions
+Encrypt sensitive data
+GDPR compliant
+
+Implementation Order
+
+Services & procedures catalog
+Settings & configuration
+Invoice creation & list
+Partial payment system ⭐ NEW
+Payment recording & tracking
+Procedure-based invoice generation ⭐ NEW
+Quotations
+Payment plans & installments
+Insurance claims
+Credit notes
+Dashboard & reports (including partial payment & procedure billing reports)
+Advanced features & optimizations

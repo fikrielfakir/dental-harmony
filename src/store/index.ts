@@ -51,6 +51,8 @@ interface AppState {
   addInvoice: (invoice: Invoice) => void;
   updateInvoice: (id: string, invoice: Partial<Invoice>) => void;
   deleteInvoice: (id: string) => void;
+  recordPayment: (invoiceId: string, payment: Omit<Payment, 'id' | 'invoiceId' | 'paymentDate' | 'remainingBalance'>) => void;
+  generateInvoiceFromAppointment: (appointmentId: string) => void;
   
   // Actions - Prescriptions
   addPrescription: (prescription: Prescription) => void;
@@ -153,6 +155,93 @@ export const useStore = create<AppState>()(
         })),
       deleteInvoice: (id) =>
         set((state) => ({ invoices: state.invoices.filter((i) => i.id !== id) })),
+      
+      recordPayment: (invoiceId, paymentData) =>
+        set((state) => {
+          const invoice = state.invoices.find((i) => i.id === invoiceId);
+          if (!invoice) return state;
+
+          const paymentAmount = paymentData.amount;
+          const totalPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0) + paymentAmount;
+          const remaining = invoice.totalAmount - totalPaid;
+          
+          const newPayment: Payment = {
+            ...paymentData,
+            id: crypto.randomUUID(),
+            invoiceId,
+            paymentDate: new Date().toISOString(),
+            remainingBalance: Math.max(0, remaining),
+          };
+
+          let newStatus: PaymentStatus = invoice.paymentStatus;
+          if (remaining <= 0) {
+            newStatus = remaining < 0 ? 'overpaid' : 'paid';
+          } else if (totalPaid > 0) {
+            newStatus = 'partial';
+          }
+
+          const creditNotes = [...(invoice.creditNotes || [])];
+          if (remaining < 0) {
+            creditNotes.push({
+              id: crypto.randomUUID(),
+              invoiceId,
+              amount: Math.abs(remaining),
+              reason: 'Overpayment',
+              status: 'active',
+              createdAt: new Date().toISOString(),
+            });
+          }
+
+          const updatedInvoices = state.invoices.map((i) =>
+            i.id === invoiceId
+              ? {
+                  ...i,
+                  payments: [...i.payments, newPayment],
+                  paymentStatus: newStatus,
+                  remainingBalance: Math.max(0, remaining),
+                  creditNotes,
+                  updatedAt: new Date().toISOString(),
+                }
+              : i
+          );
+
+          return { invoices: updatedInvoices };
+        }),
+
+      generateInvoiceFromAppointment: (appointmentId) =>
+        set((state) => {
+          const appointment = state.appointments.find((a) => a.id === appointmentId);
+          if (!appointment || (appointment.status !== 'completed' && appointment.status !== 'confirmed')) return state;
+
+          const service = state.services.find(s => s.name.toLowerCase().includes(appointment.appointmentType.toLowerCase())) || state.services[0];
+          
+          const invoiceNumber = `INV-${new Date().getFullYear()}-${String(state.invoices.length + 1).padStart(3, '0')}`;
+          const newInvoice: Invoice = {
+            id: crypto.randomUUID(),
+            patientId: appointment.patientId,
+            invoiceNumber,
+            invoiceDate: new Date().toISOString(),
+            dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+            items: [{
+              id: crypto.randomUUID(),
+              description: `${appointment.appointmentType.charAt(0).toUpperCase() + appointment.appointmentType.slice(1)} Procedure`,
+              quantity: 1,
+              unitPrice: service.price,
+              total: service.price,
+            }],
+            totalAmount: service.price,
+            taxAmount: 0,
+            discountAmount: 0,
+            paymentStatus: 'pending',
+            remainingBalance: service.price,
+            payments: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            appointmentId: appointment.id,
+          };
+
+          return { invoices: [...state.invoices, newInvoice] };
+        }),
       
       // Prescription actions
       addPrescription: (prescription) =>

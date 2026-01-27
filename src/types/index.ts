@@ -158,6 +158,7 @@ export interface Invoice {
   taxAmount: number;
   discountAmount: number;
   paymentStatus: PaymentStatus;
+  remainingBalance?: number;
   payments: Payment[];
   invoiceDate: string;
   dueDate: string;
@@ -165,6 +166,8 @@ export interface Invoice {
   createdAt: string;
   updatedAt: string;
   insuranceClaim?: InsuranceClaim;
+  appointmentId?: string; // Link to procedure
+  creditNotes?: CreditNote[];
 }
 
 export interface InvoiceItem {
@@ -181,7 +184,8 @@ export type PaymentStatus =
   | 'pending'
   | 'partial'
   | 'paid'
-  | 'overdue';
+  | 'overdue'
+  | 'overpaid';
 
 export interface Payment {
   id: string;
@@ -190,6 +194,16 @@ export interface Payment {
   paymentMethod: PaymentMethod;
   paymentDate: string;
   notes?: string;
+  remainingBalance?: number;
+}
+
+export interface CreditNote {
+  id: string;
+  invoiceId: string;
+  amount: number;
+  reason: string;
+  status: 'active' | 'used' | 'cancelled';
+  createdAt: string;
 }
 
 export type PaymentMethod = 
