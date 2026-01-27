@@ -49,6 +49,28 @@ const Billing = () => {
     status: "pending" as any,
   });
 
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const handleDownloadPDF = (invoice: Invoice) => {
+    const patient = patients.find(p => p.id === invoice.patientId);
+    const content = 
+      "INVOICE: " + invoice.invoiceNumber + "\n" +
+      "Date: " + new Date(invoice.invoiceDate).toLocaleDateString() + "\n" +
+      "Patient: " + (patient ? (patient.firstName + " " + patient.lastName) : 'N/A') + "\n" +
+      "Total Amount: $" + invoice.totalAmount.toFixed(2) + "\n" +
+      "Status: " + invoice.paymentStatus.toUpperCase();
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = invoice.invoiceNumber + ".txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const resetForm = () => {
     setFormData({
       patientId: "",
@@ -58,10 +80,11 @@ const Billing = () => {
   };
 
   const handleCreateInvoice = () => {
+    const newId = "INV-" + new Date().getFullYear() + "-" + String(invoices.length + 1).padStart(3, '0');
     const invoice: Invoice = {
-      id: `INV-${new Date().getFullYear()}-${String(invoices.length + 1).padStart(3, '0')}`,
+      id: newId,
       patientId: formData.patientId,
-      invoiceNumber: `INV-${new Date().getFullYear()}-${String(invoices.length + 1).padStart(3, '0')}`,
+      invoiceNumber: newId,
       items: [],
       totalAmount: parseFloat(formData.amount),
       taxAmount: 0,
@@ -79,10 +102,11 @@ const Billing = () => {
   };
 
   const handleCreateQuotation = () => {
+    const newId = "QUO-" + new Date().getFullYear() + "-" + String(quotations.length + 1).padStart(3, '0');
     const quotation: Quotation = {
-      id: `QUO-${new Date().getFullYear()}-${String(quotations.length + 1).padStart(3, '0')}`,
+      id: newId,
       patientId: formData.patientId,
-      quotationNumber: `QUO-${new Date().getFullYear()}-${String(quotations.length + 1).padStart(3, '0')}`,
+      quotationNumber: newId,
       items: [],
       totalAmount: parseFloat(formData.amount),
       status: 'draft',
@@ -97,13 +121,13 @@ const Billing = () => {
 
   const filteredInvoices = invoices.filter((inv) => {
     const patient = patients.find(p => p.id === inv.patientId);
-    const name = patient ? `${patient.firstName} ${patient.lastName}`.toLowerCase() : "";
+    const name = patient ? (patient.firstName + " " + patient.lastName).toLowerCase() : "";
     return name.includes(searchQuery.toLowerCase()) || inv.id.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   const filteredQuotations = quotations.filter((quo) => {
     const patient = patients.find(p => p.id === quo.patientId);
-    const name = patient ? `${patient.firstName} ${patient.lastName}`.toLowerCase() : "";
+    const name = patient ? (patient.firstName + " " + patient.lastName).toLowerCase() : "";
     return name.includes(searchQuery.toLowerCase()) || quo.id.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
@@ -234,7 +258,7 @@ const Billing = () => {
                       return (
                         <TableRow key={inv.id}>
                           <TableCell className="font-mono text-xs">{inv.invoiceNumber}</TableCell>
-                          <TableCell className="font-medium">{patient ? `${patient.firstName} ${patient.lastName}` : "N/A"}</TableCell>
+                          <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
                           <TableCell>${inv.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</TableCell>
                           <TableCell>{new Date(inv.invoiceDate).toLocaleDateString()}</TableCell>
                           <TableCell>
@@ -250,8 +274,11 @@ const Billing = () => {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                <DropdownMenuItem>Download PDF</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => {
+                                  setSelectedInvoice(inv);
+                                  setIsDetailOpen(true);
+                                }}>View Details</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleDownloadPDF(inv)}>Download PDF</DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => updateInvoice(inv.id, { paymentStatus: 'paid' })}>
                                   Mark as Paid
                                 </DropdownMenuItem>
@@ -299,7 +326,7 @@ const Billing = () => {
                       return (
                         <TableRow key={quo.id}>
                           <TableCell className="font-mono text-xs">{quo.quotationNumber}</TableCell>
-                          <TableCell className="font-medium">{patient ? `${patient.firstName} ${patient.lastName}` : "N/A"}</TableCell>
+                          <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
                           <TableCell>${quo.totalAmount.toLocaleString()}</TableCell>
                           <TableCell><Badge variant="outline">{quo.status}</Badge></TableCell>
                           <TableCell className="text-right">
@@ -370,6 +397,52 @@ const Billing = () => {
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddQuotationOpen(false)}>Cancel</Button>
             <Button onClick={handleCreateQuotation} disabled={!formData.patientId || !formData.amount}>Create Estimate</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Invoice Detail Dialog */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Invoice Details</DialogTitle>
+            <DialogDescription>
+              Full breakdown for {selectedInvoice?.invoiceNumber}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedInvoice && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Patient</Label>
+                  <p className="font-medium">
+                    {patients.find(p => p.id === selectedInvoice.patientId)?.firstName} {patients.find(p => p.id === selectedInvoice.patientId)?.lastName}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Date</Label>
+                  <p className="font-medium">{new Date(selectedInvoice.invoiceDate).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Amount</Label>
+                  <p className="font-medium text-lg">${selectedInvoice.totalAmount.toFixed(2)}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Status</Label>
+                  <div>
+                    <Badge variant={selectedInvoice.paymentStatus === 'paid' ? 'default' : 'secondary'}>
+                      {selectedInvoice.paymentStatus}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDetailOpen(false)}>Close</Button>
+            {selectedInvoice && (
+              <Button onClick={() => handleDownloadPDF(selectedInvoice)}>Download PDF</Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
