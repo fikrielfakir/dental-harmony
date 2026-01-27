@@ -271,7 +271,11 @@ const Appointments = () => {
                 const endHour = end.getHours() + end.getMinutes() / 60;
                 
                 // Adjust for 80px per hour
-                const top = (startHour - 8) * 80;
+                const startMinutes = start.getHours() * 60 + start.getMinutes();
+                const calendarStartMinutes = 8 * 60; // 8 AM
+                const pixelsPerMinute = 80 / 60;
+                
+                const top = (startMinutes - calendarStartMinutes) * pixelsPerMinute;
                 const height = (endHour - startHour) * 80;
                 
                 const patient = getPatient(appointment.patientId);
