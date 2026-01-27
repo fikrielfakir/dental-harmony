@@ -254,7 +254,7 @@ const Appointments = () => {
             </div>
 
             {/* Background grid lines */}
-            <div className="absolute inset-0 top-20">
+            <div className="absolute inset-0 top-0">
               {HOURS.map((hour) => (
                 <div key={hour} className="h-[80px] border-b border-border/5 relative group">
                   <div className="absolute top-1/2 left-0 right-0 h-px border-t border-border/5 border-dashed" />
@@ -263,12 +263,11 @@ const Appointments = () => {
               ))}
             </div>
             
-            <div className="relative top-20 px-6 h-full pb-20">
+            <div className="relative top-0 px-6 h-full pb-20">
               {dayAppointments.map((appointment) => {
                 const start = parseISO(appointment.startTime);
                 const end = parseISO(appointment.endTime);
                 const startHour = start.getHours() + start.getMinutes() / 60;
-                const endHour = end.getHours() + end.getMinutes() / 60;
                 
                 // Adjust for 80px per hour
                 const startMinutes = start.getHours() * 60 + start.getMinutes();
@@ -293,8 +292,8 @@ const Appointments = () => {
                       appointment.status === 'confirmed' ? "ring-1 ring-primary/30" : "border-border/10 shadow-lg shadow-black/5"
                     )}
                     style={{
-                      top: `${top + 8}px`,
-                      height: `${Math.max(height - 16, 72)}px`,
+                      top: `${top}px`,
+                      height: `${Math.max(height, 72)}px`,
                       borderColor: practitioner?.color,
                       background: `linear-gradient(135deg, ${practitioner?.color}15 0%, ${practitioner?.color}05 100%)`,
                     }}
