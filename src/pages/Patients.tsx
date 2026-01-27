@@ -39,6 +39,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Patient } from "@/types";
 
+import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
+
 const Patients = () => {
   const navigate = useNavigate();
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
@@ -46,6 +48,9 @@ const Patients = () => {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [patientToDelete, setPatientToDelete] = useState<string | null>(null);
+
   const [newPatient, setNewPatient] = useState({
     firstName: "",
     lastName: "",
@@ -113,8 +118,15 @@ const Patients = () => {
   };
 
   const handleDeletePatient = (id: string) => {
-    if (confirm("Are you sure you want to delete this patient?")) {
-      deletePatient(id);
+    setPatientToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDeletePatient = () => {
+    if (patientToDelete) {
+      deletePatient(patientToDelete);
+      setPatientToDelete(null);
+      setIsDeleteDialogOpen(false);
       setSelectedPatient(null);
     }
   };
@@ -695,6 +707,14 @@ const Patients = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <DeleteConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={confirmDeletePatient}
+        title="Delete Patient"
+        description="Are you sure you want to delete this patient? This record will be permanently removed."
+      />
     </div>
   );
 };

@@ -48,6 +48,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Appointment, AppointmentType, AppointmentStatus } from "@/types";
 
+import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
+
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 8); // 8 AM to 7 PM
 
 const appointmentTypes: { value: AppointmentType; label: string; duration: number }[] = [
@@ -77,6 +79,7 @@ const Appointments = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [newAppointment, setNewAppointment] = useState({
     patientId: "",
     practitionerId: "",
@@ -151,10 +154,14 @@ const Appointments = () => {
   };
 
   const handleCancelAppointment = () => {
-    if (!selectedAppointment) return;
-    if (confirm("Are you sure you want to cancel this appointment?")) {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmCancelAppointment = () => {
+    if (selectedAppointment) {
       deleteAppointment(selectedAppointment.id);
       setSelectedAppointment(null);
+      setIsDeleteDialogOpen(false);
     }
   };
 
@@ -510,6 +517,14 @@ const Appointments = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <DeleteConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={confirmCancelAppointment}
+        title="Cancel Appointment"
+        description="Are you sure you want to cancel this appointment? This action cannot be undone."
+      />
     </div>
   );
 };
