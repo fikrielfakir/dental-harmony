@@ -73,7 +73,7 @@ const statusColors: Record<AppointmentStatus, string> = {
 };
 
 const Appointments = () => {
-  const { appointments, patients, staff, addAppointment } = useStore();
+  const { appointments, patients, staff, addAppointment, updateAppointment, deleteAppointment } = useStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -148,6 +148,14 @@ const Appointments = () => {
       time: "09:00",
       notes: "",
     });
+  };
+
+  const handleCancelAppointment = () => {
+    if (!selectedAppointment) return;
+    if (confirm("Are you sure you want to cancel this appointment?")) {
+      updateAppointment(selectedAppointment.id, { status: "cancelled" });
+      setSelectedAppointment(null);
+    }
   };
 
   const getPatient = (id: string) => patients.find((p) => p.id === id);
@@ -369,7 +377,7 @@ const Appointments = () => {
                 <Button variant="outline" onClick={() => setSelectedAppointment(null)}>
                   Close
                 </Button>
-                <Button variant="destructive">Cancel Appointment</Button>
+                <Button variant="destructive" onClick={handleCancelAppointment}>Cancel Appointment</Button>
                 <Button>Edit</Button>
               </DialogFooter>
             </>
