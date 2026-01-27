@@ -39,6 +39,22 @@ Preferred communication style: Simple, everyday language.
 6. **Staff Management**: Role-based staff listing (dentist, hygienist, assistant, receptionist, admin)
 7. **Reports**: Revenue charts, procedure distribution analytics
 8. **Settings**: Practice configuration panels
+9. **Dental Chart (Odontogram)**: Interactive 32-tooth adult dental chart with FDI numbering, surface-level treatment tracking, color-coded conditions, and treatment history per patient
+
+### Dental Chart Feature
+- **Location**: `/src/components/dental/Odontogram.tsx`
+- **Constants**: `/src/constants/dental.ts` (colors, FDI numbering, status labels)
+- **Store Slice**: `dentalChart` in Zustand store with `addDentalChartEntry`, `updateDentalChartEntry`, `deleteDentalChartEntry`
+- **Types**: `DentalChartEntry`, `ToothSurface` in `/src/types/index.ts`
+- **Color Coding**:
+  - Green: Healthy
+  - Red: Caries/Cavity
+  - Blue: Filling
+  - Yellow: Crown
+  - Black: Extracted
+  - Purple: Root Canal
+- **Surfaces**: O (Occlusal), M (Mesial), D (Distal), B (Buccal), L (Lingual)
+- **Integration**: Available as "Dental Chart" tab in Patient Details dialog
 
 ### Design Patterns
 - **Component Composition**: Reusable UI components in `/src/components/ui/`
