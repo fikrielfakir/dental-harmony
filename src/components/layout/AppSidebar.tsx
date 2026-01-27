@@ -40,19 +40,19 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "relative flex flex-col bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out h-screen",
+        "relative flex flex-col bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out h-screen border-r border-sidebar-border",
         sidebarCollapsed ? "w-16" : "w-64"
       )}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-6 border-b border-sidebar-border">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground flex-shrink-0">
-          <Stethoscope className="h-6 w-6" />
+      <div className="flex items-center gap-3 px-4 h-14 border-b border-sidebar-border mica">
+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground flex-shrink-0 shadow-sm">
+          <Stethoscope className="h-5 w-5" />
         </div>
         {!sidebarCollapsed && (
           <div className="flex flex-col animate-fade-in">
-            <span className="font-bold text-lg">DentalCare</span>
-            <span className="text-xs text-sidebar-foreground/60">Practice Management</span>
+            <span className="font-bold text-base leading-none">DentalCare</span>
+            <span className="text-[10px] text-sidebar-foreground/60 uppercase tracking-wider font-semibold">Management</span>
           </div>
         )}
       </div>
@@ -68,17 +68,21 @@ export function AppSidebar() {
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
+                  "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 relative group",
                   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   isActive
-                    ? "bg-sidebar-accent text-sidebar-primary font-medium"
-                    : "text-sidebar-foreground/80"
+                    ? "bg-white/50 dark:bg-white/10 text-primary font-semibold shadow-sm"
+                    : "text-sidebar-foreground/70"
                 )
               }
             >
-              <Icon className="h-5 w-5 flex-shrink-0" />
+              <div className={cn(
+                "absolute left-0 w-1 h-4 bg-primary rounded-full transition-transform duration-200",
+                "scale-y-0 group-hover:scale-y-100"
+              )} />
+              <Icon className="h-4 w-4 flex-shrink-0" />
               {!sidebarCollapsed && (
-                <span className="animate-fade-in">{item.name}</span>
+                <span className="animate-fade-in text-sm">{item.name}</span>
               )}
             </NavLink>
           );

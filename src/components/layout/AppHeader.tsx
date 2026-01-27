@@ -21,14 +21,14 @@ export function AppHeader() {
     : "U";
 
   return (
-    <header className="flex items-center justify-between h-16 px-6 bg-card border-b border-border">
+    <header className="flex items-center justify-between h-14 px-4 md:px-6 mica border-b border-border sticky top-0 z-50">
       {/* Search */}
       <div className="flex items-center gap-4 flex-1 max-w-md">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative w-full group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
             placeholder="Search patients, appointments..."
-            className="pl-10 bg-background"
+            className="pl-10 h-9 bg-background/50 border-transparent hover:bg-background transition-all focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary rounded-md"
           />
         </div>
       </div>

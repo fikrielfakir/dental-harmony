@@ -8,68 +8,49 @@
 
 @layer base {
   :root {
-    /* Core backgrounds */
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
-
-    /* Cards and surfaces */
+    /* Windows 11 inspired palette - Light */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
+    --card-foreground: 0 0% 10%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    /* Primary - Medical Blue */
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-
-    /* Secondary - Soft gray-blue */
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
-
-    /* Muted - Subtle backgrounds */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    /* Accent - Light blue highlight */
-    --accent: 199 89% 48%;
+    --popover-foreground: 0 0% 10%;
+    
+    --primary: 213 94% 48%; /* Windows 11 Blue */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 10%;
+    
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+    
+    --accent: 213 94% 48%;
     --accent-foreground: 0 0% 100%;
-
-    /* Destructive - Medical red */
+    
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    /* Success - Medical green */
-    --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
-
-    /* Warning - Amber */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    /* Info - Cyan */
-    --info: 199 89% 48%;
-    --info-foreground: 0 0% 100%;
-
-    /* Borders and inputs */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 221 83% 53%;
-
-    --radius: 0.5rem;
-
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 213 94% 48%;
+    
+    --radius: 0.75rem; /* Win11 rounded corners are generous */
+    
     /* Sidebar */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-background: 0 0% 96%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 213 94% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 92%;
+    --sidebar-ring: 213 94% 48%;
 
     /* Chart colors */
-    --chart-1: 221 83% 53%;
+    --chart-1: 213 94% 48%;
     --chart-2: 142 76% 36%;
     --chart-3: 38 92% 50%;
     --chart-4: 199 89% 48%;
@@ -77,57 +58,43 @@
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
-
-    --card: 222 47% 14%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222 47% 14%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 199 89% 48%;
+    /* Windows 11 inspired palette - Dark */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 213 94% 58%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: 213 94% 58%;
     --accent-foreground: 0 0% 100%;
-
+    
     --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-
-    --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --info: 199 89% 48%;
-    --info-foreground: 0 0% 100%;
-
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 221 83% 53%;
-
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 221 83% 53%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 213 94% 58%;
+    
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 213 94% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 221 83% 53%;
-
-    --chart-1: 221 83% 53%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 199 89% 48%;
-    --chart-5: 0 84% 60%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 213 94% 58%;
   }
 }
 
@@ -137,8 +104,22 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground selection:bg-primary/20;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .mica {
+    @apply bg-background/80 backdrop-blur-xl;
+  }
+  
+  .mica-card {
+    @apply bg-card/70 backdrop-blur-md border border-white/10 dark:border-white/5 shadow-sm;
+  }
+
+  .win11-shadow {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05), 0 1px 2px 0 rgba(0,0,0,0.04);
   }
 }
 
