@@ -172,60 +172,72 @@ const Appointments = () => {
   return (
     <div className="space-y-6 h-full flex flex-col">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-1">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Appointments</h1>
-          <p className="text-muted-foreground">
-            Manage your practice schedule
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Appointments
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Schedule and manage patient visits with ease.
           </p>
         </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
+        <Button onClick={() => setIsAddDialogOpen(true)} className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
           <Plus className="h-4 w-4 mr-2" />
           New Appointment
         </Button>
       </div>
 
       {/* Calendar Navigation */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mica-card p-3 rounded-xl border border-border/50">
         <div className="flex items-center gap-2">
+          <div className="flex bg-muted/50 p-1 rounded-lg border border-border/30">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-background"
+              onClick={() => setCurrentDate(subWeeks(currentDate, 1))}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 hover:bg-background"
+              onClick={() => setCurrentDate(addWeeks(currentDate, 1))}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
           <Button
             variant="outline"
-            size="icon"
-            onClick={() => setCurrentDate(subWeeks(currentDate, 1))}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setCurrentDate(addWeeks(currentDate, 1))}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
+            size="sm"
+            className="rounded-lg font-medium"
             onClick={() => setCurrentDate(new Date())}
           >
             Today
           </Button>
         </div>
-        <h2 className="text-lg font-semibold">
-          {format(weekStart, "MMM d")} - {format(weekEnd, "MMM d, yyyy")}
+        <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+          <CalendarIcon className="h-5 w-5 text-primary" />
+          {format(weekStart, "MMMM yyyy")}
+          <span className="text-muted-foreground font-normal ml-1">
+            ({format(weekStart, "d")} - {format(weekEnd, "d")})
+          </span>
         </h2>
       </div>
 
       {/* Calendar Grid */}
-      <Card className="flex-1 overflow-hidden">
+      <Card className="flex-1 overflow-hidden border-border/40 shadow-xl shadow-black/5 rounded-2xl mica-card">
         <CardContent className="p-0 h-full">
           <div className="flex h-full">
             {/* Time column */}
-            <div className="w-16 flex-shrink-0 border-r border-border">
-              <div className="h-12 border-b border-border" /> {/* Header spacer */}
+            <div className="w-20 flex-shrink-0 border-r border-border/30 bg-muted/5">
+              <div className="h-14 border-b border-border/30" /> {/* Header spacer */}
               <div className="relative">
                 {HOURS.map((hour) => (
                   <div
                     key={hour}
-                    className="h-[60px] border-b border-border px-2 text-xs text-muted-foreground flex items-start pt-1"
+                    className="h-[60px] border-b border-border/10 px-3 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60 flex items-start pt-2"
                   >
                     {format(setHours(new Date(), hour), "h a")}
                   </div>
@@ -234,28 +246,31 @@ const Appointments = () => {
             </div>
 
             {/* Days columns */}
-            <ScrollArea className="flex-1">
-              <div className="flex min-w-[700px]">
+            <ScrollArea className="flex-1 scrollbar-thin">
+              <div className="flex min-w-[840px] h-full">
                 {weekDays.map((day) => {
                   const dayAppointments = getAppointmentsForDay(day);
                   const isToday = isSameDay(day, new Date());
 
                   return (
-                    <div key={day.toISOString()} className="flex-1 border-r border-border last:border-r-0">
+                    <div key={day.toISOString()} className="flex-1 border-r border-border/30 last:border-r-0 group">
                       {/* Day header */}
                       <div
                         className={cn(
-                          "h-12 border-b border-border p-2 text-center",
-                          isToday && "bg-primary/5"
+                          "h-14 border-b border-border/30 p-2 text-center flex flex-col justify-center transition-colors",
+                          isToday && "bg-primary/5 border-b-primary/30"
                         )}
                       >
-                        <p className="text-xs text-muted-foreground">
+                        <p className={cn(
+                          "text-[10px] font-bold uppercase tracking-widest mb-0.5",
+                          isToday ? "text-primary" : "text-muted-foreground/70"
+                        )}>
                           {format(day, "EEE")}
                         </p>
                         <p
                           className={cn(
-                            "text-lg font-semibold",
-                            isToday && "text-primary"
+                            "text-xl font-bold leading-none",
+                            isToday ? "text-primary scale-110" : "text-foreground"
                           )}
                         >
                           {format(day, "d")}
@@ -263,11 +278,11 @@ const Appointments = () => {
                       </div>
 
                       {/* Time slots */}
-                      <div className="relative">
+                      <div className="relative min-h-[720px] bg-background/20 group-hover:bg-background/40 transition-colors">
                         {HOURS.map((hour) => (
                           <div
                             key={hour}
-                            className="h-[60px] border-b border-border border-dashed"
+                            className="h-[60px] border-b border-border/5"
                           />
                         ))}
 
@@ -283,39 +298,47 @@ const Appointments = () => {
                             <div
                               key={appointment.id}
                               className={cn(
-                                "absolute left-1 right-1 rounded-md p-1.5 cursor-pointer transition-transform hover:scale-[1.02] overflow-hidden flex flex-col justify-between",
-                                statusColors[appointment.status]
+                                "absolute left-1 right-1 rounded-xl p-2 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 overflow-hidden flex flex-col justify-between border-l-4",
+                                appointment.status === 'confirmed' ? "ring-1 ring-primary/20" : ""
                               )}
                               style={{
                                 top: `${top}px`,
-                                height: `${Math.max(height, 24)}px`,
-                                backgroundColor: practitioner?.color || undefined,
+                                height: `${Math.max(height, 48)}px`,
+                                backgroundColor: `${practitioner?.color}15` || "#3b82f615",
+                                borderColor: practitioner?.color || "#3b82f6",
+                                color: practitioner?.color || "#3b82f6",
                               }}
                               onClick={() => setSelectedAppointment(appointment)}
                             >
-                              <div>
-                                <p className="text-xs font-medium truncate text-white">
+                              <div className="relative z-10">
+                                <p className="text-xs font-bold truncate">
                                   {patient?.firstName} {patient?.lastName}
                                 </p>
-                                {height >= 40 && (
-                                  <p className="text-xs truncate text-white/80">
+                                {height >= 60 && (
+                                  <p className="text-[10px] font-medium opacity-80 truncate mt-0.5">
                                     {appointmentTypes.find((t) => t.value === appointment.appointmentType)?.label}
                                   </p>
                                 )}
                               </div>
-                              <div className="mt-auto">
-                                <Badge 
-                                  variant="secondary" 
-                                  className={cn(
-                                    "text-[10px] h-4 px-1 py-0 uppercase bg-white/20 text-white border-none hover:bg-white/30 flex items-center gap-0.5",
-                                    appointment.status === 'completed' && "bg-green-500/50",
-                                    appointment.status === 'cancelled' && "bg-red-500/50",
-                                    appointment.status === 'no-show' && "bg-gray-500/50"
-                                  )}
-                                >
-                                  {appointment.status === 'confirmed' && <CheckCircle2 className="h-2 w-2" />}
-                                  {appointment.status.replace("-", " ")}
-                                </Badge>
+                              
+                              <div className="flex items-center justify-between mt-auto pt-1 border-t border-current/10">
+                                <div className="flex items-center gap-1 opacity-80">
+                                  <Clock className="h-2.5 w-2.5" />
+                                  <span className="text-[9px] font-bold">
+                                    {format(parseISO(appointment.startTime), "h:mm")}
+                                  </span>
+                                </div>
+                                <div className={cn(
+                                  "rounded-full p-0.5",
+                                  appointment.status === 'confirmed' && "bg-primary text-white shadow-sm"
+                                )}>
+                                  {appointment.status === 'confirmed' && <CheckCircle2 className="h-2.5 w-2.5" />}
+                                </div>
+                              </div>
+                              
+                              {/* Background Pattern */}
+                              <div className="absolute top-0 right-0 w-12 h-12 opacity-[0.03] -mr-4 -mt-4 pointer-events-none">
+                                <CalendarIcon className="w-full h-full" />
                               </div>
                             </div>
                           );
@@ -332,90 +355,120 @@ const Appointments = () => {
 
       {/* Appointment Detail Dialog */}
       <Dialog open={!!selectedAppointment} onOpenChange={() => setSelectedAppointment(null)}>
-        <DialogContent>
+        <DialogContent className="mica-card border-border/50 rounded-2xl max-w-md">
           {selectedAppointment && (
             <>
               <DialogHeader>
-                <DialogTitle>Appointment Details</DialogTitle>
+                <DialogTitle className="text-2xl font-bold tracking-tight">Appointment Info</DialogTitle>
+                <DialogDescription>
+                  Detailed view of the scheduled visit.
+                </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+              <div className="space-y-6 py-4">
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-border/50">
+                  <Avatar className="h-14 w-14 ring-2 ring-primary/20 ring-offset-2 ring-offset-background">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xl font-bold">
                       {getPatient(selectedAppointment.patientId)?.firstName.charAt(0)}
                       {getPatient(selectedAppointment.patientId)?.lastName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <div>
-                    <p className="font-semibold">
+                  <div className="flex-1">
+                    <p className="text-lg font-bold">
                       {getPatient(selectedAppointment.patientId)?.firstName}{" "}
                       {getPatient(selectedAppointment.patientId)?.lastName}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      {getPatient(selectedAppointment.patientId)?.phone}
+                    <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                      <span className="inline-block w-2 h-2 rounded-full bg-success" />
+                      Active Patient
                     </p>
                   </div>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <ChevronRight className="h-5 w-5" />
+                  </Button>
                 </div>
 
-                <div className="grid gap-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                    {format(parseISO(selectedAppointment.startTime), "EEEE, MMMM d, yyyy")}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5 p-3 rounded-xl border border-border/30 bg-background/50">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Date</Label>
+                    <div className="flex items-center gap-2 text-sm font-semibold">
+                      <CalendarIcon className="h-4 w-4 text-primary" />
+                      {format(parseISO(selectedAppointment.startTime), "MMM d, yyyy")}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    {format(parseISO(selectedAppointment.startTime), "h:mm a")} -{" "}
-                    {format(parseISO(selectedAppointment.endTime), "h:mm a")}
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    {getPractitioner(selectedAppointment.practitionerId)?.firstName}{" "}
-                    {getPractitioner(selectedAppointment.practitionerId)?.lastName}
+                  <div className="space-y-1.5 p-3 rounded-xl border border-border/30 bg-background/50">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Time</Label>
+                    <div className="flex items-center gap-2 text-sm font-semibold">
+                      <Clock className="h-4 w-4 text-primary" />
+                      {format(parseISO(selectedAppointment.startTime), "h:mm a")}
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Badge>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Practitioner</Label>
+                    <Badge variant="outline" className="text-[10px] font-bold px-2 py-0.5 rounded-full border-primary/20 bg-primary/5 text-primary">
+                      {getPractitioner(selectedAppointment.practitionerId)?.role}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/50">
+                    <div 
+                      className="w-1.5 h-10 rounded-full" 
+                      style={{ backgroundColor: getPractitioner(selectedAppointment.practitionerId)?.color }}
+                    />
+                    <div>
+                      <p className="text-sm font-bold">
+                        Dr. {getPractitioner(selectedAppointment.practitionerId)?.firstName}{" "}
+                        {getPractitioner(selectedAppointment.practitionerId)?.lastName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Dental Specialist</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-2">
+                  <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors py-1 px-3 rounded-lg flex items-center gap-1.5">
                     {appointmentTypes.find((t) => t.value === selectedAppointment.appointmentType)?.label}
                   </Badge>
                   <Badge
                     variant="outline"
-                    className={cn("capitalize flex items-center gap-1", statusColors[selectedAppointment.status])}
+                    className={cn("capitalize py-1 px-3 rounded-lg flex items-center gap-1.5 border-border/50", statusColors[selectedAppointment.status])}
                   >
-                    {selectedAppointment.status === 'confirmed' && <CheckCircle2 className="h-3 w-3" />}
+                    {selectedAppointment.status === 'confirmed' && <CheckCircle2 className="h-3.5 w-3.5" />}
                     {selectedAppointment.status.replace("-", " ")}
                   </Badge>
                 </div>
 
                 {selectedAppointment.notes && (
-                  <div>
-                    <p className="text-sm font-medium mb-1">Notes</p>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedAppointment.notes}
+                  <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-2">Notes</p>
+                    <p className="text-sm leading-relaxed text-foreground/80 italic">
+                      "{selectedAppointment.notes}"
                     </p>
                   </div>
                 )}
               </div>
 
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setSelectedAppointment(null)}>
+              <DialogFooter className="gap-2 sm:gap-0 mt-2">
+                <Button variant="ghost" className="rounded-xl flex-1" onClick={() => setSelectedAppointment(null)}>
                   Close
                 </Button>
                 {selectedAppointment.status !== 'completed' && selectedAppointment.status !== 'confirmed' && (
-                  <>
+                  <div className="flex gap-2 flex-[2]">
                     <Button 
-                      className="bg-green-600 hover:bg-green-700" 
+                      className="flex-1 bg-success hover:bg-success/90 text-success-foreground rounded-xl shadow-lg shadow-success/10"
                       onClick={() => {
                         updateAppointment(selectedAppointment.id, { status: 'completed' });
                         setSelectedAppointment(null);
                       }}
                     >
-                      Mark Completed
+                      Complete
                     </Button>
-                    <Button variant="destructive" onClick={handleCancelAppointment}>Cancel Appointment</Button>
-                    <Button>Edit</Button>
-                  </>
+                    <Button variant="destructive" className="flex-1 rounded-xl shadow-lg shadow-destructive/10" onClick={handleCancelAppointment}>
+                      Cancel
+                    </Button>
+                  </div>
                 )}
               </DialogFooter>
             </>
