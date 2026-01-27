@@ -20,6 +20,7 @@ import {
   Calendar as CalendarIcon,
   Clock,
   User,
+  CheckCircle2,
 } from "lucide-react";
 import { useStore } from "@/store";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,7 @@ const appointmentTypes: { value: AppointmentType; label: string; duration: numbe
 
 const statusColors: Record<AppointmentStatus, string> = {
   scheduled: "bg-info text-info-foreground",
-  confirmed: "bg-success text-success-foreground",
+  confirmed: "bg-primary text-primary-foreground",
   "in-progress": "bg-warning text-warning-foreground",
   completed: "bg-muted text-muted-foreground",
   cancelled: "bg-destructive/50 text-destructive-foreground",
@@ -306,12 +307,13 @@ const Appointments = () => {
                                 <Badge 
                                   variant="secondary" 
                                   className={cn(
-                                    "text-[10px] h-4 px-1 py-0 uppercase bg-white/20 text-white border-none hover:bg-white/30",
+                                    "text-[10px] h-4 px-1 py-0 uppercase bg-white/20 text-white border-none hover:bg-white/30 flex items-center gap-0.5",
                                     appointment.status === 'completed' && "bg-green-500/50",
                                     appointment.status === 'cancelled' && "bg-red-500/50",
                                     appointment.status === 'no-show' && "bg-gray-500/50"
                                   )}
                                 >
+                                  {appointment.status === 'confirmed' && <CheckCircle2 className="h-2 w-2" />}
                                   {appointment.status.replace("-", " ")}
                                 </Badge>
                               </div>
@@ -379,8 +381,9 @@ const Appointments = () => {
                   </Badge>
                   <Badge
                     variant="outline"
-                    className={cn("capitalize", statusColors[selectedAppointment.status])}
+                    className={cn("capitalize flex items-center gap-1", statusColors[selectedAppointment.status])}
                   >
+                    {selectedAppointment.status === 'confirmed' && <CheckCircle2 className="h-3 w-3" />}
                     {selectedAppointment.status.replace("-", " ")}
                   </Badge>
                 </div>

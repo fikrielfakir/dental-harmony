@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import { Clock, User } from "lucide-react";
+import { Clock, User, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -10,7 +10,7 @@ import { AppointmentStatus, AppointmentType } from "@/types";
 
 const statusColors: Record<AppointmentStatus, string> = {
   scheduled: "bg-info/10 text-info border-info/20",
-  confirmed: "bg-success/10 text-success border-success/20",
+  confirmed: "bg-primary/10 text-primary border-primary/20",
   "in-progress": "bg-warning/10 text-warning border-warning/20",
   completed: "bg-muted text-muted-foreground",
   cancelled: "bg-destructive/10 text-destructive border-destructive/20",
@@ -115,8 +115,9 @@ export function UpcomingAppointments() {
 
                     <Badge
                       variant="outline"
-                      className={cn("capitalize text-xs", statusColors[appointment.status])}
+                      className={cn("capitalize text-xs flex items-center gap-1", statusColors[appointment.status])}
                     >
+                      {appointment.status === 'confirmed' && <CheckCircle2 className="h-3 w-3" />}
                       {appointment.status.replace("-", " ")}
                     </Badge>
                   </div>
