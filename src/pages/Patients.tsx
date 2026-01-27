@@ -46,6 +46,7 @@ const Patients = () => {
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -139,6 +140,16 @@ const Patients = () => {
     }
   };
 
+  const openViewDialog = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setIsViewDialogOpen(true);
+  };
+
+  const closeViewDialog = (open: boolean) => {
+    setIsViewDialogOpen(open);
+    if (!open) setSelectedPatient(null);
+  };
+
   const openEditDialog = (patient: Patient) => {
     setSelectedPatient(patient);
     setNewPatient({
@@ -216,7 +227,7 @@ const Patients = () => {
             <Card
               key={patient.id}
               className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => setSelectedPatient(patient)}
+              onClick={() => openViewDialog(patient)}
             >
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
@@ -268,7 +279,7 @@ const Patients = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenuItem onClick={() => setSelectedPatient(patient)}>View Details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openViewDialog(patient)}>View Details</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate("/appointments")}>Book Appointment</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => openEditDialog(patient)}>Edit Patient</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDeletePatient(patient.id)}>
@@ -287,7 +298,7 @@ const Patients = () => {
       </div>
 
       {/* Patient Detail Dialog */}
-      <Dialog open={!!selectedPatient} onOpenChange={() => setSelectedPatient(null)}>
+      <Dialog open={isViewDialogOpen} onOpenChange={closeViewDialog}>
         <DialogContent className="max-w-2xl max-h-[90vh]">
           {selectedPatient && (
             <>
@@ -435,7 +446,7 @@ const Patients = () => {
               </ScrollArea>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setSelectedPatient(null)}>
+                <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
                   Close
                 </Button>
                 <Button onClick={() => navigate("/appointments")}>Book Appointment</Button>
