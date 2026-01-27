@@ -206,55 +206,147 @@ const Appointments = () => {
 
   const renderDayView = () => {
     const dayAppointments = getAppointmentsForDay(currentDate);
+    const isToday = isSameDay(currentDate, new Date());
+
     return (
-      <div className="flex h-full">
-        <div className="w-20 flex-shrink-0 border-r border-border/30 bg-muted/5">
-          <div className="h-14 border-b border-border/30" />
+      <div className="flex h-full bg-background/50 backdrop-blur-xl">
+        {/* Time Sidebar */}
+        <div className="w-24 flex-shrink-0 border-r border-border/20 bg-muted/10">
+          <div className="h-20 border-b border-border/20 flex items-center justify-center">
+            <Clock className="h-5 w-5 text-primary/50" />
+          </div>
           <div className="relative">
             {HOURS.map((hour) => (
-              <div key={hour} className="h-[60px] border-b border-border/10 px-3 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60 flex items-start pt-2">
-                {format(setHours(new Date(), hour), "h a")}
+              <div key={hour} className="h-[80px] border-b border-border/5 px-4 flex flex-col justify-start pt-3">
+                <span className="text-[11px] font-bold text-muted-foreground/40 uppercase tracking-tighter leading-none">
+                  {format(setHours(new Date(), hour), "h a")}
+                </span>
+                <span className="text-[9px] font-medium text-muted-foreground/20 mt-1">
+                  :30
+                </span>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Schedule Area */}
         <ScrollArea className="flex-1">
-          <div className="relative min-h-[720px]">
+          <div className="relative min-h-[960px]">
+            {/* Header Overlay (Floating effect) */}
+            <div className="sticky top-0 z-20 h-20 bg-background/80 backdrop-blur-md border-b border-border/20 flex items-center px-8 justify-between">
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner border border-border/30",
+                  isToday ? "bg-primary text-primary-foreground shadow-primary/20" : "bg-muted/30"
+                )}>
+                  <span className="text-xl font-bold">{format(currentDate, "d")}</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold tracking-tight">{format(currentDate, "EEEE")}</h3>
+                  <p className="text-xs text-muted-foreground font-medium">{format(currentDate, "MMMM yyyy")}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="rounded-full px-3 py-1 bg-background/50 border-border/30">
+                  {dayAppointments.length} Appointments
+                </Badge>
+              </div>
+            </div>
+
             {/* Background grid lines */}
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 top-20">
               {HOURS.map((hour) => (
-                <div key={hour} className="h-[60px] border-b border-border/5" />
+                <div key={hour} className="h-[80px] border-b border-border/5 relative group">
+                  <div className="absolute top-1/2 left-0 right-0 h-px border-t border-border/5 border-dashed" />
+                  <div className="absolute inset-0 bg-primary/[0.01] opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               ))}
             </div>
             
-            <div className="relative px-4 h-full">
+            <div className="relative top-20 px-6 h-full pb-20">
               {dayAppointments.map((appointment) => {
-                const { top, height } = getAppointmentPosition(appointment);
+                const start = parseISO(appointment.startTime);
+                const end = parseISO(appointment.endTime);
+                const startHour = start.getHours() + start.getMinutes() / 60;
+                const endHour = end.getHours() + end.getMinutes() / 60;
+                
+                // Adjust for 80px per hour
+                const top = (startHour - 8) * 80;
+                const height = (endHour - startHour) * 80;
+                
                 const patient = getPatient(appointment.patientId);
                 const practitioner = getPractitioner(appointment.practitionerId);
-                
-                if (top < 0 || top >= HOURS.length * 60) return null;
+                const type = appointmentTypes.find(t => t.value === appointment.appointmentType);
+
+                if (startHour < 8 || startHour >= 20) return null;
 
                 return (
                   <div
                     key={appointment.id}
-                    className="absolute left-4 right-4 rounded-xl p-3 cursor-pointer transition-all hover:shadow-lg border-l-4 mica-card overflow-hidden"
+                    className={cn(
+                      "absolute left-4 right-4 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] group border-l-[6px] mica-card overflow-hidden",
+                      appointment.status === 'confirmed' ? "ring-1 ring-primary/30" : "border-border/10 shadow-lg shadow-black/5"
+                    )}
                     style={{
-                      top: `${top}px`,
-                      height: `${Math.max(height, 60)}px`,
+                      top: `${top + 8}px`,
+                      height: `${Math.max(height - 16, 72)}px`,
                       borderColor: practitioner?.color,
-                      backgroundColor: `${practitioner?.color}15`,
+                      background: `linear-gradient(135deg, ${practitioner?.color}15 0%, ${practitioner?.color}05 100%)`,
                     }}
                     onClick={() => setSelectedAppointment(appointment)}
                   >
-                    <p className="font-bold text-sm truncate">{patient?.firstName} {patient?.lastName}</p>
-                    <p className="text-xs opacity-80 truncate">{appointmentTypes.find(t => t.value === appointment.appointmentType)?.label}</p>
-                    <div className="mt-1 flex items-center gap-2 opacity-60">
-                      <Clock className="h-3 w-3" />
-                      <span className="text-[10px] font-bold">
-                        {format(parseISO(appointment.startTime), "h:mm a")} - {format(parseISO(appointment.endTime), "h:mm a")}
-                      </span>
+                    {/* Glass Shine Effect */}
+                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/5 pointer-events-none" />
+                    
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-extrabold text-base tracking-tight leading-none text-foreground/90">
+                            {patient?.firstName} {patient?.lastName}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <Badge variant="outline" className="text-[10px] font-bold h-5 px-2 bg-background/40 border-border/20 uppercase tracking-tighter">
+                              {type?.label}
+                            </Badge>
+                            <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground">
+                              <Clock className="h-3 w-3" />
+                              {format(start, "h:mm")} - {format(end, "h:mm a")}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col items-end gap-2">
+                          <Avatar className="h-8 w-8 ring-2 ring-background shadow-sm border border-border/20">
+                            <AvatarFallback 
+                              className="text-[10px] font-extrabold text-white"
+                              style={{ backgroundColor: practitioner?.color }}
+                            >
+                              {practitioner?.firstName.charAt(0)}{practitioner?.lastName.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          {appointment.status === 'confirmed' && (
+                            <div className="bg-primary/20 p-1 rounded-full text-primary">
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {height > 100 && (
+                        <div className="mt-auto flex items-center justify-between">
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                            {practitioner?.firstName} {practitioner?.lastName}
+                          </p>
+                          <div className="flex gap-1">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+                          </div>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Background Icon Watermark */}
+                    <CalendarIcon className="absolute -bottom-4 -right-4 w-20 h-20 opacity-[0.03] text-foreground pointer-events-none group-hover:opacity-[0.06] transition-opacity" />
                   </div>
                 );
               })}
