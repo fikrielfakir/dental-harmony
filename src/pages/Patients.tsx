@@ -39,10 +39,11 @@ import { Separator } from "@/components/ui/separator";
 import { Patient } from "@/types";
 
 const Patients = () => {
-  const { patients, addPatient } = useStore();
+  const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [newPatient, setNewPatient] = useState({
     firstName: "",
     lastName: "",
@@ -90,6 +91,40 @@ const Patients = () => {
       insuranceProvider: "",
       policyNumber: "",
     });
+  };
+
+  const handleEditPatient = () => {
+    if (!selectedPatient) return;
+    const updated: Patient = {
+      ...selectedPatient,
+      ...newPatient,
+      updatedAt: new Date().toISOString(),
+    };
+    updatePatient(updated);
+    setIsEditDialogOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const handleDeletePatient = (id: string) => {
+    if (confirm("Are you sure you want to delete this patient?")) {
+      deletePatient(id);
+      setSelectedPatient(null);
+    }
+  };
+
+  const openEditDialog = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setNewPatient({
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      email: patient.email,
+      phone: patient.phone,
+      dateOfBirth: patient.dateOfBirth,
+      address: patient.address,
+      insuranceProvider: patient.insuranceProvider || "",
+      policyNumber: patient.policyNumber || "",
+    });
+    setIsEditDialogOpen(true);
   };
 
   const calculateAge = (dateOfBirth: string) => {
@@ -205,11 +240,11 @@ const Patients = () => {
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                      <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenuItem onClick={() => setSelectedPatient(patient)}>View Details</DropdownMenuItem>
                         <DropdownMenuItem>Book Appointment</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Patient</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem onClick={() => openEditDialog(patient)}>Edit Patient</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeletePatient(patient.id)}>
                           Delete Patient
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -399,7 +434,7 @@ const Patients = () => {
                 <Label htmlFor="firstName" className="text-xs font-semibold">First Name</Label>
                 <Input
                   id="firstName"
-                  placeholder="e.g. John"
+                  placeholder="John"
                   className="h-8 text-sm"
                   value={newPatient.firstName}
                   onChange={(e) =>
@@ -411,7 +446,7 @@ const Patients = () => {
                 <Label htmlFor="lastName" className="text-xs font-semibold">Last Name</Label>
                 <Input
                   id="lastName"
-                  placeholder="e.g. Doe"
+                  placeholder="Doe"
                   className="h-8 text-sm"
                   value={newPatient.lastName}
                   onChange={(e) =>
@@ -517,6 +552,138 @@ const Patients = () => {
               disabled={!newPatient.firstName || !newPatient.lastName}
             >
               Add Patient
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Patient Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-sm sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Edit Patient</DialogTitle>
+            <DialogDescription className="text-xs">
+              Update the patient's information.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-3 py-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-firstName" className="text-xs font-semibold">First Name</Label>
+                <Input
+                  id="edit-firstName"
+                  className="h-8 text-sm"
+                  value={newPatient.firstName}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, firstName: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-lastName" className="text-xs font-semibold">Last Name</Label>
+                <Input
+                  id="edit-lastName"
+                  className="h-8 text-sm"
+                  value={newPatient.lastName}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, lastName: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-dateOfBirth" className="text-xs font-semibold">Date of Birth</Label>
+                <Input
+                  id="edit-dateOfBirth"
+                  type="date"
+                  className="h-8 text-sm"
+                  value={newPatient.dateOfBirth}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, dateOfBirth: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-phone" className="text-xs font-semibold">Phone</Label>
+                <Input
+                  id="edit-phone"
+                  type="tel"
+                  className="h-8 text-sm"
+                  value={newPatient.phone}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, phone: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-email" className="text-xs font-semibold">Email Address</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                className="h-8 text-sm"
+                value={newPatient.email}
+                onChange={(e) =>
+                  setNewPatient({ ...newPatient, email: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-address" className="text-xs font-semibold">Home Address</Label>
+              <Input
+                id="edit-address"
+                className="h-8 text-sm"
+                value={newPatient.address}
+                onChange={(e) =>
+                  setNewPatient({ ...newPatient, address: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-insurance" className="text-xs font-semibold">Insurance</Label>
+                <Input
+                  id="edit-insurance"
+                  className="h-8 text-sm"
+                  value={newPatient.insuranceProvider}
+                  onChange={(e) =>
+                    setNewPatient({
+                      ...newPatient,
+                      insuranceProvider: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-policy" className="text-xs font-semibold">Policy #</Label>
+                <Input
+                  id="edit-policy"
+                  className="h-8 text-sm"
+                  value={newPatient.policyNumber}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, policyNumber: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="pt-2 gap-2">
+            <Button variant="secondary" className="h-8 text-xs" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="h-8 text-xs"
+              onClick={handleEditPatient}
+              disabled={!newPatient.firstName || !newPatient.lastName}
+            >
+              Update Patient
             </Button>
           </DialogFooter>
         </DialogContent>
