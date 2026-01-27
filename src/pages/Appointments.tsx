@@ -276,7 +276,8 @@ const Appointments = () => {
                 const pixelsPerMinute = 80 / 60;
                 
                 const top = (startMinutes - calendarStartMinutes) * pixelsPerMinute;
-                const height = (endHour - startHour) * 80;
+                const durationMinutes = (end.getHours() * 60 + end.getMinutes()) - (start.getHours() * 60 + start.getMinutes());
+                const height = durationMinutes * pixelsPerMinute;
                 
                 const patient = getPatient(appointment.patientId);
                 const practitioner = getPractitioner(appointment.practitionerId);
