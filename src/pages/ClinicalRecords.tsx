@@ -35,27 +35,21 @@ interface ClinicalRecord {
 }
 
 const ClinicalRecords = () => {
-  const { patients } = useStore();
+  const { patients, clinicalNotes, addClinicalNote } = useStore();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([
-    { id: "REC-101", patient: "Sarah Johnson", procedure: "Root Canal", date: "2024-05-15", doctor: "Dr. Smith", status: "Completed" },
-    { id: "REC-102", patient: "Michael Chen", procedure: "Teeth Whitening", date: "2024-05-14", doctor: "Dr. Adams", status: "In Progress" },
-    { id: "REC-103", patient: "Emma Wilson", procedure: "Dental Implant", date: "2024-05-12", doctor: "Dr. Smith", status: "Scheduled" },
-    { id: "REC-104", patient: "David Miller", procedure: "Regular Check-up", date: "2024-05-10", doctor: "Dr. Adams", status: "Completed" },
-  ]);
-
+  
   const [newRecord, setNewRecord] = useState({
-    patient: "",
+    patientId: "",
     procedure: "",
     doctor: "",
-    status: "Scheduled",
+    status: "Scheduled" as const,
     notes: "",
   });
 
   const resetForm = () => {
     setNewRecord({
-      patient: "",
+      patientId: "",
       procedure: "",
       doctor: "",
       status: "Scheduled",
@@ -64,16 +58,24 @@ const ClinicalRecords = () => {
   };
 
   const handleAddRecord = () => {
-    const record: ClinicalRecord = {
-      id: `REC-${100 + clinicalRecords.length + 1}`,
-      patient: newRecord.patient,
+    const selectedPatient = patients.find(p => p.id === newRecord.patientId);
+    const note: any = {
+      id: crypto.randomUUID(),
+      patientId: newRecord.patientId,
+      practitionerId: "1", // Default practitioner or current user
+      appointmentId: "",
+      content: newRecord.notes,
+      type: "clinical-note",
+      tags: [newRecord.procedure],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      // Adding extra fields for the UI display in this page
       procedure: newRecord.procedure,
-      date: new Date().toISOString().split("T")[0],
       doctor: newRecord.doctor,
       status: newRecord.status,
-      notes: newRecord.notes,
+      patientName: selectedPatient ? `${selectedPatient.firstName} ${selectedPatient.lastName}` : "Unknown Patient"
     };
-    setClinicalRecords([record, ...clinicalRecords]);
+    addClinicalNote(note);
     setIsAddDialogOpen(false);
     resetForm();
   };
@@ -83,19 +85,20 @@ const ClinicalRecords = () => {
     if (!open) resetForm();
   };
 
-  const filteredRecords = clinicalRecords.filter((record) => {
+  const filteredRecords = clinicalNotes.filter((record: any) => {
     const query = searchQuery.toLowerCase();
+    const patientName = record.patientName || "";
     return (
-      record.patient.toLowerCase().includes(query) ||
-      record.procedure.toLowerCase().includes(query) ||
-      record.doctor.toLowerCase().includes(query) ||
+      patientName.toLowerCase().includes(query) ||
+      (record.procedure || "").toLowerCase().includes(query) ||
+      (record.doctor || "").toLowerCase().includes(query) ||
       record.id.toLowerCase().includes(query)
     );
   });
 
-  const activeCount = clinicalRecords.filter(r => r.status === "In Progress").length;
-  const completedCount = clinicalRecords.filter(r => r.status === "Completed").length;
-  const scheduledCount = clinicalRecords.filter(r => r.status === "Scheduled").length;
+  const activeCount = clinicalNotes.filter((r: any) => r.status === "In Progress").length;
+  const completedCount = clinicalNotes.filter((r: any) => r.status === "Completed").length;
+  const scheduledCount = clinicalNotes.filter((r: any) => r.status === "Scheduled").length;
 
   return (
     <div className="space-y-6">
@@ -187,12 +190,12 @@ const ClinicalRecords = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredRecords.map((record) => (
+                filteredRecords.map((record: any) => (
                   <TableRow key={record.id}>
-                    <TableCell className="font-mono text-xs">{record.id}</TableCell>
-                    <TableCell className="font-medium">{record.patient}</TableCell>
+                    <TableCell className="font-mono text-xs">{record.id.slice(0, 8)}</TableCell>
+                    <TableCell className="font-medium">{record.patientName}</TableCell>
                     <TableCell>{record.procedure}</TableCell>
-                    <TableCell>{record.date}</TableCell>
+                    <TableCell>{new Date(record.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{record.doctor}</TableCell>
                     <TableCell>
                       <Badge variant={record.status === "Completed" ? "default" : record.status === "In Progress" ? "secondary" : "outline"}>
@@ -222,30 +225,21 @@ const ClinicalRecords = () => {
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="patient">Patient</Label>
-              {patients.length > 0 ? (
-                <Select
-                  value={newRecord.patient}
-                  onValueChange={(value) => setNewRecord({ ...newRecord, patient: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a patient" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {patients.map((patient) => (
-                      <SelectItem key={patient.id} value={`${patient.firstName} ${patient.lastName}`}>
-                        {patient.firstName} {patient.lastName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <Input
-                  id="patient"
-                  placeholder="Patient name"
-                  value={newRecord.patient}
-                  onChange={(e) => setNewRecord({ ...newRecord, patient: e.target.value })}
-                />
-              )}
+              <Select
+                value={newRecord.patientId}
+                onValueChange={(value) => setNewRecord({ ...newRecord, patientId: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a patient" />
+                </SelectTrigger>
+                <SelectContent>
+                  {patients.map((patient) => (
+                    <SelectItem key={patient.id} value={patient.id}>
+                      {patient.firstName} {patient.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -272,7 +266,7 @@ const ClinicalRecords = () => {
               <Label htmlFor="status">Status</Label>
               <Select
                 value={newRecord.status}
-                onValueChange={(value) => setNewRecord({ ...newRecord, status: value })}
+                onValueChange={(value: "Scheduled" | "In Progress" | "Completed") => setNewRecord({ ...newRecord, status: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
@@ -303,7 +297,7 @@ const ClinicalRecords = () => {
             </Button>
             <Button
               onClick={handleAddRecord}
-              disabled={!newRecord.patient || !newRecord.procedure || !newRecord.doctor}
+              disabled={!newRecord.patientId || !newRecord.procedure || !newRecord.doctor}
             >
               Add Record
             </Button>
