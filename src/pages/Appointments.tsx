@@ -285,6 +285,7 @@ const Appointments = () => {
                 if (startHour < 8 || startHour >= 20) return null;
 
                 const isCompleted = appointment.status === 'completed';
+                const completedColor = "#10b981"; // Emerald-500 for a positive "Done" feel
 
                 return (
                   <div
@@ -292,34 +293,34 @@ const Appointments = () => {
                     className={cn(
                       "absolute left-4 right-4 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] group border-l-[6px] mica-card overflow-hidden",
                       appointment.status === 'confirmed' ? "ring-1 ring-primary/30" : "border-border/10 shadow-lg shadow-black/5",
-                      isCompleted && "opacity-60 grayscale-[0.3] bg-muted/20 border-l-muted border-dashed shadow-none hover:scale-100"
+                      isCompleted && "bg-emerald-50/10 border-emerald-500/50 shadow-none hover:scale-100 ring-1 ring-emerald-500/20"
                     )}
                     style={{
                       top: `${top}px`,
                       height: `${Math.max(height, 72)}px`,
-                      borderColor: isCompleted ? 'var(--muted-foreground)' : practitioner?.color,
+                      borderColor: isCompleted ? completedColor : practitioner?.color,
                       background: isCompleted 
-                        ? 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px)'
+                        ? `linear-gradient(135deg, ${completedColor}10 0%, ${completedColor}05 100%)`
                         : `linear-gradient(135deg, ${practitioner?.color}15 0%, ${practitioner?.color}05 100%)`,
                     }}
                     onClick={() => setSelectedAppointment(appointment)}
                   >
                     {/* Glass Shine Effect */}
-                    {!isCompleted && <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/5 pointer-events-none" />}
+                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/5 pointer-events-none" />
                     
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="flex items-start justify-between">
                         <div>
                           <p className={cn(
                             "font-extrabold text-base tracking-tight leading-none text-foreground/90",
-                            isCompleted && "line-through text-muted-foreground"
+                            isCompleted && "text-emerald-950 dark:text-emerald-100"
                           )}>
                             {patient?.firstName} {patient?.lastName}
                           </p>
                           <div className="flex items-center gap-2 mt-1.5">
                             <Badge variant="outline" className={cn(
                               "text-[10px] font-bold h-5 px-2 bg-background/40 border-border/20 uppercase tracking-tighter",
-                              isCompleted && "bg-muted/50 text-muted-foreground border-transparent"
+                              isCompleted && "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                             )}>
                               {type?.label}
                             </Badge>
@@ -333,11 +334,11 @@ const Appointments = () => {
                         <div className="flex flex-col items-end gap-2">
                           <Avatar className={cn(
                             "h-8 w-8 ring-2 ring-background shadow-sm border border-border/20",
-                            isCompleted && "grayscale opacity-50"
+                            isCompleted && "ring-emerald-500/20"
                           )}>
                             <AvatarFallback 
                               className="text-[10px] font-extrabold text-white"
-                              style={{ backgroundColor: isCompleted ? 'gray' : practitioner?.color }}
+                              style={{ backgroundColor: isCompleted ? completedColor : practitioner?.color }}
                             >
                               {practitioner?.firstName.charAt(0)}{practitioner?.lastName.charAt(0)}
                             </AvatarFallback>
@@ -348,7 +349,7 @@ const Appointments = () => {
                             </div>
                           )}
                           {isCompleted && (
-                            <div className="bg-muted p-1 rounded-full text-muted-foreground">
+                            <div className="bg-emerald-500/20 p-1 rounded-full text-emerald-600">
                               <CheckCircle2 className="h-3.5 w-3.5" />
                             </div>
                           )}
@@ -357,12 +358,17 @@ const Appointments = () => {
 
                       {height > 100 && (
                         <div className="mt-auto flex items-center justify-between">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                          <p className={cn(
+                            "text-[10px] font-bold uppercase tracking-widest",
+                            isCompleted ? "text-emerald-600/70" : "text-muted-foreground"
+                          )}>
                             {practitioner?.firstName} {practitioner?.lastName}
                           </p>
-                          <div className="flex gap-1">
+                          <div className="flex gap-1 items-center">
                             {isCompleted ? (
-                              <div className="px-2 py-0.5 rounded-full bg-muted text-[8px] font-black uppercase text-muted-foreground">Done</div>
+                              <span className="text-[11px] font-medium text-emerald-600 uppercase tracking-wide bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded-md">
+                                COMPLETED
+                              </span>
                             ) : (
                               <>
                                 <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
@@ -375,7 +381,10 @@ const Appointments = () => {
                     </div>
 
                     {/* Background Icon Watermark */}
-                    <CalendarIcon className="absolute -bottom-4 -right-4 w-20 h-20 opacity-[0.03] text-foreground pointer-events-none group-hover:opacity-[0.06] transition-opacity" />
+                    <CalendarIcon className={cn(
+                      "absolute -bottom-4 -right-4 w-20 h-20 opacity-[0.03] text-foreground pointer-events-none group-hover:opacity-[0.06] transition-opacity",
+                      isCompleted && "text-emerald-500 opacity-[0.05]"
+                    )} />
                   </div>
                 );
               })}
