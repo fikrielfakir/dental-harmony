@@ -43,7 +43,7 @@ const ClinicalRecords = () => {
     patientId: "",
     procedure: "",
     doctor: "",
-    status: "Scheduled" as const,
+    status: "Scheduled" as any,
     notes: "",
   });
 
@@ -69,6 +69,15 @@ const ClinicalRecords = () => {
       tags: [newRecord.procedure],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      diagnosis: "",
+      treatmentPlan: {
+        procedures: [],
+        estimatedCost: 0,
+        estimatedDuration: "",
+      },
+      notes: newRecord.notes,
+      teethStatus: [],
+      attachments: [],
       // Adding extra fields for the UI display in this page
       procedure: newRecord.procedure,
       doctor: newRecord.doctor,
