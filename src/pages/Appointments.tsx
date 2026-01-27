@@ -219,37 +219,46 @@ const Appointments = () => {
           </div>
         </div>
         <ScrollArea className="flex-1">
-          <div className="relative min-h-[720px] p-4">
-            {HOURS.map((hour) => (
-              <div key={hour} className="h-[60px] border-b border-border/5" />
-            ))}
-            {dayAppointments.map((appointment) => {
-              const { top, height } = getAppointmentPosition(appointment);
-              const patient = getPatient(appointment.patientId);
-              const practitioner = getPractitioner(appointment.practitionerId);
-              return (
-                <div
-                  key={appointment.id}
-                  className="absolute left-4 right-4 rounded-xl p-3 cursor-pointer transition-all hover:shadow-lg border-l-4 mica-card overflow-hidden"
-                  style={{
-                    top: `${top}px`,
-                    height: `${Math.max(height, 60)}px`,
-                    borderColor: practitioner?.color,
-                    backgroundColor: `${practitioner?.color}15`,
-                  }}
-                  onClick={() => setSelectedAppointment(appointment)}
-                >
-                  <p className="font-bold text-sm truncate">{patient?.firstName} {patient?.lastName}</p>
-                  <p className="text-xs opacity-80 truncate">{appointmentTypes.find(t => t.value === appointment.appointmentType)?.label}</p>
-                  <div className="mt-1 flex items-center gap-2 opacity-60">
-                    <Clock className="h-3 w-3" />
-                    <span className="text-[10px] font-bold">
-                      {format(parseISO(appointment.startTime), "h:mm a")} - {format(parseISO(appointment.endTime), "h:mm a")}
-                    </span>
+          <div className="relative min-h-[720px]">
+            {/* Background grid lines */}
+            <div className="absolute inset-0 pt-14">
+              {HOURS.map((hour) => (
+                <div key={hour} className="h-[60px] border-b border-border/5" />
+              ))}
+            </div>
+            
+            <div className="relative pt-14 px-4 h-full">
+              {dayAppointments.map((appointment) => {
+                const { top, height } = getAppointmentPosition(appointment);
+                const patient = getPatient(appointment.patientId);
+                const practitioner = getPractitioner(appointment.practitionerId);
+                
+                if (top < 0 || top >= HOURS.length * 60) return null;
+
+                return (
+                  <div
+                    key={appointment.id}
+                    className="absolute left-4 right-4 rounded-xl p-3 cursor-pointer transition-all hover:shadow-lg border-l-4 mica-card overflow-hidden"
+                    style={{
+                      top: `${top}px`,
+                      height: `${Math.max(height, 60)}px`,
+                      borderColor: practitioner?.color,
+                      backgroundColor: `${practitioner?.color}15`,
+                    }}
+                    onClick={() => setSelectedAppointment(appointment)}
+                  >
+                    <p className="font-bold text-sm truncate">{patient?.firstName} {patient?.lastName}</p>
+                    <p className="text-xs opacity-80 truncate">{appointmentTypes.find(t => t.value === appointment.appointmentType)?.label}</p>
+                    <div className="mt-1 flex items-center gap-2 opacity-60">
+                      <Clock className="h-3 w-3" />
+                      <span className="text-[10px] font-bold">
+                        {format(parseISO(appointment.startTime), "h:mm a")} - {format(parseISO(appointment.endTime), "h:mm a")}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </ScrollArea>
       </div>
