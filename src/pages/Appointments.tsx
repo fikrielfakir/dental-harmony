@@ -384,6 +384,17 @@ const Appointments = () => {
                 <Button variant="outline" onClick={() => setSelectedAppointment(null)}>
                   Close
                 </Button>
+                {selectedAppointment.status !== 'completed' && (
+                  <Button 
+                    className="bg-green-600 hover:bg-green-700" 
+                    onClick={() => {
+                      updateAppointment(selectedAppointment.id, { status: 'completed' });
+                      setSelectedAppointment(null);
+                    }}
+                  >
+                    Mark Completed
+                  </Button>
+                )}
                 <Button variant="destructive" onClick={handleCancelAppointment}>Cancel Appointment</Button>
                 <Button>Edit</Button>
               </DialogFooter>

@@ -41,6 +41,7 @@ const ClinicalRecords = () => {
     doctor: "",
     status: "Scheduled" as any,
     notes: "",
+    cost: "",
   });
 
   const resetForm = () => {
@@ -50,6 +51,7 @@ const ClinicalRecords = () => {
       doctor: "",
       status: "Scheduled",
       notes: "",
+      cost: "",
     });
   };
 
@@ -67,9 +69,13 @@ const ClinicalRecords = () => {
       updatedAt: new Date().toISOString(),
       diagnosis: "",
       treatmentPlan: {
-        procedures: [],
-        estimatedCost: 0,
-        estimatedDuration: "",
+        procedures: [{
+          name: newRecord.procedure,
+          priority: 'medium',
+          status: 'planned'
+        }],
+        estimatedCost: parseFloat(newRecord.cost) || 0,
+        estimatedDuration: "1 hour",
       },
       notes: newRecord.notes,
       teethStatus: [],
@@ -78,6 +84,7 @@ const ClinicalRecords = () => {
       procedure: newRecord.procedure,
       doctor: newRecord.doctor,
       status: newRecord.status,
+      cost: parseFloat(newRecord.cost) || 0,
       patientName: selectedPatient ? `${selectedPatient.firstName} ${selectedPatient.lastName}` : "Unknown Patient"
     };
     addClinicalNote(note);
@@ -181,6 +188,7 @@ const ClinicalRecords = () => {
                 <TableHead>Record ID</TableHead>
                 <TableHead>Patient</TableHead>
                 <TableHead>Procedure / Note</TableHead>
+                <TableHead>Cost</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Doctor</TableHead>
                 <TableHead>Status</TableHead>
@@ -200,6 +208,7 @@ const ClinicalRecords = () => {
                     <TableCell className="font-mono text-xs">{record.id.slice(0, 8)}</TableCell>
                     <TableCell className="font-medium">{record.patientName}</TableCell>
                     <TableCell>{record.procedure}</TableCell>
+                    <TableCell className="font-medium">${(record.cost || 0).toLocaleString()}</TableCell>
                     <TableCell>{new Date(record.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{record.doctor}</TableCell>
                     <TableCell>
@@ -279,6 +288,17 @@ const ClinicalRecords = () => {
                 placeholder="e.g., Dr. Smith"
                 value={newRecord.doctor}
                 onChange={(e) => setNewRecord({ ...newRecord, doctor: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="cost">Estimated Cost ($)</Label>
+              <Input
+                id="cost"
+                type="number"
+                placeholder="0.00"
+                value={newRecord.cost}
+                onChange={(e) => setNewRecord({ ...newRecord, cost: e.target.value })}
               />
             </div>
 
