@@ -1,0 +1,568 @@
+comprehensive, modern dental practice management system using React, TypeScript, and modern web technologies. The system should streamline patient management, appointments, clinical records, and administrative operations for a dental cabinet.
+System Architecture
+Technology Stack
+
+Frontend: React 18+, TypeScript, TailwindCSS
+State Management: Zustand or Redux Toolkit
+UI Components: Shadcn/ui, Headless UI
+Forms: React Hook Form, Zod validation
+Database: Supabase PostgreSQL (with Row Level Security)
+Authentication: Supabase Auth with role-based access control
+Real-time: Supabase Real-time subscriptions
+API: RESTful with React Query/TanStack Query
+Charts: Recharts or Chart.js for analytics
+Date/Time: date-fns
+File Management: Supabase Storage for images and documents
+
+Core Modules
+1. Patient Management Module
+Features:
+
+Patient registration with complete medical history
+Allergy tracking and contraindications
+Medical conditions and medications list
+Patient contact information and insurance details
+Search and filter patients
+Patient timeline view (all interactions)
+Export patient data to PDF
+
+Schema:
+patients:
+  - id (UUID)
+  - firstName, lastName, dateOfBirth
+  - email, phone, address
+  - socialSecurityNumber
+  - insuranceProvider, policyNumber
+  - medicalHistory (JSON)
+  - allergies (array)
+  - medications (array)
+  - notes
+  - createdAt, updatedAt
+UI Components:
+
+Patient card with quick info
+Detailed patient profile view
+Medical history accordion
+Add/edit patient modal
+Patient search bar with auto-complete
+
+2. Appointment Scheduling Module
+Features:
+
+Interactive calendar view (day, week, month)
+Appointment booking with drag-and-drop
+Multiple practitioner schedules
+Procedure duration templates
+Waiting list management
+Appointment reminders (SMS/Email status)
+Cancellation and rescheduling
+Patient no-show tracking
+Calendar sync indicators
+
+Schema:
+appointments:
+  - id (UUID)
+  - patientId (FK)
+  - practitionerId (FK)
+  - appointmentType (consultation, treatment, hygiene, etc.)
+  - startTime, endTime
+  - status (scheduled, completed, cancelled, no-show)
+  - notes
+  - treatment (JSON)
+  - reminderSent (boolean)
+  - createdAt, updatedAt
+
+practitionerSchedules:
+  - id (UUID)
+  - practitionerId (FK)
+  - dayOfWeek
+  - startTime, endTime
+  - isAvailable (boolean)
+UI Components:
+
+Calendar grid with color-coded practitioners
+Appointment creation modal with patient search
+Appointment detail popup
+Drag-to-resize for duration changes
+Waiting list panel
+Time slot selection
+Reminder status indicator
+
+3. Clinical Records Module
+Features:
+
+Structured clinical notes templates
+Tooth numbering system (FDI notation)
+Treatment history per tooth
+Clinical images/radiographs upload and linking
+Diagnosis and treatment planning
+Clinical notes with timestamp and practitioner signature
+Version control for modifications
+PDF export of clinical records
+
+Schema:
+clinicalNotes:
+  - id (UUID)
+  - patientId (FK)
+  - appointmentId (FK)
+  - practitionerId (FK)
+  - diagnosis
+  - treatmentPlan (JSON)
+  - notes
+  - teethStatus (JSON with FDI numbering)
+  - attachments (images, radiographs)
+  - signature (digital)
+  - createdAt, updatedAt
+
+toothRecord:
+  - fdiNumber (1-32)
+  - status (healthy, cavity, restoration, extraction, etc.)
+  - treatments (array)
+  - images (array of file_ids)
+UI Components:
+
+Tooth chart interactive diagram (clickable FDI grid)
+Clinical note editor with rich text
+Image gallery with annotations
+Treatment history timeline per tooth
+Template selector for common diagnoses
+Notes editor with auto-save
+Digital signature pad
+
+4. Billing & Invoicing Module
+Features:
+
+Automatic invoice generation from treatments
+Quotation/estimate creation
+Payment tracking (paid, pending, overdue)
+Multiple payment methods (cash, card, check, transfer)
+Insurance claim management
+Tax calculations (VAT)
+Invoice templates with cabinet details
+Payment history per patient
+Financial reports and analytics
+
+Schema:
+invoices:
+  - id (UUID)
+  - patientId (FK)
+  - invoiceNumber (auto-increment)
+  - items (JSON array with services and amounts)
+  - totalAmount
+  - taxAmount
+  - discountAmount
+  - paymentStatus (pending, partial, paid, overdue)
+  - paymentDate
+  - invoiceDate, dueDate
+  - notes
+  - createdAt, updatedAt
+
+payments:
+  - id (UUID)
+  - invoiceId (FK)
+  - amount
+  - paymentMethod (cash, card, check, transfer)
+  - paymentDate
+  - notes
+UI Components:
+
+Invoice list with status badges
+Invoice detail view
+Create quotation form
+Payment input form
+Invoice PDF preview and download
+Payment method selector
+Aging analysis chart
+
+5. Staff Management Module
+Features:
+
+Staff profile management (dentists, hygienists, assistants)
+Role and permission assignment
+Specialization tracking
+Schedule management per staff
+Performance metrics
+License and certification tracking
+Staff directory
+
+Schema:
+users:
+  - id (UUID)
+  - email
+  - password (hashed)
+  - firstName, lastName
+  - role (admin, dentist, hygienist, assistant, receptionist)
+  - specialization
+  - phone
+  - licenseNumber, certificationDate
+  - permissions (JSON)
+  - createdAt, updatedAt
+UI Components:
+
+Staff directory list
+Staff profile card
+Add staff modal with role selector
+License tracking table
+Permissions management interface
+
+6. Prescription Management Module
+Features:
+
+Create and send e-prescriptions
+Prescription history per patient
+Medication database with common dental drugs
+Dosage templates
+Prescription validation
+Export to PDF for paper backup
+Prescription status tracking
+
+Schema:
+prescriptions:
+  - id (UUID)
+  - patientId (FK)
+  - practitionerId (FK)
+  - appointmentId (FK)
+  - medications (JSON array)
+  - instructions
+  - createdDate
+  - expiryDate
+  - status (active, dispensed, expired)
+
+medications:
+  - id (UUID)
+  - name
+  - dosage
+  - frequency
+  - duration (days)
+UI Components:
+
+Prescription form with medication search
+Dosage selector
+Prescription history timeline
+PDF export button
+Medication interactions warning (if integrated)
+
+7. Analytics & Reporting Dashboard
+Features:
+
+Appointment statistics (booked, completed, cancelled)
+Revenue tracking and forecasting
+Patient acquisition trends
+Most common treatments
+Staff performance metrics
+KPI dashboards (daily revenue, patients seen, etc.)
+Custom report builder
+Export reports to Excel/PDF
+
+Schema:
+No additional schema needed - use aggregate queries
+UI Components:
+
+KPI cards (revenue, patients today, appointments, etc.)
+Revenue line chart (monthly trend)
+Appointment status pie chart
+Top procedures bar chart
+Patient demographics chart
+Custom date range selector
+Export buttons for each report
+
+8. Settings & Configuration Module
+Features:
+
+Cabinet information (name, address, logo)
+Business hours configuration
+Appointment buffer times
+Service menu with pricing
+Email/SMS notification templates
+System logs and audit trail
+Backup and restore functions
+
+Schema:
+settings:
+  - key (unique)
+  - value (JSON)
+  - category
+  - updatedAt
+
+auditLog:
+  - id (UUID)
+  - userId (FK)
+  - action (create, update, delete)
+  - table
+  - recordId
+  - oldValue, newValue (JSON)
+  - timestamp
+UI Components:
+
+Settings form sections
+Logo upload
+Business hours time picker
+Service menu table
+Notification template editor
+Audit log viewer with filters
+
+User Roles & Permissions
+Admin
+
+Full system access
+Staff management
+Settings configuration
+Financial reports
+
+Dentist
+
+View/create appointments
+Patient clinical records (full access)
+Create prescriptions
+Invoicing
+Personal schedule management
+
+Hygienist
+
+View appointments
+Clinical notes (limited scope)
+Patient records (limited)
+Schedule management
+
+Assistant/Receptionist
+
+Appointment scheduling
+Patient registration
+Appointment reminders
+Basic patient info viewing
+Payment recording
+
+UI/UX Guidelines
+Design System
+
+Use Shadcn/ui components for consistency
+TailwindCSS utility classes for styling
+Color scheme: Professional medical aesthetic
+
+Primary: Medical blue (#1e40af)
+Success: Green (#16a34a)
+Warning: Amber (#d97706)
+Error: Red (#dc2626)
+
+
+Responsive design (mobile, tablet, desktop)
+Dark mode support
+
+Navigation Structure
+Main Layout:
+├── Sidebar Navigation
+│   ├── Dashboard
+│   ├── Patients
+│   ├── Appointments
+│   ├── Clinical Records
+│   ├── Billing
+│   ├── Prescriptions
+│   ├── Reports
+│   ├── Staff
+│   └── Settings
+├── Top Bar
+│   ├── Current user profile
+│   ├── Notifications
+│   ├── Settings
+│   └── Logout
+└── Main Content Area
+    └── Module-specific views
+Key Interactions
+
+Drag-and-drop appointments on calendar
+Quick patient search with autocomplete
+Inline editing where appropriate
+Modal dialogs for complex forms
+Toast notifications for confirmations
+Keyboard shortcuts for power users
+Undo functionality for critical actions
+
+Data Security & Compliance
+Security Requirements
+
+HTTPS/TLS encryption
+Row Level Security (RLS) in Supabase
+Password hashing with bcrypt
+JWT token management
+CORS configuration
+SQL injection prevention (prepared statements)
+XSS protection (React templating)
+CSRF tokens for state-changing operations
+
+Compliance
+
+GDPR compliance
+
+Right to deletion (soft delete)
+Data export functionality
+Consent management
+
+
+Medical data privacy (HIPAA-equivalent)
+Audit logging for all sensitive operations
+Patient data segregation
+Secure password policies
+
+API Endpoints Structure
+/api/auth/
+  POST /login
+  POST /logout
+  POST /refresh-token
+  GET /profile
+
+/api/patients/
+  GET / (list with pagination)
+  GET /:id
+  POST / (create)
+  PUT /:id (update)
+  DELETE /:id (soft delete)
+  GET /:id/appointments
+  GET /:id/clinical-notes
+  GET /:id/invoices
+
+/api/appointments/
+  GET / (with filters: date, practitioner, status)
+  GET /:id
+  POST / (create)
+  PUT /:id (update/reschedule)
+  DELETE /:id (cancel)
+  POST /:id/remind (send reminder)
+
+/api/clinical-notes/
+  GET / (by patient)
+  GET /:id
+  POST / (create)
+  PUT /:id (update)
+  DELETE /:id
+
+/api/invoices/
+  GET / (with filters)
+  GET /:id
+  POST / (create)
+  POST /:id/payment
+  GET /:id/pdf (export)
+
+/api/prescriptions/
+  GET / (by patient)
+  POST / (create)
+  GET /:id
+  GET /:id/pdf
+
+/api/analytics/
+  GET /dashboard
+  GET /revenue (with date range)
+  GET /appointments-stats
+  GET /patient-demographics
+
+/api/settings/
+  GET /
+  PUT /
+  GET /audit-log
+Performance Considerations
+
+Implement pagination for large lists (20-50 items per page)
+Use React Query with caching strategies
+Lazy load images and documents
+Database indexing on frequently queried fields
+Code splitting and dynamic imports
+Memoization for expensive computations
+Debouncing for search inputs
+Virtual scrolling for large lists
+
+Testing Strategy
+
+Unit tests with Vitest/Jest
+Component tests with React Testing Library
+Integration tests for critical workflows
+E2E tests with Cypress or Playwright
+Test coverage target: 80%+
+
+Deployment & DevOps
+
+Deploy to Vercel or Netlify (frontend)
+Supabase hosting (backend + database)
+Environment variables for configuration
+CI/CD with GitHub Actions
+Automated testing on pull requests
+Staging environment for testing
+
+Implementation Phases
+Phase 1: MVP (Weeks 1-2)
+
+Patient management
+Appointment scheduling
+Basic clinical notes
+User authentication and roles
+
+Phase 2: Core Features (Weeks 3-4)
+
+Billing module
+Prescriptions
+Enhanced clinical records with tooth chart
+Email notifications
+
+Phase 3: Advanced Features (Weeks 5-6)
+
+Analytics dashboard
+Staff management
+Settings and configuration
+Audit logging
+
+Phase 4: Polish & Optimization (Week 7)
+
+Performance optimization
+UI/UX refinements
+Security hardening
+Documentation
+
+Additional Features to Consider
+
+SMS reminders integration (Twilio)
+Email reminders automation
+Patient portal (self-service booking, payment)
+Integration with payment gateways (Stripe, Square)
+Document management (contracts, consent forms)
+Video consultation capability
+Mobile app (React Native)
+Integration with imaging equipment APIs
+WhatsApp notifications
+Insurance claim automation
+
+Folder Structure
+src/
+├── components/
+│   ├── auth/
+│   ├── patients/
+│   ├── appointments/
+│   ├── clinical/
+│   ├── billing/
+│   ├── prescriptions/
+│   ├── analytics/
+│   ├── settings/
+│   ├── common/
+│   │   ├── Header.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── Layout.tsx
+│   └── ui/ (shadcn components)
+├── pages/
+├── hooks/
+├── services/ (API calls)
+├── store/ (Zustand)
+├── types/
+├── utils/
+├── styles/
+└── App.tsx
+Success Metrics
+
+System uptime: 99.5%+
+Page load time: < 2 seconds
+Appointment creation: < 30 seconds
+Patient search response: < 1 second
+User satisfaction: > 4.5/5
+Staff adoption rate: > 90% within 1 month
+
+
+Starting the Build
+Begin with the layout structure and authentication system. Then build the patient and appointment modules as they form the core of the system. Progressively add clinical records, billing, and analytics as the foundation stabilizes.
+Use Lovable's component generation capabilities to speed up UI development. Leverage Supabase for rapid backend development without writing extensive server code.
+Start with Supabase Auth for user management, then build RBAC (Role-Based Access Control) with proper RLS policies.
