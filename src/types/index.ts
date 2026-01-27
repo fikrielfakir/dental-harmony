@@ -101,12 +101,26 @@ export interface ClinicalNote {
   diagnosis: string;
   treatmentPlan: TreatmentPlan;
   notes: string;
-  teethStatus: ToothRecord[];
+  teethStatus: DentalChartEntry[];
   attachments: Attachment[];
   signature?: string;
   createdAt: string;
   updatedAt: string;
 }
+
+export interface DentalChartEntry {
+  id: string;
+  patientId: string;
+  toothNumber: number;
+  surfaces: ToothSurface[];
+  treatmentType: string;
+  status: 'planned' | 'completed';
+  notes?: string;
+  date: string;
+  color?: string;
+}
+
+export type ToothSurface = 'O' | 'M' | 'D' | 'B' | 'L';
 
 export interface TreatmentPlan {
   procedures: PlannedProcedure[];
@@ -119,13 +133,6 @@ export interface PlannedProcedure {
   tooth?: number;
   priority: 'urgent' | 'high' | 'medium' | 'low';
   status: 'planned' | 'in-progress' | 'completed';
-}
-
-export interface ToothRecord {
-  fdiNumber: number;
-  status: ToothStatus;
-  treatments: string[];
-  notes?: string;
 }
 
 export type ToothStatus = 

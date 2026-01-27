@@ -37,12 +37,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Patient } from "@/types";
-
-import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Odontogram } from "@/components/dental/Odontogram";
 
 const Patients = () => {
   const navigate = useNavigate();
+  // ... rest of imports
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
@@ -385,131 +385,148 @@ const Patients = () => {
                 </DialogTitle>
               </DialogHeader>
 
-              <ScrollArea className="max-h-[60vh]">
-                <div className="space-y-6 pr-4">
-                  {/* Contact Information */}
-                  <div>
-                    <h4 className="font-semibold mb-3">Contact Information</h4>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        {selectedPatient.email}
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        {selectedPatient.phone}
-                      </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {selectedPatient.address}
-                    </p>
-                  </div>
+              <Tabs defaultValue="profile" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="profile">Profile</TabsTrigger>
+                  <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                  <TabsTrigger value="notes">Notes</TabsTrigger>
+                  <TabsTrigger value="chart">Dental Chart</TabsTrigger>
+                </TabsList>
 
-                  <Separator />
-
-                  {/* Insurance */}
-                  {selectedPatient.insuranceProvider && (
-                    <>
+                <TabsContent value="profile" className="mt-4">
+                  <ScrollArea className="max-h-[50vh]">
+                    <div className="space-y-6 pr-4">
+                      {/* Contact Information */}
                       <div>
-                        <h4 className="font-semibold mb-3">Insurance</h4>
-                        <div className="grid gap-2 sm:grid-cols-2 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Provider: </span>
-                            {selectedPatient.insuranceProvider}
+                        <h4 className="font-semibold mb-3">Contact Information</h4>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Mail className="h-4 w-4 text-muted-foreground" />
+                            {selectedPatient.email}
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">Policy #: </span>
-                            {selectedPatient.policyNumber}
+                          <div className="flex items-center gap-2 text-sm">
+                            <Phone className="h-4 w-4 text-muted-foreground" />
+                            {selectedPatient.phone}
                           </div>
                         </div>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          {selectedPatient.address}
+                        </p>
                       </div>
+
                       <Separator />
-                    </>
-                  )}
 
-                  {/* Allergies & Medications */}
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <AlertCircle className="h-4 w-4 text-destructive" />
-                        Allergies
-                      </h4>
-                      {selectedPatient.allergies.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                          {selectedPatient.allergies.map((allergy, i) => (
-                            <Badge key={i} variant="destructive">
-                              {allergy}
-                            </Badge>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">
-                          No known allergies
-                        </p>
+                      {/* Insurance */}
+                      {selectedPatient.insuranceProvider && (
+                        <>
+                          <div>
+                            <h4 className="font-semibold mb-3">Insurance</h4>
+                            <div className="grid gap-2 sm:grid-cols-2 text-sm">
+                              <div>
+                                <span className="text-muted-foreground">Provider: </span>
+                                {selectedPatient.insuranceProvider}
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">Policy #: </span>
+                                {selectedPatient.policyNumber}
+                              </div>
+                            </div>
+                          </div>
+                          <Separator />
+                        </>
                       )}
-                    </div>
 
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <Pill className="h-4 w-4 text-info" />
-                        Medications
-                      </h4>
-                      {selectedPatient.medications.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                          {selectedPatient.medications.map((med, i) => (
-                            <Badge key={i} variant="secondary">
-                              {med}
-                            </Badge>
-                          ))}
+                      {/* Allergies & Medications */}
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
+                          <h4 className="font-semibold mb-3 flex items-center gap-2">
+                            <AlertCircle className="h-4 w-4 text-destructive" />
+                            Allergies
+                          </h4>
+                          {selectedPatient.allergies.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                              {selectedPatient.allergies.map((allergy, i) => (
+                                <Badge key={i} variant="destructive">
+                                  {allergy}
+                                </Badge>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground">
+                              No known allergies
+                            </p>
+                          )}
                         </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">
-                          No current medications
-                        </p>
-                      )}
-                    </div>
-                  </div>
 
-                  <Separator />
+                        <div>
+                          <h4 className="font-semibold mb-3 flex items-center gap-2">
+                            <Pill className="h-4 w-4 text-info" />
+                            Medications
+                          </h4>
+                          {selectedPatient.medications.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                              {selectedPatient.medications.map((med, i) => (
+                                <Badge key={i} variant="secondary">
+                                  {med}
+                                </Badge>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground">
+                              No current medications
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
-                  {/* Medical History */}
-                  <div>
-                    <h4 className="font-semibold mb-3">Medical History</h4>
-                    <div className="space-y-3 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Conditions: </span>
-                        {selectedPatient.medicalHistory.conditions.length > 0
-                          ? selectedPatient.medicalHistory.conditions.join(", ")
-                          : "None reported"}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Past Surgeries: </span>
-                        {selectedPatient.medicalHistory.surgeries.length > 0
-                          ? selectedPatient.medicalHistory.surgeries.join(", ")
-                          : "None reported"}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Family History: </span>
-                        {selectedPatient.medicalHistory.familyHistory.length > 0
-                          ? selectedPatient.medicalHistory.familyHistory.join(", ")
-                          : "None reported"}
-                      </div>
-                    </div>
-                  </div>
-
-                  {selectedPatient.notes && (
-                    <>
                       <Separator />
+
+                      {/* Medical History */}
                       <div>
-                        <h4 className="font-semibold mb-2">Notes</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {selectedPatient.notes}
-                        </p>
+                        <h4 className="font-semibold mb-3">Medical History</h4>
+                        <div className="space-y-3 text-sm">
+                          <div>
+                            <span className="text-muted-foreground">Conditions: </span>
+                            {selectedPatient.medicalHistory.conditions.length > 0
+                              ? selectedPatient.medicalHistory.conditions.join(", ")
+                              : "None reported"}
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Past Surgeries: </span>
+                            {selectedPatient.medicalHistory.surgeries.length > 0
+                              ? selectedPatient.medicalHistory.surgeries.join(", ")
+                              : "None reported"}
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Family History: </span>
+                            {selectedPatient.medicalHistory.familyHistory.length > 0
+                              ? selectedPatient.medicalHistory.familyHistory.join(", ")
+                              : "None reported"}
+                          </div>
+                        </div>
                       </div>
-                    </>
-                  )}
-                </div>
-              </ScrollArea>
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+
+                <TabsContent value="appointments" className="mt-4">
+                  <div className="py-12 text-center text-muted-foreground">
+                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                    <p>Appointment history view coming soon.</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="notes" className="mt-4">
+                  <div className="py-12 text-center text-muted-foreground">
+                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                    <p>Clinical notes view coming soon.</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="chart" className="mt-4">
+                  <Odontogram patientId={selectedPatient.id} />
+                </TabsContent>
+              </Tabs>
 
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
