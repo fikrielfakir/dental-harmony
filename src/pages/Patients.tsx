@@ -97,12 +97,19 @@ const Patients = () => {
 
   const handleEditPatient = () => {
     if (!selectedPatient) return;
-    const updated: Partial<Patient> = {
-      ...newPatient,
-    };
-    updatePatient(selectedPatient.id, updated);
+    updatePatient(selectedPatient.id, { ...newPatient });
     setIsEditDialogOpen(false);
     setSelectedPatient(null);
+    setNewPatient({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      dateOfBirth: "",
+      address: "",
+      insuranceProvider: "",
+      policyNumber: "",
+    });
   };
 
   const handleDeletePatient = (id: string) => {
