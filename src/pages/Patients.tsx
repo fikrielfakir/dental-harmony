@@ -385,30 +385,34 @@ const Patients = () => {
 
       {/* Add Patient Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-sm sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New Patient</DialogTitle>
-            <DialogDescription>
-              Enter the patient's basic information. You can add more details later.
+            <DialogTitle className="text-xl">Add New Patient</DialogTitle>
+            <DialogDescription className="text-xs">
+              Fill in the essential details to register a new patient.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+          <div className="grid gap-3 py-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="firstName" className="text-xs font-semibold">First Name</Label>
                 <Input
                   id="firstName"
+                  placeholder="e.g. John"
+                  className="h-8 text-sm"
                   value={newPatient.firstName}
                   onChange={(e) =>
                     setNewPatient({ ...newPatient, firstName: e.target.value })
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="lastName" className="text-xs font-semibold">Last Name</Label>
                 <Input
                   id="lastName"
+                  placeholder="e.g. Doe"
+                  className="h-8 text-sm"
                   value={newPatient.lastName}
                   onChange={(e) =>
                     setNewPatient({ ...newPatient, lastName: e.target.value })
@@ -417,23 +421,41 @@ const Patients = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                value={newPatient.dateOfBirth}
-                onChange={(e) =>
-                  setNewPatient({ ...newPatient, dateOfBirth: e.target.value })
-                }
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="dateOfBirth" className="text-xs font-semibold">Date of Birth</Label>
+                <Input
+                  id="dateOfBirth"
+                  type="date"
+                  className="h-8 text-sm"
+                  value={newPatient.dateOfBirth}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, dateOfBirth: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-xs font-semibold">Phone</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="(555) 000-0000"
+                  className="h-8 text-sm"
+                  value={newPatient.phone}
+                  onChange={(e) =>
+                    setNewPatient({ ...newPatient, phone: e.target.value })
+                  }
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs font-semibold">Email Address</Label>
               <Input
                 id="email"
                 type="email"
+                placeholder="john.doe@example.com"
+                className="h-8 text-sm"
                 value={newPatient.email}
                 onChange={(e) =>
                   setNewPatient({ ...newPatient, email: e.target.value })
@@ -441,22 +463,12 @@ const Patients = () => {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="address" className="text-xs font-semibold">Home Address</Label>
               <Input
-                id="phone"
-                type="tel"
-                value={newPatient.phone}
-                onChange={(e) =>
-                  setNewPatient({ ...newPatient, phone: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Textarea
                 id="address"
+                placeholder="123 Street Name, City"
+                className="h-8 text-sm"
                 value={newPatient.address}
                 onChange={(e) =>
                   setNewPatient({ ...newPatient, address: e.target.value })
@@ -464,11 +476,13 @@ const Patients = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="insuranceProvider">Insurance Provider</Label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="insuranceProvider" className="text-xs font-semibold">Insurance</Label>
                 <Input
                   id="insuranceProvider"
+                  placeholder="Provider"
+                  className="h-8 text-sm"
                   value={newPatient.insuranceProvider}
                   onChange={(e) =>
                     setNewPatient({
@@ -478,10 +492,12 @@ const Patients = () => {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="policyNumber">Policy Number</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="policyNumber" className="text-xs font-semibold">Policy #</Label>
                 <Input
                   id="policyNumber"
+                  placeholder="Number"
+                  className="h-8 text-sm"
                   value={newPatient.policyNumber}
                   onChange={(e) =>
                     setNewPatient({ ...newPatient, policyNumber: e.target.value })
@@ -491,11 +507,12 @@ const Patients = () => {
             </div>
           </div>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+          <DialogFooter className="pt-2 gap-2">
+            <Button variant="secondary" className="h-8 text-xs" onClick={() => setIsAddDialogOpen(false)}>
               Cancel
             </Button>
             <Button
+              className="h-8 text-xs"
               onClick={handleAddPatient}
               disabled={!newPatient.firstName || !newPatient.lastName}
             >
