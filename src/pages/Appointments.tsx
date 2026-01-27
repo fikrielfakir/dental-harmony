@@ -284,32 +284,43 @@ const Appointments = () => {
 
                 if (startHour < 8 || startHour >= 20) return null;
 
+                const isCompleted = appointment.status === 'completed';
+
                 return (
                   <div
                     key={appointment.id}
                     className={cn(
                       "absolute left-4 right-4 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] group border-l-[6px] mica-card overflow-hidden",
-                      appointment.status === 'confirmed' ? "ring-1 ring-primary/30" : "border-border/10 shadow-lg shadow-black/5"
+                      appointment.status === 'confirmed' ? "ring-1 ring-primary/30" : "border-border/10 shadow-lg shadow-black/5",
+                      isCompleted && "opacity-60 grayscale-[0.3] bg-muted/20 border-l-muted border-dashed shadow-none hover:scale-100"
                     )}
                     style={{
                       top: `${top}px`,
                       height: `${Math.max(height, 72)}px`,
-                      borderColor: practitioner?.color,
-                      background: `linear-gradient(135deg, ${practitioner?.color}15 0%, ${practitioner?.color}05 100%)`,
+                      borderColor: isCompleted ? 'var(--muted-foreground)' : practitioner?.color,
+                      background: isCompleted 
+                        ? 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px)'
+                        : `linear-gradient(135deg, ${practitioner?.color}15 0%, ${practitioner?.color}05 100%)`,
                     }}
                     onClick={() => setSelectedAppointment(appointment)}
                   >
                     {/* Glass Shine Effect */}
-                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/5 pointer-events-none" />
+                    {!isCompleted && <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/5 pointer-events-none" />}
                     
                     <div className="relative z-10 flex flex-col h-full">
                       <div className="flex items-start justify-between">
                         <div>
-                          <p className="font-extrabold text-base tracking-tight leading-none text-foreground/90">
+                          <p className={cn(
+                            "font-extrabold text-base tracking-tight leading-none text-foreground/90",
+                            isCompleted && "line-through text-muted-foreground"
+                          )}>
                             {patient?.firstName} {patient?.lastName}
                           </p>
                           <div className="flex items-center gap-2 mt-1.5">
-                            <Badge variant="outline" className="text-[10px] font-bold h-5 px-2 bg-background/40 border-border/20 uppercase tracking-tighter">
+                            <Badge variant="outline" className={cn(
+                              "text-[10px] font-bold h-5 px-2 bg-background/40 border-border/20 uppercase tracking-tighter",
+                              isCompleted && "bg-muted/50 text-muted-foreground border-transparent"
+                            )}>
                               {type?.label}
                             </Badge>
                             <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground">
@@ -320,16 +331,24 @@ const Appointments = () => {
                         </div>
                         
                         <div className="flex flex-col items-end gap-2">
-                          <Avatar className="h-8 w-8 ring-2 ring-background shadow-sm border border-border/20">
+                          <Avatar className={cn(
+                            "h-8 w-8 ring-2 ring-background shadow-sm border border-border/20",
+                            isCompleted && "grayscale opacity-50"
+                          )}>
                             <AvatarFallback 
                               className="text-[10px] font-extrabold text-white"
-                              style={{ backgroundColor: practitioner?.color }}
+                              style={{ backgroundColor: isCompleted ? 'gray' : practitioner?.color }}
                             >
                               {practitioner?.firstName.charAt(0)}{practitioner?.lastName.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           {appointment.status === 'confirmed' && (
                             <div className="bg-primary/20 p-1 rounded-full text-primary">
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                            </div>
+                          )}
+                          {isCompleted && (
+                            <div className="bg-muted p-1 rounded-full text-muted-foreground">
                               <CheckCircle2 className="h-3.5 w-3.5" />
                             </div>
                           )}
@@ -342,8 +361,14 @@ const Appointments = () => {
                             {practitioner?.firstName} {practitioner?.lastName}
                           </p>
                           <div className="flex gap-1">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+                            {isCompleted ? (
+                              <div className="px-2 py-0.5 rounded-full bg-muted text-[8px] font-black uppercase text-muted-foreground">Done</div>
+                            ) : (
+                              <>
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+                              </>
+                            )}
                           </div>
                         </div>
                       )}
