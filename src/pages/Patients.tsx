@@ -12,6 +12,7 @@ import {
   Pill,
   ChevronRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "@/store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,7 @@ import { Separator } from "@/components/ui/separator";
 import { Patient } from "@/types";
 
 const Patients = () => {
+  const navigate = useNavigate();
   const { patients, addPatient, updatePatient, deletePatient } = useStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
@@ -95,12 +97,10 @@ const Patients = () => {
 
   const handleEditPatient = () => {
     if (!selectedPatient) return;
-    const updated: Patient = {
-      ...selectedPatient,
+    const updated: Partial<Patient> = {
       ...newPatient,
-      updatedAt: new Date().toISOString(),
     };
-    updatePatient(updated);
+    updatePatient(selectedPatient.id, updated);
     setIsEditDialogOpen(false);
     setSelectedPatient(null);
   };
@@ -242,7 +242,7 @@ const Patients = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenuItem onClick={() => setSelectedPatient(patient)}>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Book Appointment</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/appointments")}>Book Appointment</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => openEditDialog(patient)}>Edit Patient</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDeletePatient(patient.id)}>
                           Delete Patient
@@ -411,7 +411,7 @@ const Patients = () => {
                 <Button variant="outline" onClick={() => setSelectedPatient(null)}>
                   Close
                 </Button>
-                <Button>Book Appointment</Button>
+                <Button onClick={() => navigate("/appointments")}>Book Appointment</Button>
               </DialogFooter>
             </>
           )}
