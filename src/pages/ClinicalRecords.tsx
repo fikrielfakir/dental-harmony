@@ -1,17 +1,101 @@
+import { useState } from "react";
 import { FileText, Plus, Search, History, Activity } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useStore } from "@/store";
+
+interface ClinicalRecord {
+  id: string;
+  patient: string;
+  procedure: string;
+  date: string;
+  doctor: string;
+  status: string;
+  notes?: string;
+}
 
 const ClinicalRecords = () => {
-  const clinicalRecords = [
+  const { patients } = useStore();
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [clinicalRecords, setClinicalRecords] = useState<ClinicalRecord[]>([
     { id: "REC-101", patient: "Sarah Johnson", procedure: "Root Canal", date: "2024-05-15", doctor: "Dr. Smith", status: "Completed" },
     { id: "REC-102", patient: "Michael Chen", procedure: "Teeth Whitening", date: "2024-05-14", doctor: "Dr. Adams", status: "In Progress" },
     { id: "REC-103", patient: "Emma Wilson", procedure: "Dental Implant", date: "2024-05-12", doctor: "Dr. Smith", status: "Scheduled" },
     { id: "REC-104", patient: "David Miller", procedure: "Regular Check-up", date: "2024-05-10", doctor: "Dr. Adams", status: "Completed" },
-  ];
+  ]);
+
+  const [newRecord, setNewRecord] = useState({
+    patient: "",
+    procedure: "",
+    doctor: "",
+    status: "Scheduled",
+    notes: "",
+  });
+
+  const resetForm = () => {
+    setNewRecord({
+      patient: "",
+      procedure: "",
+      doctor: "",
+      status: "Scheduled",
+      notes: "",
+    });
+  };
+
+  const handleAddRecord = () => {
+    const record: ClinicalRecord = {
+      id: `REC-${100 + clinicalRecords.length + 1}`,
+      patient: newRecord.patient,
+      procedure: newRecord.procedure,
+      date: new Date().toISOString().split("T")[0],
+      doctor: newRecord.doctor,
+      status: newRecord.status,
+      notes: newRecord.notes,
+    };
+    setClinicalRecords([record, ...clinicalRecords]);
+    setIsAddDialogOpen(false);
+    resetForm();
+  };
+
+  const closeAddDialog = (open: boolean) => {
+    setIsAddDialogOpen(open);
+    if (!open) resetForm();
+  };
+
+  const filteredRecords = clinicalRecords.filter((record) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      record.patient.toLowerCase().includes(query) ||
+      record.procedure.toLowerCase().includes(query) ||
+      record.doctor.toLowerCase().includes(query) ||
+      record.id.toLowerCase().includes(query)
+    );
+  });
+
+  const activeCount = clinicalRecords.filter(r => r.status === "In Progress").length;
+  const completedCount = clinicalRecords.filter(r => r.status === "Completed").length;
+  const scheduledCount = clinicalRecords.filter(r => r.status === "Scheduled").length;
 
   return (
     <div className="space-y-6">
@@ -22,7 +106,7 @@ const ClinicalRecords = () => {
             Manage patient clinical history, notes, and treatment plans
           </p>
         </div>
-        <Button className="flex items-center gap-2">
+        <Button className="flex items-center gap-2" onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="h-4 w-4" />
           Add Clinical Note
         </Button>
@@ -37,7 +121,7 @@ const ClinicalRecords = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">{activeCount}</div>
           </CardContent>
         </Card>
         <Card>
@@ -48,7 +132,7 @@ const ClinicalRecords = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
+            <div className="text-2xl font-bold">{completedCount}</div>
           </CardContent>
         </Card>
         <Card>
@@ -59,7 +143,7 @@ const ClinicalRecords = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
+            <div className="text-2xl font-bold">{scheduledCount}</div>
           </CardContent>
         </Card>
       </div>
@@ -67,7 +151,12 @@ const ClinicalRecords = () => {
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search patient records, procedures, or notes..." className="pl-10" />
+          <Input 
+            placeholder="Search patient records, procedures, or notes..." 
+            className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
         <Button variant="outline">Advanced Search</Button>
       </div>
@@ -91,27 +180,136 @@ const ClinicalRecords = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {clinicalRecords.map((record) => (
-                <TableRow key={record.id}>
-                  <TableCell className="font-mono text-xs">{record.id}</TableCell>
-                  <TableCell className="font-medium">{record.patient}</TableCell>
-                  <TableCell>{record.procedure}</TableCell>
-                  <TableCell>{record.date}</TableCell>
-                  <TableCell>{record.doctor}</TableCell>
-                  <TableCell>
-                    <Badge variant={record.status === "Completed" ? "default" : record.status === "In Progress" ? "secondary" : "outline"}>
-                      {record.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">View</Button>
+              {filteredRecords.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    No records found
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                filteredRecords.map((record) => (
+                  <TableRow key={record.id}>
+                    <TableCell className="font-mono text-xs">{record.id}</TableCell>
+                    <TableCell className="font-medium">{record.patient}</TableCell>
+                    <TableCell>{record.procedure}</TableCell>
+                    <TableCell>{record.date}</TableCell>
+                    <TableCell>{record.doctor}</TableCell>
+                    <TableCell>
+                      <Badge variant={record.status === "Completed" ? "default" : record.status === "In Progress" ? "secondary" : "outline"}>
+                        {record.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="sm">View</Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
+
+      <Dialog open={isAddDialogOpen} onOpenChange={closeAddDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Clinical Note</DialogTitle>
+            <DialogDescription>
+              Create a new clinical record or treatment note.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="patient">Patient</Label>
+              {patients.length > 0 ? (
+                <Select
+                  value={newRecord.patient}
+                  onValueChange={(value) => setNewRecord({ ...newRecord, patient: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a patient" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {patients.map((patient) => (
+                      <SelectItem key={patient.id} value={`${patient.firstName} ${patient.lastName}`}>
+                        {patient.firstName} {patient.lastName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  id="patient"
+                  placeholder="Patient name"
+                  value={newRecord.patient}
+                  onChange={(e) => setNewRecord({ ...newRecord, patient: e.target.value })}
+                />
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="procedure">Procedure / Note Type</Label>
+              <Input
+                id="procedure"
+                placeholder="e.g., Root Canal, Check-up, Treatment Note"
+                value={newRecord.procedure}
+                onChange={(e) => setNewRecord({ ...newRecord, procedure: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="doctor">Doctor</Label>
+              <Input
+                id="doctor"
+                placeholder="e.g., Dr. Smith"
+                value={newRecord.doctor}
+                onChange={(e) => setNewRecord({ ...newRecord, doctor: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select
+                value={newRecord.status}
+                onValueChange={(value) => setNewRecord({ ...newRecord, status: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Scheduled">Scheduled</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Clinical Notes</Label>
+              <Textarea
+                id="notes"
+                placeholder="Enter detailed clinical notes..."
+                rows={4}
+                value={newRecord.notes}
+                onChange={(e) => setNewRecord({ ...newRecord, notes: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddRecord}
+              disabled={!newRecord.patient || !newRecord.procedure || !newRecord.doctor}
+            >
+              Add Record
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
