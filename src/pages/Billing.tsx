@@ -37,7 +37,7 @@ import { useStore } from "@/store";
 import { Invoice, Quotation } from "@/types";
 
 const Billing = () => {
-  const { patients, invoices, addInvoice, quotations, addQuotation } = useStore();
+  const { patients, invoices, addInvoice, updateInvoice, deleteInvoice, quotations, addQuotation } = useStore();
   const [activeTab, setActiveTab] = useState("invoices");
   const [isAddInvoiceOpen, setIsAddInvoiceOpen] = useState(false);
   const [isAddQuotationOpen, setIsAddQuotationOpen] = useState(false);
@@ -243,7 +243,23 @@ const Billing = () => {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>View Details</DropdownMenuItem>
+                                <DropdownMenuItem>Download PDF</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => updateInvoice(inv.id, { paymentStatus: 'paid' })}>
+                                  Mark as Paid
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive" onClick={() => deleteInvoice(inv.id)}>
+                                  Delete Invoice
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       );

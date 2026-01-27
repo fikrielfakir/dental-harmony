@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Plus, Search, History, Activity } from "lucide-react";
+import { FileText, Plus, Search, History, Activity, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,20 +22,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useStore } from "@/store";
 
-interface ClinicalRecord {
-  id: string;
-  patient: string;
-  procedure: string;
-  date: string;
-  doctor: string;
-  status: string;
-  notes?: string;
-}
-
 const ClinicalRecords = () => {
-  const { patients, clinicalNotes, addClinicalNote } = useStore();
+  const { patients, clinicalNotes, addClinicalNote, updateClinicalNote, deleteClinicalNote } = useStore();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -212,7 +208,22 @@ const ClinicalRecords = () => {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm">View</Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>View Note</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { status: 'Completed' })}>
+                            Mark as Completed
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="text-destructive" onClick={() => deleteClinicalNote(record.id)}>
+                            Delete Record
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))
