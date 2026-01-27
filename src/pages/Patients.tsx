@@ -72,22 +72,7 @@ const Patients = () => {
     );
   });
 
-  const handleAddPatient = () => {
-    const patient: Patient = {
-      id: crypto.randomUUID(),
-      ...newPatient,
-      medicalHistory: {
-        conditions: [],
-        surgeries: [],
-        familyHistory: [],
-      },
-      allergies: [],
-      medications: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    addPatient(patient);
-    setIsAddDialogOpen(false);
+  const resetForm = () => {
     setNewPatient({
       firstName: "",
       lastName: "",
@@ -125,19 +110,6 @@ const Patients = () => {
     addPatient(patient);
     setIsAddDialogOpen(false);
     resetForm();
-  };
-
-  const resetForm = () => {
-    setNewPatient({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      dateOfBirth: "",
-      address: "",
-      insuranceProvider: "",
-      policyNumber: "",
-    });
   };
 
   const closeAddDialog = (open: boolean) => {
