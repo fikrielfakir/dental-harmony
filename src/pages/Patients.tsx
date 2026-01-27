@@ -46,7 +46,13 @@ import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmation
 
 const Patients = () => {
   const navigate = useNavigate();
-  const { patients, addPatient, updatePatient, deletePatient } = useStore();
+  const { patients, addPatient, updatePatient, deletePatient, dentalChart } = useStore();
+
+  const getLatestTreatment = (patientId: string) => {
+    const patientEntries = dentalChart.filter(e => e.patientId === patientId);
+    if (patientEntries.length === 0) return null;
+    return patientEntries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+  };
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
@@ -336,6 +342,25 @@ const Patients = () => {
                   </div>
 
                   <div className="hidden sm:flex items-center gap-2">
+                    {(() => {
+                      const latestTreatment = getLatestTreatment(patient.id);
+                      if (latestTreatment) {
+                        return (
+                          <Badge 
+                            variant="outline" 
+                            className="text-xs capitalize"
+                            style={{ 
+                              borderColor: latestTreatment.color, 
+                              color: latestTreatment.color === '#000000' ? '#000' : latestTreatment.color,
+                              backgroundColor: `${latestTreatment.color}10`
+                            }}
+                          >
+                            {latestTreatment.treatmentType}
+                          </Badge>
+                        );
+                      }
+                      return null;
+                    })()}
                     {patient.insuranceProvider && (
                       <Badge variant="secondary" className="text-xs">
                         {patient.insuranceProvider}
