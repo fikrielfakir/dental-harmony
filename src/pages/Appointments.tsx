@@ -153,7 +153,7 @@ const Appointments = () => {
   const handleCancelAppointment = () => {
     if (!selectedAppointment) return;
     if (confirm("Are you sure you want to cancel this appointment?")) {
-      updateAppointment(selectedAppointment.id, { status: "cancelled" });
+      deleteAppointment(selectedAppointment.id);
       setSelectedAppointment(null);
     }
   };
