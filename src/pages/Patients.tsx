@@ -51,6 +51,8 @@ const Patients = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [patientToDelete, setPatientToDelete] = useState<string | null>(null);
+  const [filterHasAllergies, setFilterHasAllergies] = useState<boolean | null>(null);
+  const [filterHasInsurance, setFilterHasInsurance] = useState<boolean | null>(null);
 
   const [newPatient, setNewPatient] = useState({
     firstName: "",
@@ -66,12 +68,30 @@ const Patients = () => {
   const filteredPatients = patients.filter((patient) => {
     const fullName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
     const query = searchQuery.toLowerCase();
-    return (
+    const matchesSearch =
       fullName.includes(query) ||
       patient.email.toLowerCase().includes(query) ||
-      patient.phone.includes(query)
-    );
+      patient.phone.includes(query);
+    
+    const matchesAllergiesFilter =
+      filterHasAllergies === null ||
+      (filterHasAllergies === true && patient.allergies.length > 0) ||
+      (filterHasAllergies === false && patient.allergies.length === 0);
+    
+    const matchesInsuranceFilter =
+      filterHasInsurance === null ||
+      (filterHasInsurance === true && !!patient.insuranceProvider) ||
+      (filterHasInsurance === false && !patient.insuranceProvider);
+    
+    return matchesSearch && matchesAllergiesFilter && matchesInsuranceFilter;
   });
+
+  const activeFilterCount = [filterHasAllergies, filterHasInsurance].filter(f => f !== null).length;
+
+  const clearFilters = () => {
+    setFilterHasAllergies(null);
+    setFilterHasInsurance(null);
+  };
 
   const resetForm = () => {
     setNewPatient({
@@ -203,9 +223,55 @@ const Patients = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline" size="icon">
-          <Filter className="h-4 w-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="relative">
+              <Filter className="h-4 w-4" />
+              {activeFilterCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem
+              onClick={() => setFilterHasAllergies(filterHasAllergies === true ? null : true)}
+              className={filterHasAllergies === true ? "bg-accent" : ""}
+            >
+              <AlertCircle className="h-4 w-4 mr-2" />
+              Has Allergies
+              {filterHasAllergies === true && <span className="ml-auto">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setFilterHasAllergies(filterHasAllergies === false ? null : false)}
+              className={filterHasAllergies === false ? "bg-accent" : ""}
+            >
+              <AlertCircle className="h-4 w-4 mr-2" />
+              No Allergies
+              {filterHasAllergies === false && <span className="ml-auto">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setFilterHasInsurance(filterHasInsurance === true ? null : true)}
+              className={filterHasInsurance === true ? "bg-accent" : ""}
+            >
+              Has Insurance
+              {filterHasInsurance === true && <span className="ml-auto">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setFilterHasInsurance(filterHasInsurance === false ? null : false)}
+              className={filterHasInsurance === false ? "bg-accent" : ""}
+            >
+              No Insurance
+              {filterHasInsurance === false && <span className="ml-auto">✓</span>}
+            </DropdownMenuItem>
+            {activeFilterCount > 0 && (
+              <DropdownMenuItem onClick={clearFilters} className="text-destructive">
+                Clear Filters
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Patient List */}
