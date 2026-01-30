@@ -190,13 +190,25 @@ const Settings = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label>{t('settings.billing.currency')}</Label>
-                <Input 
+                <Select 
                   value={localSettings.billing.currency} 
-                  onChange={(e) => setLocalSettings({
+                  onValueChange={(value) => setLocalSettings({
                     ...localSettings, 
-                    billing: { ...localSettings.billing, currency: e.target.value }
+                    billing: { ...localSettings.billing, currency: value }
                   })}
-                />
+                >
+                  <SelectTrigger className="w-64">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="CAD">CAD ($)</SelectItem>
+                    <SelectItem value="AUD">AUD ($)</SelectItem>
+                    <SelectItem value="JPY">JPY (¥)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
