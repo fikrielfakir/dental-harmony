@@ -64,7 +64,7 @@ const Billing = () => {
   const [formData, setFormData] = useState({
     patientId: "",
     amount: "",
-    status: "pending" as PaymentStatus,
+    status: "unpaid" as PaymentStatus,
   });
 
   const [paymentFormData, setPaymentFormData] = useState({
@@ -83,8 +83,8 @@ const Billing = () => {
       "Date: " + new Date(invoice.invoiceDate).toLocaleDateString() + "\n" +
       "Patient: " + (patient ? (patient.firstName + " " + patient.lastName) : 'N/A') + "\n" +
       "Total Amount: $" + invoice.totalAmount.toFixed(2) + "\n" +
-      "Paid Amount: $" + (invoice.totalAmount - (invoice.remainingBalance ?? invoice.totalAmount)).toFixed(2) + "\n" +
-      "Remaining Balance: $" + (invoice.remainingBalance ?? invoice.totalAmount).toFixed(2) + "\n" +
+      "Paid Amount: $" + (invoice.paidAmount || 0).toFixed(2) + "\n" +
+      "Balance Due: $" + (invoice.balanceDue ?? (invoice.totalAmount - (invoice.paidAmount || 0))).toLocaleString() + "\n" +
       "Status: " + invoice.paymentStatus.toUpperCase();
     
     const blob = new Blob([content], { type: 'text/plain' });
@@ -95,29 +95,30 @@ const Billing = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const resetForm = () => {
     setFormData({
       patientId: "",
       amount: "",
-      status: "pending",
+      status: "unpaid",
     });
   };
 
   const handleCreateInvoice = () => {
     const newId = "INV-" + new Date().getFullYear() + "-" + String(invoices.length + 1).padStart(3, '0');
+    const amount = parseFloat(formData.amount);
     const invoice: Invoice = {
       id: crypto.randomUUID(),
       patientId: formData.patientId,
       invoiceNumber: newId,
       items: [],
-      totalAmount: parseFloat(formData.amount),
-      taxAmount: 0,
-      discountAmount: 0,
+      totalAmount: amount,
+      paidAmount: formData.status === 'paid' ? amount : 0,
+      balanceDue: formData.status === 'paid' ? 0 : amount,
       paymentStatus: formData.status,
       payments: [],
-      remainingBalance: parseFloat(formData.amount),
       invoiceDate: new Date().toISOString(),
       dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
       createdAt: new Date().toISOString(),
@@ -498,7 +499,7 @@ const Billing = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="unpaid">Unpaid</SelectItem>
                   <SelectItem value="partial">Partial</SelectItem>
                   <SelectItem value="paid">Paid</SelectItem>
                 </SelectContent>
