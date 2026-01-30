@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Building2, Clock, DollarSign, Bell, Shield, Save } from "lucide-react";
+import { Building2, Clock, DollarSign, Bell, Shield, Save, Globe } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Language } from "@/types";
 import { useStore } from "@/store";
 import { useToast } from "@/hooks/use-toast";
 
@@ -58,6 +60,7 @@ const Settings = () => {
           <TabsTrigger value="business">Business Hours</TabsTrigger>
           <TabsTrigger value="billing">Pricing & Billing</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="language">Language</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
         </TabsList>
 
@@ -236,6 +239,40 @@ const Settings = () => {
                 />
               </div>
               <Button onClick={handleSave}>Save Notification Settings</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="language">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Language Settings
+              </CardTitle>
+              <CardDescription>Choose your preferred language for the application interface.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Interface Language</Label>
+                <Select 
+                  value={localSettings.language} 
+                  onValueChange={(value: Language) => setLocalSettings({...localSettings, language: value})}
+                >
+                  <SelectTrigger className="w-64">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="fr">Français (French)</SelectItem>
+                    <SelectItem value="ar">العربية (Arabic)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  This will change the language of the application interface.
+                </p>
+              </div>
+              <Button onClick={handleSave}>Save Language Settings</Button>
             </CardContent>
           </Card>
         </TabsContent>

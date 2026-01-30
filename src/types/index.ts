@@ -290,12 +290,15 @@ export type PrescriptionStatus =
   | 'expired';
 
 // Settings types
+export type Language = 'en' | 'fr' | 'ar';
+
 export interface PracticeSettings {
   name: string;
   taxId: string;
   address: string;
   email: string;
   phone: string;
+  language: Language;
   businessHours: BusinessHour[];
   billing: {
     currency: string;

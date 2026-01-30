@@ -112,6 +112,7 @@ export const useStore = create<AppState>()(
         address: "123 Medical Plaza, Suite 100",
         email: "info@dentalcare.com",
         phone: "(555) 123-4567",
+        language: "en",
         businessHours: [
           { day: "Monday", open: "09:00", close: "17:00", isOpen: true },
           { day: "Tuesday", open: "09:00", close: "17:00", isOpen: true },
