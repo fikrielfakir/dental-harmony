@@ -177,8 +177,8 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[600px]">
-      <div className="p-4 space-y-6 flex-1 overflow-y-auto scrollbar-thin">
+    <div className="flex flex-col max-h-[70vh]">
+      <div className="p-4 space-y-6 overflow-y-auto scrollbar-thin">
         <div className="text-center space-y-1.5">
           <h3 className="text-xl font-extrabold text-gray-900 tracking-tight">{t("patients.dentalChart.title")}</h3>
           <p className="text-xs text-muted-foreground font-medium">{t("patients.dentalChart.subtitle")}</p>
