@@ -562,46 +562,81 @@ const Billing = () => {
           <DialogHeader>
             <DialogTitle>Record Payment</DialogTitle>
             <DialogDescription>
-              Record a full or partial payment for {selectedInvoice?.invoiceNumber}. 
-              Remaining: ${(selectedInvoice?.remainingBalance ?? 0).toLocaleString()}
+              Record a full or partial payment for {selectedInvoice?.invoiceNumber}.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="space-y-2">
-              <Label>Payment Amount ($)</Label>
-              <Input 
-                type="number" 
-                value={paymentFormData.amount} 
-                onChange={(e) => setPaymentFormData({...paymentFormData, amount: e.target.value})}
-              />
+            <div className="p-4 bg-muted rounded-lg space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Amount Due:</span>
+                <span className="font-bold text-destructive">
+                  ${(selectedInvoice?.balanceDue ?? (selectedInvoice?.totalAmount || 0)).toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Total Treatment:</span>
+                <span className="font-medium">
+                  ${(selectedInvoice?.totalAmount ?? 0).toLocaleString()}
+                </span>
+              </div>
             </div>
+
             <div className="space-y-2">
-              <Label>Payment Method</Label>
+              <Label htmlFor="pay-amount">Amount Received ($)</Label>
+              <Input 
+                id="pay-amount"
+                type="number" 
+                placeholder="0.00"
+                value={paymentFormData.amount} 
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setPaymentFormData({...paymentFormData, amount: val});
+                }}
+              />
+              {selectedInvoice && paymentFormData.amount && parseFloat(paymentFormData.amount) < (selectedInvoice.balanceDue ?? selectedInvoice.totalAmount) && (
+                <div className="text-xs text-amber-600 font-medium flex items-center gap-1 mt-1">
+                  <AlertCircle className="h-3 w-3" />
+                  Remaining Debtor Amount: ${((selectedInvoice.balanceDue ?? selectedInvoice.totalAmount) - parseFloat(paymentFormData.amount)).toLocaleString()}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="pay-method">Payment Method</Label>
               <Select 
                 value={paymentFormData.method} 
                 onValueChange={(val: PaymentMethod) => setPaymentFormData({...paymentFormData, method: val})}
               >
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger id="pay-method">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="cash">Cash</SelectItem>
                   <SelectItem value="card">Credit/Debit Card</SelectItem>
                   <SelectItem value="transfer">Bank Transfer</SelectItem>
                   <SelectItem value="check">Check</SelectItem>
+                  <SelectItem value="insurance">Insurance</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Notes</Label>
+              <Label htmlFor="pay-notes">Notes (Optional)</Label>
               <Input 
-                placeholder="Optional payment notes..."
-                value={paymentFormData.notes}
+                id="pay-notes" 
+                placeholder="e.g. Second installment"
+                value={paymentFormData.notes} 
                 onChange={(e) => setPaymentFormData({...paymentFormData, notes: e.target.value})}
               />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsPaymentModalOpen(false)}>Cancel</Button>
-            <Button onClick={handleRecordPayment} disabled={!paymentFormData.amount}>Record Payment</Button>
+            <Button 
+              onClick={handleRecordPayment} 
+              disabled={!paymentFormData.amount || parseFloat(paymentFormData.amount) <= 0}
+            >
+              Confirm Payment
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
