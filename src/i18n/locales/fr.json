@@ -1,0 +1,149 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "patients": "Patients",
+    "appointments": "Rendez-vous",
+    "clinical": "Clinique",
+    "billing": "Facturation",
+    "prescriptions": "Ordonnances",
+    "reports": "Rapports",
+    "staff": "Personnel",
+    "settings": "Paramètres",
+    "search": "Rechercher"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Configurez les paramètres et préférences de votre cabinet",
+    "saveAll": "Enregistrer toutes les modifications",
+    "tabs": {
+      "practiceInfo": "Infos Cabinet",
+      "businessHours": "Horaires",
+      "pricingBilling": "Tarifs & Facturation",
+      "notifications": "Notifications",
+      "language": "Langue",
+      "security": "Sécurité"
+    },
+    "practice": {
+      "title": "Informations du Cabinet",
+      "description": "Mettez à jour les détails et coordonnées de votre cabinet.",
+      "name": "Nom du Cabinet",
+      "taxId": "Numéro SIRET / RPPS",
+      "address": "Adresse",
+      "email": "Email Public",
+      "phone": "Numéro de Téléphone",
+      "save": "Enregistrer"
+    },
+    "hours": {
+      "title": "Horaires d'Ouverture",
+      "description": "Définissez les heures d'ouverture pour les rendez-vous.",
+      "to": "à",
+      "update": "Mettre à jour"
+    },
+    "billing": {
+      "title": "Configuration de Facturation",
+      "description": "Gérez vos tarifs et méthodes de paiement.",
+      "currency": "Devise",
+      "autoInvoicing": "Facturation Automatique",
+      "autoInvoicingDesc": "Générer des factures immédiatement après les rendez-vous.",
+      "save": "Enregistrer la Facturation"
+    },
+    "notifications": {
+      "title": "Modèles de Notifications",
+      "description": "Configurez les rappels patients et alertes du personnel.",
+      "reminders": "Rappels de Rendez-vous",
+      "remindersDesc": "Envoyer des SMS de rappel 24 heures avant.",
+      "followUp": "Emails de Suivi",
+      "followUpDesc": "Envoyer des enquêtes de satisfaction après les soins.",
+      "save": "Enregistrer les Notifications"
+    },
+    "language": {
+      "title": "Paramètres de Langue",
+      "description": "Choisissez votre langue préférée pour l'interface de l'application.",
+      "select": "Langue de l'Interface",
+      "selectDesc": "Cela changera la langue de l'interface de l'application.",
+      "save": "Enregistrer la Langue",
+      "english": "Anglais",
+      "french": "Français",
+      "arabic": "Arabe"
+    },
+    "security": {
+      "title": "Sécurité & Accès",
+      "description": "Gérez l'accès au système et la protection des données.",
+      "twoFactor": "Authentification à Deux Facteurs",
+      "apiKeys": "Gérer les Clés API",
+      "purgeCache": "Purger le Cache"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue",
+    "todayAppointments": "Rendez-vous Aujourd'hui",
+    "todayRevenue": "Revenus du Jour",
+    "totalPatients": "Total Patients",
+    "pendingInvoices": "Factures en Attente",
+    "upcomingAppointments": "Prochains Rendez-vous",
+    "recentPatients": "Patients Récents",
+    "quickActions": "Actions Rapides",
+    "newPatient": "Nouveau Patient",
+    "newAppointment": "Nouveau Rendez-vous",
+    "viewAll": "Voir Tout"
+  },
+  "patients": {
+    "title": "Patients",
+    "subtitle": "Gérez les dossiers et informations des patients",
+    "addNew": "Ajouter Patient",
+    "search": "Rechercher des patients...",
+    "name": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "dateOfBirth": "Date de Naissance",
+    "lastVisit": "Dernière Visite",
+    "actions": "Actions",
+    "noPatients": "Aucun patient trouvé"
+  },
+  "appointments": {
+    "title": "Rendez-vous",
+    "subtitle": "Planifiez et gérez les rendez-vous",
+    "addNew": "Nouveau Rendez-vous",
+    "today": "Aujourd'hui",
+    "week": "Semaine",
+    "month": "Mois",
+    "patient": "Patient",
+    "practitioner": "Praticien",
+    "type": "Type",
+    "status": "Statut",
+    "time": "Heure",
+    "noAppointments": "Aucun rendez-vous programmé"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "loading": "Chargement...",
+    "noData": "Aucune donnée disponible",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "actions": "Actions"
+  },
+  "days": {
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche"
+  },
+  "toast": {
+    "settingsUpdated": "Paramètres mis à jour",
+    "settingsUpdatedDesc": "Vos préférences ont été enregistrées avec succès."
+  }
+}

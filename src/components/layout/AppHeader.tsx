@@ -1,4 +1,5 @@
 import { Bell, Search, User, LogOut, ChevronDown, Stethoscope, LayoutDashboard, Users, Calendar, FileText, Receipt, Pill, BarChart3, UserCog, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,18 +17,19 @@ import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const navigationItems = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Patients", href: "/patients", icon: Users },
-  { name: "Appointments", href: "/appointments", icon: Calendar },
-  { name: "Clinical", href: "/clinical", icon: FileText },
-  { name: "Billing", href: "/billing", icon: Receipt },
-  { name: "Prescriptions", href: "/prescriptions", icon: Pill },
-  { name: "Reports", href: "/reports", icon: BarChart3 },
-  { name: "Staff", href: "/staff", icon: UserCog },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { key: "dashboard", href: "/", icon: LayoutDashboard },
+  { key: "patients", href: "/patients", icon: Users },
+  { key: "appointments", href: "/appointments", icon: Calendar },
+  { key: "clinical", href: "/clinical", icon: FileText },
+  { key: "billing", href: "/billing", icon: Receipt },
+  { key: "prescriptions", href: "/prescriptions", icon: Pill },
+  { key: "reports", href: "/reports", icon: BarChart3 },
+  { key: "staff", href: "/staff", icon: UserCog },
+  { key: "settings", href: "/settings", icon: Settings },
 ];
 
 export function AppHeader() {
+  const { t } = useTranslation();
   const { currentUser } = useStore();
   
   const initials = currentUser
@@ -37,7 +39,6 @@ export function AppHeader() {
   return (
     <header className="flex items-center justify-between h-14 px-4 mica border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="flex items-center gap-8">
-        {/* Logo */}
         <div className="flex items-center gap-2 pr-4 border-r border-border/50">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm">
             <Stethoscope className="h-5 w-5" />
@@ -45,13 +46,12 @@ export function AppHeader() {
           <span className="font-bold text-base leading-none hidden md:block">DentalCare</span>
         </div>
 
-        {/* Navigation */}
         <nav className="hidden lg:flex items-center gap-1">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
               <NavLink
-                key={item.name}
+                key={item.key}
                 to={item.href}
                 className={({ isActive }) =>
                   cn(
@@ -64,7 +64,7 @@ export function AppHeader() {
                 }
               >
                 <Icon className="h-4 w-4" />
-                <span>{item.name}</span>
+                <span>{t(`nav.${item.key}`)}</span>
                 <div className={cn(
                   "absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-primary rounded-full transition-transform duration-200",
                   "scale-x-0 group-hover:scale-x-100"
@@ -75,18 +75,15 @@ export function AppHeader() {
         </nav>
       </div>
 
-      {/* Right side actions */}
       <div className="flex items-center gap-3">
-        {/* Search */}
         <div className="relative group hidden sm:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
-            placeholder="Search..."
+            placeholder={t('nav.search')}
             className="pl-9 h-8 w-48 bg-background/50 border-transparent hover:bg-background transition-all focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary rounded-md text-xs"
           />
         </div>
 
-        {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative h-8 w-8">

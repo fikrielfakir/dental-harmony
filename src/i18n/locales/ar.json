@@ -1,0 +1,149 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "patients": "المرضى",
+    "appointments": "المواعيد",
+    "clinical": "السجلات السريرية",
+    "billing": "الفواتير",
+    "prescriptions": "الوصفات",
+    "reports": "التقارير",
+    "staff": "الموظفين",
+    "settings": "الإعدادات",
+    "search": "بحث"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "تكوين إعدادات وتفضيلات العيادة",
+    "saveAll": "حفظ جميع التغييرات",
+    "tabs": {
+      "practiceInfo": "معلومات العيادة",
+      "businessHours": "ساعات العمل",
+      "pricingBilling": "الأسعار والفواتير",
+      "notifications": "الإشعارات",
+      "language": "اللغة",
+      "security": "الأمان"
+    },
+    "practice": {
+      "title": "معلومات العيادة",
+      "description": "تحديث تفاصيل ومعلومات الاتصال الخاصة بالعيادة.",
+      "name": "اسم العيادة",
+      "taxId": "الرقم الضريبي",
+      "address": "العنوان",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "save": "حفظ التغييرات"
+    },
+    "hours": {
+      "title": "ساعات العمل",
+      "description": "تحديد أوقات فتح العيادة للمواعيد.",
+      "to": "إلى",
+      "update": "تحديث الساعات"
+    },
+    "billing": {
+      "title": "إعدادات الفواتير",
+      "description": "إدارة الأسعار وطرق الدفع.",
+      "currency": "العملة",
+      "autoInvoicing": "الفوترة التلقائية",
+      "autoInvoicingDesc": "إنشاء الفواتير مباشرة بعد المواعيد.",
+      "save": "حفظ إعدادات الفواتير"
+    },
+    "notifications": {
+      "title": "قوالب الإشعارات",
+      "description": "تكوين تذكيرات المرضى وتنبيهات الموظفين.",
+      "reminders": "تذكيرات المواعيد",
+      "remindersDesc": "إرسال رسائل تذكير قبل 24 ساعة.",
+      "followUp": "رسائل المتابعة",
+      "followUpDesc": "إرسال استبيانات الرضا بعد العلاج.",
+      "save": "حفظ إعدادات الإشعارات"
+    },
+    "language": {
+      "title": "إعدادات اللغة",
+      "description": "اختر لغتك المفضلة لواجهة التطبيق.",
+      "select": "لغة الواجهة",
+      "selectDesc": "سيؤدي هذا إلى تغيير لغة واجهة التطبيق.",
+      "save": "حفظ إعدادات اللغة",
+      "english": "الإنجليزية",
+      "french": "الفرنسية",
+      "arabic": "العربية"
+    },
+    "security": {
+      "title": "الأمان والوصول",
+      "description": "إدارة الوصول إلى النظام وحماية البيانات.",
+      "twoFactor": "المصادقة الثنائية",
+      "apiKeys": "إدارة مفاتيح API",
+      "purgeCache": "مسح ذاكرة التخزين المؤقت"
+    }
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بعودتك",
+    "todayAppointments": "مواعيد اليوم",
+    "todayRevenue": "إيرادات اليوم",
+    "totalPatients": "إجمالي المرضى",
+    "pendingInvoices": "الفواتير المعلقة",
+    "upcomingAppointments": "المواعيد القادمة",
+    "recentPatients": "المرضى الجدد",
+    "quickActions": "إجراءات سريعة",
+    "newPatient": "مريض جديد",
+    "newAppointment": "موعد جديد",
+    "viewAll": "عرض الكل"
+  },
+  "patients": {
+    "title": "المرضى",
+    "subtitle": "إدارة سجلات ومعلومات المرضى",
+    "addNew": "إضافة مريض",
+    "search": "البحث عن المرضى...",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "dateOfBirth": "تاريخ الميلاد",
+    "lastVisit": "آخر زيارة",
+    "actions": "الإجراءات",
+    "noPatients": "لا يوجد مرضى"
+  },
+  "appointments": {
+    "title": "المواعيد",
+    "subtitle": "جدولة وإدارة المواعيد",
+    "addNew": "موعد جديد",
+    "today": "اليوم",
+    "week": "الأسبوع",
+    "month": "الشهر",
+    "patient": "المريض",
+    "practitioner": "الطبيب",
+    "type": "النوع",
+    "status": "الحالة",
+    "time": "الوقت",
+    "noAppointments": "لا توجد مواعيد مجدولة"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "export": "تصدير",
+    "loading": "جاري التحميل...",
+    "noData": "لا توجد بيانات",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "submit": "إرسال",
+    "actions": "الإجراءات"
+  },
+  "days": {
+    "monday": "الاثنين",
+    "tuesday": "الثلاثاء",
+    "wednesday": "الأربعاء",
+    "thursday": "الخميس",
+    "friday": "الجمعة",
+    "saturday": "السبت",
+    "sunday": "الأحد"
+  },
+  "toast": {
+    "settingsUpdated": "تم تحديث الإعدادات",
+    "settingsUpdatedDesc": "تم حفظ تفضيلاتك بنجاح."
+  }
+}

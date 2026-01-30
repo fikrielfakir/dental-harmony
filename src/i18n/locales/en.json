@@ -1,0 +1,149 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "appointments": "Appointments",
+    "clinical": "Clinical",
+    "billing": "Billing",
+    "prescriptions": "Prescriptions",
+    "reports": "Reports",
+    "staff": "Staff",
+    "settings": "Settings",
+    "search": "Search"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your practice settings and preferences",
+    "saveAll": "Save All Changes",
+    "tabs": {
+      "practiceInfo": "Practice Info",
+      "businessHours": "Business Hours",
+      "pricingBilling": "Pricing & Billing",
+      "notifications": "Notifications",
+      "language": "Language",
+      "security": "Security"
+    },
+    "practice": {
+      "title": "Practice Information",
+      "description": "Update your practice details and contact information.",
+      "name": "Practice Name",
+      "taxId": "Tax ID / NPI",
+      "address": "Address",
+      "email": "Public Email",
+      "phone": "Phone Number",
+      "save": "Save Changes"
+    },
+    "hours": {
+      "title": "Business Hours",
+      "description": "Set when your practice is open for appointments.",
+      "to": "to",
+      "update": "Update Hours"
+    },
+    "billing": {
+      "title": "Billing Configuration",
+      "description": "Manage your service pricing and payment methods.",
+      "currency": "Currency",
+      "autoInvoicing": "Automatic Invoicing",
+      "autoInvoicingDesc": "Generate invoices immediately after appointments.",
+      "save": "Save Billing Settings"
+    },
+    "notifications": {
+      "title": "Notification Templates",
+      "description": "Configure patient reminders and staff alerts.",
+      "reminders": "Appointment Reminders",
+      "remindersDesc": "Send SMS reminders 24 hours before.",
+      "followUp": "Follow-up Emails",
+      "followUpDesc": "Send satisfaction surveys after procedures.",
+      "save": "Save Notification Settings"
+    },
+    "language": {
+      "title": "Language Settings",
+      "description": "Choose your preferred language for the application interface.",
+      "select": "Interface Language",
+      "selectDesc": "This will change the language of the application interface.",
+      "save": "Save Language Settings",
+      "english": "English",
+      "french": "French",
+      "arabic": "Arabic"
+    },
+    "security": {
+      "title": "Security & Access",
+      "description": "Manage system access and data protection.",
+      "twoFactor": "Two-Factor Authentication",
+      "apiKeys": "Manage API Keys",
+      "purgeCache": "Purge Practice Cache"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "todayAppointments": "Today's Appointments",
+    "todayRevenue": "Today's Revenue",
+    "totalPatients": "Total Patients",
+    "pendingInvoices": "Pending Invoices",
+    "upcomingAppointments": "Upcoming Appointments",
+    "recentPatients": "Recent Patients",
+    "quickActions": "Quick Actions",
+    "newPatient": "New Patient",
+    "newAppointment": "New Appointment",
+    "viewAll": "View All"
+  },
+  "patients": {
+    "title": "Patients",
+    "subtitle": "Manage patient records and information",
+    "addNew": "Add Patient",
+    "search": "Search patients...",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "dateOfBirth": "Date of Birth",
+    "lastVisit": "Last Visit",
+    "actions": "Actions",
+    "noPatients": "No patients found"
+  },
+  "appointments": {
+    "title": "Appointments",
+    "subtitle": "Schedule and manage appointments",
+    "addNew": "New Appointment",
+    "today": "Today",
+    "week": "Week",
+    "month": "Month",
+    "patient": "Patient",
+    "practitioner": "Practitioner",
+    "type": "Type",
+    "status": "Status",
+    "time": "Time",
+    "noAppointments": "No appointments scheduled"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "actions": "Actions"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "toast": {
+    "settingsUpdated": "Settings updated",
+    "settingsUpdatedDesc": "Your practice preferences have been saved successfully."
+  }
+}
