@@ -219,7 +219,7 @@ const ClinicalRecords = () => {
                     <TableCell className="font-mono text-xs">{record.id.slice(0, 8)}</TableCell>
                     <TableCell className="font-medium">{record.patientName}</TableCell>
                     <TableCell>{record.procedure}</TableCell>
-                    <TableCell className="font-medium">€{(record.cost || 0).toLocaleString()}</TableCell>
+                    <TableCell className="font-medium">{(record.cost || 0).toLocaleString()} DH</TableCell>
                     <TableCell>{new Date(record.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{record.doctor}</TableCell>
                     <TableCell>
@@ -313,6 +313,7 @@ const ClinicalRecords = () => {
                 value={newRecord.cost}
                 onChange={(e) => setNewRecord({ ...newRecord, cost: e.target.value })}
               />
+              <p className="text-[10px] text-muted-foreground">Currency: DH (MAD)</p>
             </div>
 
             <div className="space-y-2">
