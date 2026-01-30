@@ -289,6 +289,31 @@ export type PrescriptionStatus =
   | 'dispensed'
   | 'expired';
 
+// Settings types
+export interface PracticeSettings {
+  name: string;
+  taxId: string;
+  address: string;
+  email: string;
+  phone: string;
+  businessHours: BusinessHour[];
+  billing: {
+    currency: string;
+    automaticInvoicing: boolean;
+  };
+  notifications: {
+    appointmentReminders: boolean;
+    followUpEmails: boolean;
+  };
+}
+
+export interface BusinessHour {
+  day: string;
+  open: string;
+  close: string;
+  isOpen: boolean;
+}
+
 // Dashboard types
 export interface DashboardStats {
   todayAppointments: number;

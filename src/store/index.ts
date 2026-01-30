@@ -11,7 +11,8 @@ import {
   MedicalService,
   DentalChartEntry,
   Payment,
-  PaymentStatus
+  PaymentStatus,
+  PracticeSettings
 } from '@/types';
 import { mockPatients, mockStaff, mockAppointments } from '@/data/mockData';
 
@@ -26,10 +27,14 @@ interface AppState {
   quotations: Quotation[];
   services: MedicalService[];
   dentalChart: DentalChartEntry[];
+  settings: PracticeSettings;
   
   // UI State
   sidebarCollapsed: boolean;
   currentUser: Staff | null;
+  
+  // Actions - Settings
+  updateSettings: (settings: Partial<PracticeSettings>) => void;
   
   // Actions - Patients
   addPatient: (patient: Patient) => void;
@@ -101,11 +106,39 @@ export const useStore = create<AppState>()(
         { id: '4', name: 'Root Canal Therapy', code: 'ROOT-01', price: 600, category: 'Endodontics' },
       ],
       dentalChart: [],
+      settings: {
+        name: "DentalCare Clinic",
+        taxId: "1234567890",
+        address: "123 Medical Plaza, Suite 100",
+        email: "info@dentalcare.com",
+        phone: "(555) 123-4567",
+        businessHours: [
+          { day: "Monday", open: "09:00", close: "17:00", isOpen: true },
+          { day: "Tuesday", open: "09:00", close: "17:00", isOpen: true },
+          { day: "Wednesday", open: "09:00", close: "17:00", isOpen: true },
+          { day: "Thursday", open: "09:00", close: "17:00", isOpen: true },
+          { day: "Friday", open: "09:00", close: "17:00", isOpen: true },
+        ],
+        billing: {
+          currency: "USD ($)",
+          automaticInvoicing: true,
+        },
+        notifications: {
+          appointmentReminders: true,
+          followUpEmails: false,
+        }
+      },
       
       // UI State
       sidebarCollapsed: false,
       currentUser: mockStaff[0], // Default to first dentist
       
+      // Settings actions
+      updateSettings: (newSettings) =>
+        set((state) => ({
+          settings: { ...state.settings, ...newSettings }
+        })),
+        
       // Patient actions
       addPatient: (patient) =>
         set((state) => ({ patients: [...state.patients, patient] })),
@@ -326,6 +359,7 @@ export const useStore = create<AppState>()(
         services: state.services,
         dentalChart: state.dentalChart,
         sidebarCollapsed: state.sidebarCollapsed,
+        settings: state.settings,
       }),
     }
   )
