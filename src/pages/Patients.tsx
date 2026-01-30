@@ -409,7 +409,7 @@ const Patients = () => {
                   <div>
                     {selectedPatient.firstName} {selectedPatient.lastName}
                     <p className="text-sm font-normal text-muted-foreground">
-                      Patient since {format(parseISO(selectedPatient.createdAt), "MMMM yyyy")}
+                      {t("patients.patientDetails.patientSince")} {format(parseISO(selectedPatient.createdAt), "MMMM yyyy")}
                     </p>
                   </div>
                 </DialogTitle>
@@ -417,10 +417,10 @@ const Patients = () => {
 
               <Tabs defaultValue="profile" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="profile">Profile</TabsTrigger>
-                  <TabsTrigger value="appointments">Appointments</TabsTrigger>
-                  <TabsTrigger value="notes">Notes</TabsTrigger>
-                  <TabsTrigger value="chart">Dental Chart</TabsTrigger>
+                  <TabsTrigger value="profile">{t("patients.patientDetails.tabs.profile")}</TabsTrigger>
+                  <TabsTrigger value="appointments">{t("patients.patientDetails.tabs.appointments")}</TabsTrigger>
+                  <TabsTrigger value="notes">{t("patients.patientDetails.tabs.notes")}</TabsTrigger>
+                  <TabsTrigger value="chart">{t("patients.patientDetails.tabs.chart")}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="profile" className="mt-4">
@@ -428,7 +428,7 @@ const Patients = () => {
                     <div className="space-y-6 pr-4">
                       {/* Contact Information */}
                       <div>
-                        <h4 className="font-semibold mb-3">Contact Information</h4>
+                        <h4 className="font-semibold mb-3">{t("patients.patientDetails.contactInfo")}</h4>
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div className="flex items-center gap-2 text-sm">
                             <Mail className="h-4 w-4 text-muted-foreground" />
@@ -450,14 +450,14 @@ const Patients = () => {
                       {selectedPatient.insuranceProvider && (
                         <>
                           <div>
-                            <h4 className="font-semibold mb-3">Insurance</h4>
+                            <h4 className="font-semibold mb-3">{t("patients.patientDetails.insurance")}</h4>
                             <div className="grid gap-2 sm:grid-cols-2 text-sm">
                               <div>
-                                <span className="text-muted-foreground">Provider: </span>
+                                <span className="text-muted-foreground">{t("patients.patientDetails.provider")}: </span>
                                 {selectedPatient.insuranceProvider}
                               </div>
                               <div>
-                                <span className="text-muted-foreground">Policy #: </span>
+                                <span className="text-muted-foreground">{t("patients.patientDetails.policyNumber")}: </span>
                                 {selectedPatient.policyNumber}
                               </div>
                             </div>
@@ -471,7 +471,7 @@ const Patients = () => {
                         <div>
                           <h4 className="font-semibold mb-3 flex items-center gap-2">
                             <AlertCircle className="h-4 w-4 text-destructive" />
-                            Allergies
+                            {t("patients.allergies")}
                           </h4>
                           {selectedPatient.allergies.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
@@ -483,7 +483,7 @@ const Patients = () => {
                             </div>
                           ) : (
                             <p className="text-sm text-muted-foreground">
-                              No known allergies
+                              {t("patients.patientDetails.noAllergies")}
                             </p>
                           )}
                         </div>
@@ -491,7 +491,7 @@ const Patients = () => {
                         <div>
                           <h4 className="font-semibold mb-3 flex items-center gap-2">
                             <Pill className="h-4 w-4 text-info" />
-                            Medications
+                            {t("patients.patientDetails.medications")}
                           </h4>
                           {selectedPatient.medications.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
@@ -503,7 +503,7 @@ const Patients = () => {
                             </div>
                           ) : (
                             <p className="text-sm text-muted-foreground">
-                              No current medications
+                              {t("patients.patientDetails.noMedications")}
                             </p>
                           )}
                         </div>
@@ -513,25 +513,25 @@ const Patients = () => {
 
                       {/* Medical History */}
                       <div>
-                        <h4 className="font-semibold mb-3">Medical History</h4>
+                        <h4 className="font-semibold mb-3">{t("patients.patientDetails.medicalHistory")}</h4>
                         <div className="space-y-3 text-sm">
                           <div>
-                            <span className="text-muted-foreground">Conditions: </span>
+                            <span className="text-muted-foreground">{t("patients.patientDetails.conditions")}: </span>
                             {selectedPatient.medicalHistory.conditions.length > 0
                               ? selectedPatient.medicalHistory.conditions.join(", ")
-                              : "None reported"}
+                              : t("patients.patientDetails.noneReported")}
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Past Surgeries: </span>
+                            <span className="text-muted-foreground">{t("patients.patientDetails.surgeries")}: </span>
                             {selectedPatient.medicalHistory.surgeries.length > 0
                               ? selectedPatient.medicalHistory.surgeries.join(", ")
-                              : "None reported"}
+                              : t("patients.patientDetails.noneReported")}
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Family History: </span>
+                            <span className="text-muted-foreground">{t("patients.patientDetails.familyHistory")}: </span>
                             {selectedPatient.medicalHistory.familyHistory.length > 0
                               ? selectedPatient.medicalHistory.familyHistory.join(", ")
-                              : "None reported"}
+                              : t("patients.patientDetails.noneReported")}
                           </div>
                         </div>
                       </div>

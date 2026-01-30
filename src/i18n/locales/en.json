@@ -117,7 +117,28 @@
     "searchPlaceholder": "...Search by name, email, or phone",
     "allergies": "Allergies",
     "lastName": "Last Name",
-    "editPatient": "Edit Patient"
+    "editPatient": "Edit Patient",
+    "patientDetails": {
+      "tabs": {
+        "profile": "Profile",
+        "appointments": "Appointments",
+        "notes": "Notes",
+        "chart": "Dental Chart"
+      },
+      "contactInfo": "Contact Information",
+      "insurance": "Insurance",
+      "provider": "Provider",
+      "policyNumber": "Policy #",
+      "medications": "Medications",
+      "noAllergies": "No known allergies",
+      "noMedications": "No current medications",
+      "medicalHistory": "Medical History",
+      "conditions": "Conditions",
+      "surgeries": "Past Surgeries",
+      "familyHistory": "Family History",
+      "noneReported": "None reported",
+      "patientSince": "Patient since"
+    }
   },
   "appointments": {
     "title": "Appointments",

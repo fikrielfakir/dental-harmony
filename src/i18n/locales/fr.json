@@ -117,7 +117,28 @@
     "searchPlaceholder": "...Rechercher par nom, email ou téléphone",
     "allergies": "Allergies",
     "lastName": "Nom de famille",
-    "editPatient": "Modifier le patient"
+    "editPatient": "Modifier le patient",
+    "patientDetails": {
+      "tabs": {
+        "profile": "Profil",
+        "appointments": "Rendez-vous",
+        "notes": "Notes",
+        "chart": "Schéma Dentaire"
+      },
+      "contactInfo": "Informations de Contact",
+      "insurance": "Assurance",
+      "provider": "Prestataire",
+      "policyNumber": "N° de Police",
+      "medications": "Médicaments",
+      "noAllergies": "Aucune allergie connue",
+      "noMedications": "Aucun médicament en cours",
+      "medicalHistory": "Antécédents Médicaux",
+      "conditions": "Pathologies",
+      "surgeries": "Chirurgies passées",
+      "familyHistory": "Antécédents familiaux",
+      "noneReported": "Aucun signalé",
+      "patientSince": "Patient depuis"
+    }
   },
   "appointments": {
     "title": "Rendez-vous",

@@ -117,7 +117,28 @@
     "searchPlaceholder": "...بحث بالاسم، البريد الإلكتروني، أو الهاتف",
     "allergies": "حساسية",
     "lastName": "الاسم الأخير",
-    "editPatient": "تعديل بيانات المريض"
+    "editPatient": "تعديل بيانات المريض",
+    "patientDetails": {
+      "tabs": {
+        "profile": "الملف الشخصي",
+        "appointments": "المواعيد",
+        "notes": "ملاحظات",
+        "chart": "مخطط الأسنان"
+      },
+      "contactInfo": "معلومات الاتصال",
+      "insurance": "التأمين",
+      "provider": "المزود",
+      "policyNumber": "رقم السياسة",
+      "medications": "الأدوية",
+      "noAllergies": "لا توجد حساسية معروفة",
+      "noMedications": "لا توجد أدوية حالية",
+      "medicalHistory": "التاريخ الطبي",
+      "conditions": "الحالات",
+      "surgeries": "الجراحات السابقة",
+      "familyHistory": "تاريخ العائلة",
+      "noneReported": "لم يتم الإبلاغ عن شيء",
+      "patientSince": "مريض منذ"
+    }
   },
   "appointments": {
     "title": "المواعيد",
