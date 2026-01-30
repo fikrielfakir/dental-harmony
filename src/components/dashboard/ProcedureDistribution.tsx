@@ -8,17 +8,37 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity } from "lucide-react";
-
-// Mock procedure data
-const procedureData = [
-  { name: "Checkups", value: 35, color: "hsl(221, 83%, 53%)" },
-  { name: "Cleanings", value: 25, color: "hsl(142, 76%, 36%)" },
-  { name: "Fillings", value: 18, color: "hsl(38, 92%, 50%)" },
-  { name: "Crowns", value: 12, color: "hsl(199, 89%, 48%)" },
-  { name: "Other", value: 10, color: "hsl(215, 16%, 47%)" },
-];
+import { useStore } from "@/store";
 
 export function ProcedureDistribution() {
+  const { appointments } = useStore();
+
+  // Calculate real procedure distribution from appointments
+  const distribution = appointments.reduce((acc: Record<string, number>, apt) => {
+    const type = apt.appointmentType.charAt(0).toUpperCase() + apt.appointmentType.slice(1);
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+  }, {});
+
+  const total = appointments.length;
+  const colors = [
+    "hsl(221, 83%, 53%)",
+    "hsl(142, 76%, 36%)",
+    "hsl(38, 92%, 50%)",
+    "hsl(199, 89%, 48%)",
+    "hsl(215, 16%, 47%)",
+    "hsl(280, 65%, 60%)",
+    "hsl(0, 72%, 51%)",
+  ];
+
+  const procedureData = Object.entries(distribution)
+    .map(([name, count], index) => ({
+      name,
+      value: Math.round((count / total) * 100),
+      color: colors[index % colors.length]
+    }))
+    .sort((a, b) => b.value - a.value);
+
   return (
     <Card>
       <CardHeader className="pb-2">

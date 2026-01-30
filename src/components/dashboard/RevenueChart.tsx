@@ -9,24 +9,28 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign } from "lucide-react";
-
-// Mock revenue data
-const revenueData = [
-  { month: "Jan", revenue: 12500 },
-  { month: "Feb", revenue: 15200 },
-  { month: "Mar", revenue: 18900 },
-  { month: "Apr", revenue: 16400 },
-  { month: "May", revenue: 21000 },
-  { month: "Jun", revenue: 19800 },
-  { month: "Jul", revenue: 22500 },
-  { month: "Aug", revenue: 24100 },
-  { month: "Sep", revenue: 21800 },
-  { month: "Oct", revenue: 25600 },
-  { month: "Nov", revenue: 23400 },
-  { month: "Dec", revenue: 28900 },
-];
+import { useStore } from "@/store";
+import { parseISO, format } from "date-fns";
 
 export function RevenueChart() {
+  const { invoices } = useStore();
+
+  // Generate real revenue data from invoices
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const currentYear = new Date().getFullYear();
+  
+  const revenueData = months.map((month, index) => {
+    const monthlyTotal = invoices
+      .flatMap(inv => inv.payments)
+      .filter(p => {
+        const pDate = parseISO(p.paymentDate);
+        return pDate.getMonth() === index && pDate.getFullYear() === currentYear;
+      })
+      .reduce((sum, p) => sum + p.amount, 0);
+      
+    return { month, revenue: monthlyTotal };
+  });
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -58,7 +62,7 @@ export function RevenueChart() {
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
                 className="text-xs fill-muted-foreground"
               />
               <Tooltip
