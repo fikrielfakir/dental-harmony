@@ -399,10 +399,10 @@ const Patients = () => {
 
       {/* Patient Detail Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={closeViewDialog}>
-        <DialogContent className="max-w-2xl max-h-[90vh]">
+        <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden flex flex-col">
           {selectedPatient && (
             <>
-              <DialogHeader>
+              <DialogHeader className="p-6 pb-2">
                 <DialogTitle className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
                     <AvatarFallback className="bg-primary text-primary-foreground">
@@ -420,15 +420,17 @@ const Patients = () => {
               </DialogHeader>
 
               <Tabs defaultValue="profile" className="flex-1 flex flex-col min-h-0">
-                <TabsList className="grid w-full grid-cols-4 sticky top-0 bg-background z-20 border-b shrink-0">
-                  <TabsTrigger value="profile">{t("patients.patientDetails.tabs.profile")}</TabsTrigger>
-                  <TabsTrigger value="appointments">{t("patients.patientDetails.tabs.appointments")}</TabsTrigger>
-                  <TabsTrigger value="notes">{t("patients.patientDetails.tabs.notes")}</TabsTrigger>
-                  <TabsTrigger value="chart">{t("patients.patientDetails.tabs.chart")}</TabsTrigger>
-                </TabsList>
+                <div className="px-6">
+                  <TabsList className="grid w-full grid-cols-4 bg-muted/50 p-1">
+                    <TabsTrigger value="profile" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("patients.patientDetails.tabs.profile")}</TabsTrigger>
+                    <TabsTrigger value="appointments" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("patients.patientDetails.tabs.appointments")}</TabsTrigger>
+                    <TabsTrigger value="notes" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("patients.patientDetails.tabs.notes")}</TabsTrigger>
+                    <TabsTrigger value="chart" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">{t("patients.patientDetails.tabs.chart")}</TabsTrigger>
+                  </TabsList>
+                </div>
 
-                <ScrollArea className="flex-1 min-h-0 px-1">
-                  <div className="mt-4 pb-6">
+                <ScrollArea className="flex-1 min-h-0">
+                  <div className="p-6">
                     <TabsContent value="profile" className="m-0 focus-visible:outline-none">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Personal Info */}
@@ -509,15 +511,13 @@ const Patients = () => {
                     </TabsContent>
 
                     <TabsContent value="chart" className="m-0 focus-visible:outline-none">
-                      <div className="h-[400px] overflow-y-auto pr-2 scrollbar-thin">
-                        <Odontogram patientId={selectedPatient.id} />
-                      </div>
+                      <Odontogram patientId={selectedPatient.id} />
                     </TabsContent>
                   </div>
                 </ScrollArea>
               </Tabs>
 
-              <DialogFooter>
+              <DialogFooter className="p-6 pt-2 border-t bg-muted/10">
                 <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
                   {t("common.cancel")}
                 </Button>

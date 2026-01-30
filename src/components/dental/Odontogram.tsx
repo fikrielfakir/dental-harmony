@@ -177,280 +177,151 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
   };
 
   return (
-    <div className="space-y-4 p-2 sm:p-3 bg-gradient-to-b from-slate-50 to-white rounded-xl border border-slate-200">
-      <div className="text-center mb-1">
-        <h3 className="text-sm font-semibold text-gray-800">{t("patients.dentalChart.title")}</h3>
-        <p className="text-[10px] text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
+    <div className="space-y-6">
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-semibold text-gray-900">{t("patients.dentalChart.title")}</h3>
+        <p className="text-sm text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
-      <div className="flex flex-col gap-4 overflow-x-auto pb-2 scrollbar-thin">
-        {/* Upper Teeth */}
-        <div className="flex flex-col items-center min-w-[600px] mx-auto">
-          <span className="text-[10px] font-medium text-muted-foreground mb-1">{t("patients.dentalChart.upperArch")}</span>
-          <div className="flex justify-center gap-0.5">
-            <div className="flex gap-0.5">
-              {FDI_NUMBERING.upperRight.map(n => (
-                <ToothSVG 
-                  key={n} 
-                  fdiNumber={n} 
-                  entries={patientEntries} 
-                  onClick={() => setSelectedTooth(n)}
-                  isUpper={true}
-                />
-              ))}
-            </div>
-            <div className="w-px bg-slate-300 mx-1 self-stretch" />
-            <div className="flex gap-0.5">
-              {FDI_NUMBERING.upperLeft.map(n => (
-                <ToothSVG 
-                  key={n} 
-                  fdiNumber={n} 
-                  entries={patientEntries} 
-                  onClick={() => setSelectedTooth(n)}
-                  isUpper={true}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-dashed border-slate-300 w-full min-w-[600px] mx-auto" />
-
-        {/* Lower Teeth */}
-        <div className="flex flex-col items-center min-w-[600px] mx-auto">
-          <div className="flex justify-center gap-0.5">
-            <div className="flex gap-0.5">
-              {FDI_NUMBERING.lowerRight.map(n => (
-                <ToothSVG 
-                  key={n} 
-                  fdiNumber={n} 
-                  entries={patientEntries} 
-                  onClick={() => setSelectedTooth(n)}
-                  isUpper={false}
-                />
-              ))}
-            </div>
-            <div className="w-px bg-slate-300 mx-1 self-stretch" />
-            <div className="flex gap-0.5">
-              {FDI_NUMBERING.lowerLeft.map(n => (
-                <ToothSVG 
-                  key={n} 
-                  fdiNumber={n} 
-                  entries={patientEntries} 
-                  onClick={() => setSelectedTooth(n)}
-                  isUpper={false}
-                />
-              ))}
+      <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-6">
+        <div className="flex flex-col gap-8 overflow-x-auto pb-4 scrollbar-thin">
+          {/* Upper Teeth */}
+          <div className="flex flex-col items-center min-w-[600px] mx-auto space-y-4">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">{t("patients.dentalChart.upperArch")}</span>
+            <div className="flex justify-center gap-1">
+              <div className="flex gap-1">
+                {FDI_NUMBERING.upperRight.map(n => (
+                  <ToothSVG 
+                    key={n} 
+                    fdiNumber={n} 
+                    entries={patientEntries} 
+                    onClick={() => setSelectedTooth(n)}
+                    isUpper={true}
+                  />
+                ))}
+              </div>
+              <div className="w-px bg-slate-200 mx-3 self-stretch" />
+              <div className="flex gap-1">
+                {FDI_NUMBERING.upperLeft.map(n => (
+                  <ToothSVG 
+                    key={n} 
+                    fdiNumber={n} 
+                    entries={patientEntries} 
+                    onClick={() => setSelectedTooth(n)}
+                    isUpper={true}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-          <span className="text-[10px] font-medium text-muted-foreground mt-1">{t("patients.dentalChart.lowerArch")}</span>
+
+          <div className="border-t border-dashed border-slate-200 w-full min-w-[600px] mx-auto" />
+
+          {/* Lower Teeth */}
+          <div className="flex flex-col items-center min-w-[600px] mx-auto space-y-4">
+            <div className="flex justify-center gap-1">
+              <div className="flex gap-1">
+                {FDI_NUMBERING.lowerRight.map(n => (
+                  <ToothSVG 
+                    key={n} 
+                    fdiNumber={n} 
+                    entries={patientEntries} 
+                    onClick={() => setSelectedTooth(n)}
+                    isUpper={false}
+                  />
+                ))}
+              </div>
+              <div className="w-px bg-slate-200 mx-3 self-stretch" />
+              <div className="flex gap-1">
+                {FDI_NUMBERING.lowerLeft.map(n => (
+                  <ToothSVG 
+                    key={n} 
+                    fdiNumber={n} 
+                    entries={patientEntries} 
+                    onClick={() => setSelectedTooth(n)}
+                    isUpper={false}
+                  />
+                ))}
+              </div>
+            </div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">{t("patients.dentalChart.lowerArch")}</span>
+          </div>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-2 justify-center py-2 border-t border-slate-200">
+      <div className="flex flex-wrap gap-4 justify-center py-4 px-2 bg-white rounded-lg border border-slate-100 shadow-sm">
         {Object.entries(DENTAL_COLORS).map(([key, color]) => (
-          <div key={key} className="flex items-center gap-1">
+          <div key={key} className="flex items-center gap-2">
             <div 
-              className="w-3 h-3 rounded border border-slate-300" 
+              className="w-4 h-4 rounded-full border border-slate-200 shadow-inner" 
               style={{ backgroundColor: color }} 
             />
-            <span className="text-[10px] font-medium text-gray-600">
+            <span className="text-xs font-medium text-gray-700">
               {t(`patients.dentalChart.status.${key}`, TOOTH_STATUS_LABELS[key as keyof typeof TOOTH_STATUS_LABELS] || key)}
             </span>
           </div>
         ))}
       </div>
 
-      {/* Treatment Dialog */}
-      <Dialog open={selectedTooth !== null} onOpenChange={(open) => !open && setSelectedTooth(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <span className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
-                {selectedTooth}
-              </span>
-              {t("patients.dentalChart.tooth")} #{selectedTooth}
-            </DialogTitle>
-            <DialogDescription>{t("patients.dentalChart.subtitle")}</DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            {/* Surface Selection */}
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">{t("patients.dentalChart.surfaces")}</Label>
-              <div className="flex flex-wrap gap-2">
-                {SURFACES.map(surface => (
-                  <label 
-                    key={surface}
-                    className={`
-                      flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
-                      ${formData.surfaces.includes(surface) 
-                        ? 'bg-primary/10 border-primary text-primary' 
-                        : 'bg-white border-slate-200 hover:border-slate-300'}
-                    `}
-                  >
-                    <Checkbox 
-                      checked={formData.surfaces.includes(surface)}
-                      onCheckedChange={() => toggleSurface(surface)}
-                    />
-                    <span className="text-sm font-medium">{surface}</span>
-                    <span className="text-xs text-muted-foreground">({t(`patients.dentalChart.surfaceLabels.${surface}`, SURFACE_LABELS[surface])})</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Treatment Type */}
-            <div className="space-y-2">
-              <Label>{t("appointments.type")}</Label>
-              <Select value={formData.treatmentType} onValueChange={(v) => setFormData({...formData, treatmentType: v})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="healthy">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.healthy }} />
-                      {t("patients.dentalChart.status.healthy")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="cavity">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.cavity }} />
-                      {t("patients.dentalChart.status.caries")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="filling">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.filling }} />
-                      {t("patients.dentalChart.status.filling")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="crown">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.crown }} />
-                      {t("patients.dentalChart.status.crown")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="extraction">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.extraction }} />
-                      {t("patients.dentalChart.status.extracted")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="rootcanal">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.rootCanal }} />
-                      {t("patients.dentalChart.status.root-canal")}
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Status */}
-            <div className="space-y-2">
-              <Label>{t("appointments.status")}</Label>
-              <Select value={formData.status} onValueChange={(v: "planned" | "completed") => setFormData({...formData, status: v})}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="planned">{t("common.planned", "Planned")}</SelectItem>
-                  <SelectItem value="completed">{t("patients.dentalChart.completed")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Notes */}
-            <div className="space-y-2">
-              <Label>{t("common.notes", "Notes")}</Label>
-              <Textarea 
-                placeholder={t("common.notesPlaceholder", "Add any additional notes...")}
-                value={formData.notes} 
-                onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                rows={2}
-              />
-            </div>
-
-            {/* Existing treatments for this tooth */}
-            {selectedTooth && getToothHistory(selectedTooth).length > 0 && (
-              <div className="space-y-2 pt-2 border-t">
-                <Label className="text-sm text-muted-foreground">{t("patients.dentalChart.history")}</Label>
-                <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {getToothHistory(selectedTooth).map(entry => (
-                    <div key={entry.id} className="flex items-center justify-between text-sm bg-slate-50 p-2 rounded">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                        <span>{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
-                        <Badge variant="outline" className="text-[10px]">{entry.surfaces.join(', ')}</Badge>
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(entry.date).toLocaleDateString()}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedTooth(null)}>{t("common.cancel")}</Button>
-            <Button onClick={handleSave}>{t("common.save")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
       {/* Treatment History */}
-      <div className="space-y-3 pt-2">
-        <h3 className="font-semibold text-xs flex items-center gap-2 px-1">
-          {t("patients.dentalChart.history")}
-          {patientEntries.length > 0 && (
-            <Badge variant="secondary" className="text-[10px] h-4">{patientEntries.length} {t("patients.dentalChart.records")}</Badge>
-          )}
-        </h3>
-        <div className="border rounded-lg p-2 bg-white">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between px-1">
+          <h3 className="font-semibold text-sm text-gray-900 flex items-center gap-2">
+            {t("patients.dentalChart.history")}
+            {patientEntries.length > 0 && (
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-5">
+                {patientEntries.length} {t("patients.dentalChart.records")}
+              </Badge>
+            )}
+          </h3>
+        </div>
+        
+        <div className="border rounded-xl bg-white shadow-sm overflow-hidden">
           {patientEntries.length === 0 ? (
-            <p className="text-[10px] text-muted-foreground text-center py-4">
-              {t("common.noData")}
-            </p>
+            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground bg-slate-50/30">
+              <p className="text-xs font-medium">{t("common.noData")}</p>
+            </div>
           ) : (
-            <div className="space-y-2 max-h-[150px] overflow-y-auto pr-1 scrollbar-thin">
+            <div className="divide-y divide-slate-100 max-h-[200px] overflow-y-auto scrollbar-thin">
               {patientEntries
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map(entry => (
                   <div 
                     key={entry.id} 
-                    className="flex justify-between items-center p-2 bg-slate-50 rounded-md hover:bg-slate-100 transition-colors border border-slate-100"
+                    className="flex justify-between items-center p-3 hover:bg-slate-50 transition-colors"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <Badge 
-                          variant="outline" 
-                          className="font-bold text-[9px] h-4 px-1"
-                          style={{ borderColor: entry.color, color: entry.color === '#000000' ? '#000' : entry.color }}
-                        >
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-lg border border-slate-100 bg-white font-bold text-xs shadow-sm" style={{ color: entry.color === '#000000' ? '#000' : entry.color }}>
                           #{entry.toothNumber}
-                        </Badge>
-                        <span className="font-medium text-[10px] truncate max-w-[80px]">{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
-                        <Badge variant={entry.status === 'completed' ? 'default' : 'secondary'} className="text-[8px] h-3 px-1">
-                          {t(`patients.dentalChart.${entry.status}`, entry.status)}
-                        </Badge>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-xs text-gray-900">
+                            {t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}
+                          </span>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <Badge variant="outline" className="text-[9px] h-4 px-1 leading-none border-slate-200 text-slate-500">
+                              {entry.surfaces.join(', ')}
+                            </Badge>
+                            <span className={`text-[9px] font-medium px-1.5 py-0 rounded-full h-4 flex items-center ${entry.status === 'completed' ? 'bg-green-50 text-green-600' : 'bg-blue-50 text-blue-600'}`}>
+                              {t(`patients.dentalChart.${entry.status}`, entry.status)}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 ml-2">
-                      <p className="text-[9px] text-muted-foreground whitespace-nowrap">
-                        {new Date(entry.date).toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })}
-                      </p>
+                    <div className="flex items-center gap-3 ml-4">
+                      <time className="text-[10px] font-medium text-slate-400">
+                        {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </time>
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-5 w-5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors"
                         onClick={() => handleDelete(entry.id)}
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
