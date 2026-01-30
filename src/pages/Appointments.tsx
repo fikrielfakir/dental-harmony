@@ -418,14 +418,28 @@ const Appointments = () => {
             const dayAppointments = getAppointmentsForDay(day);
             const isCurrentMonth = isSameMonth(day, monthStart);
             return (
-              <div key={i} className={cn(
-                "min-h-[120px] border-b border-r border-border/20 p-2 transition-colors hover:bg-muted/5 flex flex-col last:border-r-0",
-                !isCurrentMonth && "opacity-30"
-              )}>
+              <div 
+                key={i} 
+                className={cn(
+                  "min-h-[120px] border-b border-r border-border/20 p-2 transition-colors hover:bg-muted/5 flex flex-col last:border-r-0 cursor-pointer",
+                  !isCurrentMonth && "opacity-30"
+                )}
+                onClick={() => {
+                  setCurrentDate(day);
+                  setViewMode('day');
+                }}
+              >
                 <p className={cn("text-xs font-bold mb-1", isSameDay(day, new Date()) && "text-primary bg-primary/10 w-6 h-6 flex items-center justify-center rounded-full")}>{format(day, "d")}</p>
                 <div className="space-y-1 flex-1 overflow-hidden">
                   {dayAppointments.slice(0, 3).map(apt => (
-                    <div key={apt.id} className="text-[9px] p-1 rounded bg-primary/10 text-primary truncate border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors" onClick={(e) => { e.stopPropagation(); setSelectedAppointment(apt); }}>
+                    <div 
+                      key={apt.id} 
+                      className="text-[9px] p-1 rounded bg-primary/10 text-primary truncate border border-primary/20 cursor-pointer hover:bg-primary/20 transition-colors" 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        setSelectedAppointment(apt); 
+                      }}
+                    >
                       {getPatient(apt.patientId)?.lastName}
                     </div>
                   ))}
