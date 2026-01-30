@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["glib", "nss", "nspr", "atk", "at-spi2-atk", "libdrm", "mesa", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "xorg.libxcb", "xorg.libxshmfence", "libxkbcommon", "pango", "cairo", "at-spi2-core", "cups", "dbus-glib", "expat", "gtk3", "xorg.libXScrnSaver", "alsa-lib", "xorg.libXtst", "xorg.libXcursor", "xorg.libXi", "xorg.libXrender", "xorg.libXft", "xorg.libXinerama", "xorg.libXpm", "xorg.libXaw", "xorg.libXmu", "xorg.libXres", "xorg.libXdmcp", "xorg.libXau", "gdk-pixbuf", "fontconfig", "freetype", "harfbuzz", "icu", "libpng", "libjpeg_turbo", "libwebp", "libtiff", "zlib", "libsecret", "libnotify"]
+packages = ["glib", "nss", "nspr", "atk", "at-spi2-atk", "libdrm", "mesa", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "xorg.libxcb", "xorg.libxshmfence", "libxkbcommon", "pango", "cairo", "at-spi2-core", "cups", "dbus-glib", "expat", "gtk3", "xorg.libXScrnSaver", "alsa-lib", "xorg.libXtst", "xorg.libXcursor", "xorg.libXi", "xorg.libXrender", "xorg.libXft", "xorg.libXinerama", "xorg.libXpm", "xorg.libXaw", "xorg.libXmu", "xorg.libXres", "xorg.libXdmcp", "xorg.libXau", "gdk-pixbuf", "fontconfig", "freetype", "harfbuzz", "icu", "libpng", "libjpeg_turbo", "libwebp", "libtiff", "zlib", "libsecret", "libnotify", "libgbm"]
 
 [deployment]
 deploymentTarget = "autoscale"
