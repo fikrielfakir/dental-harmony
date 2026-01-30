@@ -160,7 +160,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
       status: formData.status,
       notes: formData.notes,
       date: new Date().toISOString(),
-      color: colorMap[formData.treatmentType.toLowerCase().replace(" ", "").replace("-", "")] || "#cbd5e1",
+      color: colorMap[formData.treatmentType.toLowerCase().replace(/\s+/g, "")] || "#cbd5e1",
     };
 
     addDentalChartEntry(newEntry);
@@ -177,10 +177,10 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
   };
 
   return (
-    <div className="space-y-6 p-2 sm:p-4 bg-gradient-to-b from-slate-50 to-white rounded-xl border border-slate-200">
-      <div className="text-center mb-2">
-        <h3 className="text-base font-semibold text-gray-800">{t("patients.dentalChart.title")}</h3>
-        <p className="text-xs text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
+    <div className="space-y-4 p-2 sm:p-3 bg-gradient-to-b from-slate-50 to-white rounded-xl border border-slate-200">
+      <div className="text-center mb-1">
+        <h3 className="text-sm font-semibold text-gray-800">{t("patients.dentalChart.title")}</h3>
+        <p className="text-[10px] text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
       <div className="flex flex-col gap-4 overflow-x-auto pb-2 scrollbar-thin">
@@ -404,58 +404,50 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
       </Dialog>
       
       {/* Treatment History */}
-      <div className="space-y-4 pt-4">
-        <h3 className="font-semibold text-sm flex items-center gap-2">
+      <div className="space-y-3 pt-2">
+        <h3 className="font-semibold text-xs flex items-center gap-2 px-1">
           {t("patients.dentalChart.history")}
           {patientEntries.length > 0 && (
-            <Badge variant="secondary" className="text-xs">{patientEntries.length} {t("patients.dentalChart.records")}</Badge>
+            <Badge variant="secondary" className="text-[10px] h-4">{patientEntries.length} {t("patients.dentalChart.records")}</Badge>
           )}
         </h3>
-        <ScrollArea className="h-[200px] border rounded-lg p-4 bg-white">
+        <div className="border rounded-lg p-2 bg-white">
           {patientEntries.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="text-[10px] text-muted-foreground text-center py-4">
               {t("common.noData")}
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2 max-h-[150px] overflow-y-auto pr-1 scrollbar-thin">
               {patientEntries
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map(entry => (
                   <div 
                     key={entry.id} 
-                    className="flex justify-between items-start p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
+                    className="flex justify-between items-center p-2 bg-slate-50 rounded-md hover:bg-slate-100 transition-colors border border-slate-100"
                   >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <Badge 
                           variant="outline" 
-                          className="font-bold"
+                          className="font-bold text-[9px] h-4 px-1"
                           style={{ borderColor: entry.color, color: entry.color === '#000000' ? '#000' : entry.color }}
                         >
-                          {t("patients.dentalChart.tooth")} #{entry.toothNumber}
+                          #{entry.toothNumber}
                         </Badge>
-                        <span className="font-medium text-sm capitalize">{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
-                        <Badge variant={entry.status === 'completed' ? 'default' : 'secondary'} className="text-[10px]">
+                        <span className="font-medium text-[10px] truncate max-w-[80px]">{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
+                        <Badge variant={entry.status === 'completed' ? 'default' : 'secondary'} className="text-[8px] h-3 px-1">
                           {t(`patients.dentalChart.${entry.status}`, entry.status)}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-muted-foreground">
-                          {t("patients.dentalChart.surfaces")}: {entry.surfaces.join(', ')}
-                        </span>
-                      </div>
-                      {entry.notes && (
-                        <p className="text-xs text-muted-foreground mt-1 italic">"{entry.notes}"</p>
-                      )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(entry.date).toLocaleDateString()}
+                    <div className="flex items-center gap-2 ml-2">
+                      <p className="text-[9px] text-muted-foreground whitespace-nowrap">
+                        {new Date(entry.date).toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })}
                       </p>
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-6 w-6 text-destructive hover:text-destructive"
+                        className="h-5 w-5 text-destructive hover:text-destructive hover:bg-destructive/10"
                         onClick={() => handleDelete(entry.id)}
                       >
                         <Trash2 className="h-3 w-3" />
@@ -465,7 +457,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                 ))}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </div>
     </div>
   );

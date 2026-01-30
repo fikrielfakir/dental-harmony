@@ -11,7 +11,11 @@ import {
   AlertCircle,
   Pill,
   ChevronRight,
-  FileText
+  FileText,
+  User,
+  Hash,
+  MapPin,
+  ShieldAlert
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "@/store";
@@ -415,151 +419,102 @@ const Patients = () => {
                 </DialogTitle>
               </DialogHeader>
 
-              <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="profile">{t("patients.patientDetails.tabs.profile")}</TabsTrigger>
-                  <TabsTrigger value="appointments">{t("patients.patientDetails.tabs.appointments")}</TabsTrigger>
-                  <TabsTrigger value="notes">{t("patients.patientDetails.tabs.notes")}</TabsTrigger>
-                  <TabsTrigger value="chart">{t("patients.patientDetails.tabs.chart")}</TabsTrigger>
+              <Tabs defaultValue="profile" className="flex-1 flex flex-col min-h-0">
+                <TabsList className="grid w-full grid-cols-4 sticky top-0 bg-background z-20 border-b shrink-0">
+                  <TabsTrigger value="profile">{t("patients.tabs.profile")}</TabsTrigger>
+                  <TabsTrigger value="appointments">{t("patients.tabs.appointments")}</TabsTrigger>
+                  <TabsTrigger value="notes">{t("patients.tabs.notes")}</TabsTrigger>
+                  <TabsTrigger value="chart">{t("patients.tabs.dentalChart")}</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="profile" className="mt-4">
-                  <ScrollArea className="max-h-[50vh]">
-                    <div className="space-y-6 pr-4">
-                      {/* Contact Information */}
-                      <div>
-                        <h4 className="font-semibold mb-3">{t("patients.patientDetails.contactInfo")}</h4>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div className="flex items-center gap-2 text-sm">
-                            <Mail className="h-4 w-4 text-muted-foreground" />
-                            {selectedPatient.email}
-                          </div>
-                          <div className="flex items-center gap-2 text-sm">
-                            <Phone className="h-4 w-4 text-muted-foreground" />
-                            {selectedPatient.phone}
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-2">
-                          {selectedPatient.address}
-                        </p>
-                      </div>
-
-                      <Separator />
-
-                      {/* Insurance */}
-                      {selectedPatient.insuranceProvider && (
-                        <>
-                          <div>
-                            <h4 className="font-semibold mb-3">{t("patients.patientDetails.insurance")}</h4>
-                            <div className="grid gap-2 sm:grid-cols-2 text-sm">
-                              <div>
-                                <span className="text-muted-foreground">{t("patients.patientDetails.provider")}: </span>
-                                {selectedPatient.insuranceProvider}
-                              </div>
-                              <div>
-                                <span className="text-muted-foreground">{t("patients.patientDetails.policyNumber")}: </span>
-                                {selectedPatient.policyNumber}
-                              </div>
+                <ScrollArea className="flex-1 min-h-0 px-1">
+                  <div className="mt-4 pb-6">
+                    <TabsContent value="profile" className="m-0 focus-visible:outline-none">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Personal Info */}
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                              <User className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground">{t("patients.form.fullName")}</p>
+                              <p className="font-medium">{selectedPatient.firstName} {selectedPatient.lastName}</p>
                             </div>
                           </div>
-                          <Separator />
-                        </>
-                      )}
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                              <Calendar className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground">{t("patients.form.dateOfBirth")}</p>
+                              <p className="font-medium">{selectedPatient.dateOfBirth}</p>
+                            </div>
+                          </div>
+                        </div>
 
-                      {/* Allergies & Medications */}
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <h4 className="font-semibold mb-3 flex items-center gap-2">
-                            <AlertCircle className="h-4 w-4 text-destructive" />
+                        {/* Contact Info */}
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                              <Phone className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground">{t("patients.form.phone")}</p>
+                              <p className="font-medium">{selectedPatient.phone}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                              <Mail className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground">{t("patients.form.email")}</p>
+                              <p className="font-medium">{selectedPatient.email}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Allergies & Medications */}
+                        <div className="md:col-span-2 space-y-4 pt-4 border-t">
+                          <h4 className="font-semibold flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 text-destructive" />
                             {t("patients.allergies")}
                           </h4>
-                          {selectedPatient.allergies.length > 0 ? (
-                            <div className="flex flex-wrap gap-2">
-                              {selectedPatient.allergies.map((allergy, i) => (
-                                <Badge key={i} variant="destructive">
-                                  {allergy}
-                                </Badge>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-sm text-muted-foreground">
-                              {t("patients.patientDetails.noAllergies")}
-                            </p>
-                          )}
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold mb-3 flex items-center gap-2">
-                            <Pill className="h-4 w-4 text-info" />
-                            {t("patients.patientDetails.medications")}
-                          </h4>
-                          {selectedPatient.medications.length > 0 ? (
-                            <div className="flex flex-wrap gap-2">
-                              {selectedPatient.medications.map((med, i) => (
-                                <Badge key={i} variant="secondary">
-                                  {med}
-                                </Badge>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-sm text-muted-foreground">
-                              {t("patients.patientDetails.noMedications")}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <Separator />
-
-                      {/* Medical History */}
-                      <div>
-                        <h4 className="font-semibold mb-3">{t("patients.patientDetails.medicalHistory")}</h4>
-                        <div className="space-y-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">{t("patients.patientDetails.conditions")}: </span>
-                            {selectedPatient.medicalHistory.conditions.length > 0
-                              ? selectedPatient.medicalHistory.conditions.join(", ")
-                              : t("patients.patientDetails.noneReported")}
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">{t("patients.patientDetails.surgeries")}: </span>
-                            {selectedPatient.medicalHistory.surgeries.length > 0
-                              ? selectedPatient.medicalHistory.surgeries.join(", ")
-                              : t("patients.patientDetails.noneReported")}
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">{t("patients.patientDetails.familyHistory")}: </span>
-                            {selectedPatient.medicalHistory.familyHistory.length > 0
-                              ? selectedPatient.medicalHistory.familyHistory.join(", ")
-                              : t("patients.patientDetails.noneReported")}
+                          <div className="flex flex-wrap gap-2">
+                            {selectedPatient.allergies.length > 0 ? (
+                              selectedPatient.allergies.map((allergy, i) => (
+                                <Badge key={i} variant="destructive">{allergy}</Badge>
+                              ))
+                            ) : (
+                              <span className="text-sm text-muted-foreground">{t("common.none", "None")}</span>
+                            )}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
+                    </TabsContent>
 
-                <TabsContent value="appointments" className="mt-4">
-                  <div className="py-12 text-center text-muted-foreground">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>Appointment history view coming soon.</p>
+                    <TabsContent value="appointments" className="m-0 focus-visible:outline-none">
+                      <div className="p-8 text-center border-2 border-dashed rounded-lg">
+                        <Calendar className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                        <p>{t("common.comingSoon", "View coming soon.")}</p>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="notes" className="m-0 focus-visible:outline-none">
+                      <div className="p-8 text-center border-2 border-dashed rounded-lg">
+                        <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                        <p>{t("common.comingSoon", "View coming soon.")}</p>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="chart" className="m-0 focus-visible:outline-none">
+                      <div className="h-[400px] overflow-y-auto pr-2 scrollbar-thin">
+                        <Odontogram patientId={selectedPatient.id} />
+                      </div>
+                    </TabsContent>
                   </div>
-                </TabsContent>
-
-                <TabsContent value="notes" className="mt-4">
-                  <div className="py-12 text-center text-muted-foreground">
-                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                    <p>Clinical notes view coming soon.</p>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="chart" className="mt-4">
-                  <ScrollArea className="max-h-[60vh]">
-                    <div className="pr-4">
-                      <Odontogram patientId={selectedPatient.id} />
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
+                </ScrollArea>
               </Tabs>
 
               <DialogFooter>
