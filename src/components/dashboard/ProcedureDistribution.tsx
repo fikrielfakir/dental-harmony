@@ -9,8 +9,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity } from "lucide-react";
 import { useStore } from "@/store";
+import { useTranslation } from "react-i18next";
 
 export function ProcedureDistribution() {
+  const { t } = useTranslation();
   const { appointments } = useStore();
 
   // Calculate real procedure distribution from appointments
@@ -44,7 +46,7 @@ export function ProcedureDistribution() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <Activity className="h-5 w-5 text-warning" />
-          Procedure Distribution
+          {t("dashboard.procedureDistribution")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -70,7 +72,7 @@ export function ProcedureDistribution() {
                   border: "1px solid hsl(var(--border))",
                   borderRadius: "8px",
                 }}
-                formatter={(value: number) => [`${value}%`, "Percentage"]}
+                formatter={(value: number) => [`${value}%`, t("dashboard.percentage")]}
               />
               <Legend
                 verticalAlign="bottom"

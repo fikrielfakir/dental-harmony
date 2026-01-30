@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStore } from "@/store";
 import { cn } from "@/lib/utils";
 import { AppointmentStatus, AppointmentType } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const statusColors: Record<AppointmentStatus, string> = {
   scheduled: "bg-info/10 text-info border-info/20",
@@ -31,6 +32,7 @@ const typeLabels: Record<AppointmentType, string> = {
 };
 
 export function UpcomingAppointments() {
+  const { t } = useTranslation();
   const { appointments, patients, staff } = useStore();
 
   // Get today's appointments sorted by time
@@ -57,7 +59,7 @@ export function UpcomingAppointments() {
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" />
-          Today's Appointments
+          {t("dashboard.todayAppointments")}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -66,7 +68,7 @@ export function UpcomingAppointments() {
             {todayAppointments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <Clock className="h-12 w-12 text-muted-foreground/30 mb-3" />
-                <p className="text-muted-foreground">No appointments today</p>
+                <p className="text-muted-foreground">{t("dashboard.noAppointments")}</p>
               </div>
             ) : (
               todayAppointments.map((appointment) => {

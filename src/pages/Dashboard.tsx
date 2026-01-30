@@ -8,8 +8,10 @@ import { useStore } from "@/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { appointments, patients, staff, invoices } = useStore();
 
   // Calculate today's stats
@@ -51,40 +53,40 @@ const Dashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("dashboard.title")}</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's what's happening today.
+          {t("dashboard.welcomeBack")}
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Today's Appointments"
+          title={t("dashboard.todayAppointments")}
           value={todayAppointments.length}
-          description={`${completedToday} completed`}
+          description={`${completedToday} ${t("dashboard.completed")}`}
           icon={Calendar}
           iconClassName="bg-primary/10 text-primary"
         />
         <StatCard
-          title="Total Patients"
+          title={t("dashboard.totalPatients")}
           value={patients.length}
-          description="Active patients"
+          description={t("dashboard.activePatients")}
           icon={Users}
           trend={{ value: 12, positive: true }}
           iconClassName="bg-info/10 text-info"
         />
         <StatCard
-          title="Today's Revenue"
+          title={t("dashboard.todayRevenue")}
           value={`$${todayRevenue.toLocaleString()}`}
-          description="From completed appointments"
+          description={t("dashboard.todayRevenueDesc", "From completed appointments")}
           icon={DollarSign}
           iconClassName="bg-success/10 text-success"
         />
         <StatCard
-          title="Pending Payments"
+          title={t("dashboard.pendingPayments")}
           value={pendingPayments}
-          description="Awaiting payment"
+          description={t("dashboard.awaitingPayment")}
           icon={AlertCircle}
           iconClassName="bg-warning/10 text-warning"
         />
@@ -109,7 +111,7 @@ const Dashboard = () => {
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <Users className="h-5 w-5 text-info" />
-              Staff Overview
+              {t("dashboard.staffOverview")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -147,9 +149,9 @@ const Dashboard = () => {
                       </div>
                       <div className="text-right">
                         <Badge variant="secondary" className="mb-1">
-                          {memberAppointments.length} appointments
+                          {memberAppointments.length} {t("dashboard.appointmentsToday")}
                         </Badge>
-                        <p className="text-xs text-muted-foreground">Today</p>
+                        <p className="text-xs text-muted-foreground">{t("dashboard.today")}</p>
                       </div>
                     </div>
                   );

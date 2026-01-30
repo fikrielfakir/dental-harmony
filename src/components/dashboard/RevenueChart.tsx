@@ -11,8 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign } from "lucide-react";
 import { useStore } from "@/store";
 import { parseISO, format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export function RevenueChart() {
+  const { t } = useTranslation();
   const { invoices } = useStore();
 
   // Generate real revenue data from invoices
@@ -36,7 +38,7 @@ export function RevenueChart() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
           <DollarSign className="h-5 w-5 text-success" />
-          Revenue Overview
+          {t("dashboard.revenueOverview")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -72,7 +74,7 @@ export function RevenueChart() {
                   borderRadius: "8px",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
-                formatter={(value: number) => [`$${value.toLocaleString()}`, "Revenue"]}
+                formatter={(value: number) => [`$${value.toLocaleString()}`, t("dashboard.revenue")]}
               />
               <Area
                 type="monotone"
