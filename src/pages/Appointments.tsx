@@ -407,9 +407,9 @@ const Appointments = () => {
     return (
       <div className="flex flex-col h-full">
         <div className="grid grid-cols-7 border-b border-border/30">
-          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+          {[t('days.monday'), t('days.tuesday'), t('days.wednesday'), t('days.thursday'), t('days.friday'), t('days.saturday'), t('days.sunday')].map(day => (
             <div key={day} className="h-10 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
-              {day}
+              {day.substring(0, 3)}
             </div>
           ))}
         </div>
@@ -465,9 +465,9 @@ const Appointments = () => {
                   <div className="h-10 w-px bg-border/30" />
                   <div className="text-right">
                     <p className="text-xs font-bold text-foreground/80">
-                      {monthAppointments.length > 20 ? 'High Volume' : monthAppointments.length > 10 ? 'Moderate' : 'Low Volume'}
+                      {monthAppointments.length > 20 ? t('common.highVolume', 'Volume Élevé') : monthAppointments.length > 10 ? t('common.moderate', 'Modéré') : t('common.lowVolume', 'Faible Volume')}
                     </p>
-                    <p className="text-[10px] text-muted-foreground font-medium">Click to expand</p>
+                    <p className="text-[10px] text-muted-foreground font-medium">{t('common.clickToExpand', 'Cliquer pour agrandir')}</p>
                   </div>
                 </div>
               </Card>

@@ -241,7 +241,11 @@
     "back": "Retour",
     "next": "Suivant",
     "submit": "Soumettre",
-    "actions": "Actions"
+    "actions": "Actions",
+    "highVolume": "Volume Élevé",
+    "moderate": "Modéré",
+    "lowVolume": "Faible Volume",
+    "clickToExpand": "Cliquer pour agrandir"
   },
   "days": {
     "monday": "Lundi",
