@@ -402,17 +402,17 @@ const Patients = () => {
         <DialogContent className="max-w-2xl max-h-[90vh] p-0 overflow-hidden flex flex-col">
           {selectedPatient && (
             <>
-              <DialogHeader className="p-6 pb-2">
+              <DialogHeader className="p-4 pb-1">
                 <DialogTitle className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+                  <Avatar className="h-9 w-9">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                       {selectedPatient.firstName.charAt(0)}
                       {selectedPatient.lastName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    {selectedPatient.firstName} {selectedPatient.lastName}
-                    <p className="text-sm font-normal text-muted-foreground">
+                    <span className="text-base font-bold">{selectedPatient.firstName} {selectedPatient.lastName}</span>
+                    <p className="text-[11px] font-normal text-muted-foreground">
                       {t("patients.patientDetails.patientSince")} {format(parseISO(selectedPatient.createdAt), "MMMM yyyy")}
                     </p>
                   </div>
@@ -517,11 +517,11 @@ const Patients = () => {
                 </ScrollArea>
               </Tabs>
 
-              <DialogFooter className="p-6 pt-2 border-t bg-muted/10">
-                <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
+              <DialogFooter className="p-4 pt-2 border-t bg-muted/5 shadow-[0_-1px_0_rgba(0,0,0,0.05)]">
+                <Button variant="outline" size="sm" onClick={() => setIsViewDialogOpen(false)}>
                   {t("common.cancel")}
                 </Button>
-                <Button onClick={() => navigate("/appointments")}>{t("appointments.addNew")}</Button>
+                <Button size="sm" onClick={() => navigate("/appointments")}>{t("appointments.addNew")}</Button>
               </DialogFooter>
             </>
           )}

@@ -178,16 +178,16 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-1">
-        <h3 className="text-lg font-semibold text-gray-900">{t("patients.dentalChart.title")}</h3>
-        <p className="text-sm text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
+      <div className="text-center space-y-2">
+        <h3 className="text-xl font-extrabold text-gray-900 tracking-tight">{t("patients.dentalChart.title")}</h3>
+        <p className="text-sm text-muted-foreground font-medium">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
       <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-6">
         <div className="flex flex-col gap-8 overflow-x-auto pb-4 scrollbar-thin">
           {/* Upper Teeth */}
           <div className="flex flex-col items-center min-w-[600px] mx-auto space-y-4">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">{t("patients.dentalChart.upperArch")}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-1 px-4">{t("patients.dentalChart.upperArch")}</span>
             <div className="flex justify-center gap-1">
               <div className="flex gap-1">
                 {FDI_NUMBERING.upperRight.map(n => (
@@ -244,7 +244,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                 ))}
               </div>
             </div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">{t("patients.dentalChart.lowerArch")}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-1 px-4">{t("patients.dentalChart.lowerArch")}</span>
           </div>
         </div>
       </div>
