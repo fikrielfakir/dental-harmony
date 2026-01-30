@@ -352,7 +352,113 @@ const Billing = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Record Payment Modal */}
+      {/* Add Invoice Dialog */}
+      <Dialog open={isAddInvoiceOpen} onOpenChange={setIsAddInvoiceOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Create New Invoice</DialogTitle>
+            <DialogDescription>
+              Create a manual invoice for a patient.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="patient">Patient</Label>
+              <Select 
+                value={formData.patientId} 
+                onValueChange={(val) => setFormData({...formData, patientId: val})}
+              >
+                <SelectTrigger id="patient">
+                  <SelectValue placeholder="Select patient" />
+                </SelectTrigger>
+                <SelectContent>
+                  {patients.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.firstName} {p.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="amount">Amount ($)</Label>
+              <Input 
+                id="amount"
+                type="number" 
+                placeholder="0.00"
+                value={formData.amount} 
+                onChange={(e) => setFormData({...formData, amount: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Initial Status</Label>
+              <Select 
+                value={formData.status} 
+                onValueChange={(val: PaymentStatus) => setFormData({...formData, status: val})}
+              >
+                <SelectTrigger id="status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="partial">Partial</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddInvoiceOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateInvoice} disabled={!formData.patientId || !formData.amount}>Create Invoice</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Quotation Dialog */}
+      <Dialog open={isAddQuotationOpen} onOpenChange={setIsAddQuotationOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Create New Quotation</DialogTitle>
+            <DialogDescription>
+              Create a treatment estimate for a patient.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="q-patient">Patient</Label>
+              <Select 
+                value={formData.patientId} 
+                onValueChange={(val) => setFormData({...formData, patientId: val})}
+              >
+                <SelectTrigger id="q-patient">
+                  <SelectValue placeholder="Select patient" />
+                </SelectTrigger>
+                <SelectContent>
+                  {patients.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.firstName} {p.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="q-amount">Estimated Amount ($)</Label>
+              <Input 
+                id="q-amount"
+                type="number" 
+                placeholder="0.00"
+                value={formData.amount} 
+                onChange={(e) => setFormData({...formData, amount: e.target.value})}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddQuotationOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateQuotation} disabled={!formData.patientId || !formData.amount}>Create Quotation</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Dialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
