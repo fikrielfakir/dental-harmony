@@ -497,16 +497,117 @@ const Patients = () => {
                     </TabsContent>
 
                     <TabsContent value="appointments" className="m-0 focus-visible:outline-none">
-                      <div className="p-8 text-center border-2 border-dashed rounded-lg">
-                        <Calendar className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <p>{t("common.comingSoon", "View coming soon.")}</p>
+                      <div className="space-y-4 py-2">
+                        {(() => {
+                          const { appointments } = useStore();
+                          const patientAppointments = appointments
+                            .filter(a => a.patientId === selectedPatient.id)
+                            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                          
+                          if (patientAppointments.length === 0) {
+                            return (
+                              <div className="p-8 text-center border-2 border-dashed rounded-xl bg-slate-50/50 border-slate-200">
+                                <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                                <p className="text-sm font-medium text-slate-500">{t("appointments.noAppointments")}</p>
+                                <Button 
+                                  variant="link" 
+                                  className="mt-2 text-primary"
+                                  onClick={() => navigate("/appointments")}
+                                >
+                                  {t("appointments.addNew")}
+                                </Button>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div className="space-y-3">
+                              {patientAppointments.map((app) => (
+                                <div 
+                                  key={app.id} 
+                                  className="flex items-center justify-between p-4 rounded-xl border border-slate-100 bg-white shadow-sm hover:border-primary/20 transition-colors"
+                                >
+                                  <div className="flex items-center gap-4">
+                                    <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-slate-50 border border-slate-100">
+                                      <span className="text-[10px] font-bold uppercase text-slate-400">
+                                        {format(parseISO(app.date), "MMM")}
+                                      </span>
+                                      <span className="text-lg font-bold text-slate-700 leading-none">
+                                        {format(parseISO(app.date), "dd")}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <p className="font-bold text-sm text-slate-900">{app.type}</p>
+                                      <div className="flex items-center gap-2 mt-0.5">
+                                        <span className="text-xs text-slate-500 font-medium">{app.time}</span>
+                                        <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                        <span className="text-xs text-slate-500 font-medium">{app.practitioner}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Badge 
+                                    className={`
+                                      text-[10px] font-bold uppercase tracking-wider px-2 py-0.5
+                                      ${app.status === 'completed' ? 'bg-green-50 text-green-600 border-green-100' : 
+                                        app.status === 'pending' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+                                        'bg-slate-50 text-slate-600 border-slate-100'}
+                                    `}
+                                    variant="outline"
+                                  >
+                                    {t(`appointments.status.${app.status}`, app.status)}
+                                  </Badge>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })()}
                       </div>
                     </TabsContent>
 
                     <TabsContent value="notes" className="m-0 focus-visible:outline-none">
-                      <div className="p-8 text-center border-2 border-dashed rounded-lg">
-                        <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <p>{t("common.comingSoon", "View coming soon.")}</p>
+                      <div className="space-y-4 py-2">
+                        {(() => {
+                          const { dentalChart } = useStore();
+                          const procedureNotes = dentalChart
+                            .filter(e => e.patientId === selectedPatient.id && e.notes)
+                            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                          
+                          if (procedureNotes.length === 0) {
+                            return (
+                              <div className="p-8 text-center border-2 border-dashed rounded-xl bg-slate-50/50 border-slate-200">
+                                <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                                <p className="text-sm font-medium text-slate-500">{t("common.noData")}</p>
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div className="space-y-4">
+                              {procedureNotes.map((note) => (
+                                <div key={note.id} className="relative pl-4 border-l-2 border-slate-100 space-y-2 py-1">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline" className="text-[10px] h-5 px-1.5 border-slate-200 font-bold bg-white">
+                                        #{note.toothNumber}
+                                      </Badge>
+                                      <span className="text-xs font-bold text-slate-900 uppercase">
+                                        {t(`patients.dentalChart.status.${note.treatmentType.toLowerCase().replace(" ", "-")}`, note.treatmentType)}
+                                      </span>
+                                    </div>
+                                    <time className="text-[10px] font-bold text-slate-400">
+                                      {format(parseISO(note.date), "MMM dd, yyyy")}
+                                    </time>
+                                  </div>
+                                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <p className="text-xs text-slate-600 leading-relaxed italic">
+                                      "{note.notes}"
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })()}
                       </div>
                     </TabsContent>
 
