@@ -138,6 +138,34 @@
       "familyHistory": "تاريخ العائلة",
       "noneReported": "لم يتم الإبلاغ عن شيء",
       "patientSince": "مريض منذ"
+    },
+    "dentalChart": {
+      "title": "مخطط أسنان البالغين",
+      "subtitle": "انقر على السن لتسجيل العلاج",
+      "upperArch": "الفك العلوي",
+      "lowerArch": "الفك السفلي",
+      "history": "تاريخ العلاج",
+      "records": "سجلات",
+      "surfaces": "الأسطح",
+      "completed": "مكتمل",
+      "planned": "مخطط",
+      "tooth": "السن",
+      "surfaceLabels": {
+        "O": "إطباقي",
+        "M": "إنسي",
+        "D": "وحشي",
+        "B": "دهليزي",
+        "L": "لساني"
+      },
+      "status": {
+        "healthy": "سليم",
+        "caries": "تسوس",
+        "filling": "حشوة",
+        "crown": "تاج",
+        "extracted": "مخلوع",
+        "root-canal": "علاج عصب",
+        "missing": "مفقود"
+      }
     }
   },
   "appointments": {

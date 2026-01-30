@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useStore } from "@/store";
 import { DentalChartEntry, ToothSurface } from "@/types";
 import { DENTAL_COLORS, FDI_NUMBERING, TOOTH_STATUS_LABELS } from "@/constants/dental";
@@ -117,6 +118,7 @@ const ToothSVG = ({
 };
 
 export const Odontogram = ({ patientId }: OdontogramProps) => {
+  const { t } = useTranslation();
   const { dentalChart, addDentalChartEntry, deleteDentalChartEntry } = useStore();
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -177,14 +179,14 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
   return (
     <div className="space-y-6 p-4 sm:p-6 bg-gradient-to-b from-slate-50 to-white rounded-xl border border-slate-200">
       <div className="text-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">Adult Dental Chart</h3>
-        <p className="text-sm text-muted-foreground">Click on a tooth to record treatment</p>
+        <h3 className="text-lg font-semibold text-gray-800">{t("patients.dentalChart.title")}</h3>
+        <p className="text-sm text-muted-foreground">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
       <div className="flex flex-col gap-6 overflow-x-auto pb-4">
         {/* Upper Teeth */}
         <div className="flex flex-col items-center">
-          <span className="text-xs font-medium text-muted-foreground mb-2">Upper Arch</span>
+          <span className="text-xs font-medium text-muted-foreground mb-2">{t("patients.dentalChart.upperArch")}</span>
           <div className="flex justify-center gap-0.5 sm:gap-1">
             <div className="flex gap-0.5 sm:gap-1">
               {FDI_NUMBERING.upperRight.map(n => (
@@ -241,7 +243,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
               ))}
             </div>
           </div>
-          <span className="text-xs font-medium text-muted-foreground mt-2">Lower Arch</span>
+          <span className="text-xs font-medium text-muted-foreground mt-2">{t("patients.dentalChart.lowerArch")}</span>
         </div>
       </div>
 
@@ -254,7 +256,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
               style={{ backgroundColor: color }} 
             />
             <span className="text-xs font-medium text-gray-600">
-              {TOOTH_STATUS_LABELS[key as keyof typeof TOOTH_STATUS_LABELS] || key}
+              {t(`patients.dentalChart.status.${key}`, TOOTH_STATUS_LABELS[key as keyof typeof TOOTH_STATUS_LABELS] || key)}
             </span>
           </div>
         ))}
@@ -268,15 +270,15 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
               <span className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">
                 {selectedTooth}
               </span>
-              Treatment for Tooth #{selectedTooth}
+              {t("patients.dentalChart.tooth")} #{selectedTooth}
             </DialogTitle>
-            <DialogDescription>Record a new treatment or condition for this tooth.</DialogDescription>
+            <DialogDescription>{t("patients.dentalChart.subtitle")}</DialogDescription>
           </DialogHeader>
           
           <div className="grid gap-4 py-4">
             {/* Surface Selection */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium">Tooth Surfaces</Label>
+              <Label className="text-sm font-medium">{t("patients.dentalChart.surfaces")}</Label>
               <div className="flex flex-wrap gap-2">
                 {SURFACES.map(surface => (
                   <label 
@@ -293,7 +295,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                       onCheckedChange={() => toggleSurface(surface)}
                     />
                     <span className="text-sm font-medium">{surface}</span>
-                    <span className="text-xs text-muted-foreground">({SURFACE_LABELS[surface]})</span>
+                    <span className="text-xs text-muted-foreground">({t(`patients.dentalChart.surfaceLabels.${surface}`, SURFACE_LABELS[surface])})</span>
                   </label>
                 ))}
               </div>
@@ -301,7 +303,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
 
             {/* Treatment Type */}
             <div className="space-y-2">
-              <Label>Treatment Type</Label>
+              <Label>{t("appointments.type")}</Label>
               <Select value={formData.treatmentType} onValueChange={(v) => setFormData({...formData, treatmentType: v})}>
                 <SelectTrigger>
                   <SelectValue />
@@ -310,37 +312,37 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                   <SelectItem value="healthy">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.healthy }} />
-                      Healthy
+                      {t("patients.dentalChart.status.healthy")}
                     </div>
                   </SelectItem>
                   <SelectItem value="cavity">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.cavity }} />
-                      Caries / Cavity
+                      {t("patients.dentalChart.status.caries")}
                     </div>
                   </SelectItem>
                   <SelectItem value="filling">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.filling }} />
-                      Filling
+                      {t("patients.dentalChart.status.filling")}
                     </div>
                   </SelectItem>
                   <SelectItem value="crown">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.crown }} />
-                      Crown
+                      {t("patients.dentalChart.status.crown")}
                     </div>
                   </SelectItem>
                   <SelectItem value="extraction">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.extraction }} />
-                      Extraction
+                      {t("patients.dentalChart.status.extracted")}
                     </div>
                   </SelectItem>
                   <SelectItem value="rootcanal">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DENTAL_COLORS.rootCanal }} />
-                      Root Canal
+                      {t("patients.dentalChart.status.root-canal")}
                     </div>
                   </SelectItem>
                 </SelectContent>
@@ -349,23 +351,23 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
 
             {/* Status */}
             <div className="space-y-2">
-              <Label>Status</Label>
+              <Label>{t("appointments.status")}</Label>
               <Select value={formData.status} onValueChange={(v: "planned" | "completed") => setFormData({...formData, status: v})}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="planned">Planned</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="planned">{t("common.planned", "Planned")}</SelectItem>
+                  <SelectItem value="completed">{t("patients.dentalChart.completed")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {/* Notes */}
             <div className="space-y-2">
-              <Label>Notes (Optional)</Label>
+              <Label>{t("common.notes", "Notes")}</Label>
               <Textarea 
-                placeholder="Add any additional notes about this treatment..."
+                placeholder={t("common.notesPlaceholder", "Add any additional notes...")}
                 value={formData.notes} 
                 onChange={(e) => setFormData({...formData, notes: e.target.value})}
                 rows={2}
@@ -375,13 +377,13 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
             {/* Existing treatments for this tooth */}
             {selectedTooth && getToothHistory(selectedTooth).length > 0 && (
               <div className="space-y-2 pt-2 border-t">
-                <Label className="text-sm text-muted-foreground">Previous Treatments</Label>
+                <Label className="text-sm text-muted-foreground">{t("patients.dentalChart.history")}</Label>
                 <div className="space-y-2 max-h-32 overflow-y-auto">
                   {getToothHistory(selectedTooth).map(entry => (
                     <div key={entry.id} className="flex items-center justify-between text-sm bg-slate-50 p-2 rounded">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                        <span>{entry.treatmentType}</span>
+                        <span>{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
                         <Badge variant="outline" className="text-[10px]">{entry.surfaces.join(', ')}</Badge>
                       </div>
                       <span className="text-xs text-muted-foreground">
@@ -395,8 +397,8 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedTooth(null)}>Cancel</Button>
-            <Button onClick={handleSave}>Save Treatment</Button>
+            <Button variant="outline" onClick={() => setSelectedTooth(null)}>{t("common.cancel")}</Button>
+            <Button onClick={handleSave}>{t("common.save")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -404,15 +406,15 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
       {/* Treatment History */}
       <div className="space-y-4 pt-4">
         <h3 className="font-semibold text-sm flex items-center gap-2">
-          Treatment History
+          {t("patients.dentalChart.history")}
           {patientEntries.length > 0 && (
-            <Badge variant="secondary" className="text-xs">{patientEntries.length} records</Badge>
+            <Badge variant="secondary" className="text-xs">{patientEntries.length} {t("patients.dentalChart.records")}</Badge>
           )}
         </h3>
         <ScrollArea className="h-[200px] border rounded-lg p-4 bg-white">
           {patientEntries.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">
-              No treatment records for this patient. Click on a tooth to add a treatment.
+              {t("common.noData")}
             </p>
           ) : (
             <div className="space-y-3">
@@ -430,16 +432,16 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                           className="font-bold"
                           style={{ borderColor: entry.color, color: entry.color === '#000000' ? '#000' : entry.color }}
                         >
-                          Tooth #{entry.toothNumber}
+                          {t("patients.dentalChart.tooth")} #{entry.toothNumber}
                         </Badge>
-                        <span className="font-medium text-sm capitalize">{entry.treatmentType}</span>
+                        <span className="font-medium text-sm capitalize">{t(`patients.dentalChart.status.${entry.treatmentType.toLowerCase().replace(" ", "-")}`, entry.treatmentType)}</span>
                         <Badge variant={entry.status === 'completed' ? 'default' : 'secondary'} className="text-[10px]">
-                          {entry.status}
+                          {t(`patients.dentalChart.${entry.status}`, entry.status)}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs text-muted-foreground">
-                          Surfaces: {entry.surfaces.join(', ')}
+                          {t("patients.dentalChart.surfaces")}: {entry.surfaces.join(', ')}
                         </span>
                       </div>
                       {entry.notes && (

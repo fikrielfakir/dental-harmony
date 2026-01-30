@@ -138,6 +138,34 @@
       "familyHistory": "Family History",
       "noneReported": "None reported",
       "patientSince": "Patient since"
+    },
+    "dentalChart": {
+      "title": "Adult Dental Chart",
+      "subtitle": "Click on a tooth to record treatment",
+      "upperArch": "Upper Arch",
+      "lowerArch": "Lower Arch",
+      "history": "Treatment History",
+      "records": "records",
+      "surfaces": "Surfaces",
+      "completed": "completed",
+      "planned": "planned",
+      "tooth": "Tooth",
+      "surfaceLabels": {
+        "O": "Occlusal",
+        "M": "Mesial",
+        "D": "Distal",
+        "B": "Buccal",
+        "L": "Lingual"
+      },
+      "status": {
+        "healthy": "Healthy",
+        "caries": "Caries",
+        "filling": "Filling",
+        "crown": "Crown",
+        "extracted": "Extracted",
+        "root-canal": "Root Canal",
+        "missing": "Missing"
+      }
     }
   },
   "appointments": {

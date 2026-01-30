@@ -138,6 +138,34 @@
       "familyHistory": "Antécédents familiaux",
       "noneReported": "Aucun signalé",
       "patientSince": "Patient depuis"
+    },
+    "dentalChart": {
+      "title": "Schéma Dentaire Adulte",
+      "subtitle": "Cliquez sur une dent pour enregistrer un soin",
+      "upperArch": "Arcade Supérieure",
+      "lowerArch": "Arcade Inférieure",
+      "history": "Historique des Soins",
+      "records": "enregistrements",
+      "surfaces": "Surfaces",
+      "completed": "terminé",
+      "planned": "planifié",
+      "tooth": "Dent",
+      "surfaceLabels": {
+        "O": "Occlusal",
+        "M": "Mésial",
+        "D": "Distal",
+        "B": "Vestibulaire",
+        "L": "Lingual"
+      },
+      "status": {
+        "healthy": "Sain",
+        "caries": "Carie",
+        "filling": "Obturation",
+        "crown": "Couronne",
+        "extracted": "Extraite",
+        "root-canal": "Dévitalisation",
+        "missing": "Manquante"
+      }
     }
   },
   "appointments": {
