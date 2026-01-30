@@ -1,5 +1,5 @@
 import { format, parseISO, startOfToday } from "date-fns";
-import { Calendar, Users, DollarSign, Clock, AlertCircle, TrendingUp } from "lucide-react";
+import { Calendar, Users, Banknote, Clock, AlertCircle, TrendingUp } from "lucide-react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { UpcomingAppointments } from "@/components/dashboard/UpcomingAppointments";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
@@ -76,11 +76,10 @@ const Dashboard = () => {
           trend={{ value: 12, positive: true }}
           iconClassName="bg-info/10 text-info"
         />
-        <StatCard
           title={t("dashboard.todayRevenue")}
           value={`${todayRevenue.toLocaleString()} DH`}
           description={t("dashboard.todayRevenueDesc")}
-          icon={DollarSign}
+          icon={Banknote}
           iconClassName="bg-success/10 text-success"
         />
         <StatCard

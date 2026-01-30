@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Building2, Clock, DollarSign, Bell, Shield, Save, Globe } from "lucide-react";
+import { Building2, Clock, Banknote, Bell, Shield, Save, Globe } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Language } from "@/types";
 import { useStore } from "@/store";
@@ -182,7 +182,7 @@ const Settings = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
+                <Banknote className="h-5 w-5" />
                 {t('settings.billing.title')}
               </CardTitle>
               <CardDescription>{t('settings.billing.description')}</CardDescription>

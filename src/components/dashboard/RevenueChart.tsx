@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign } from "lucide-react";
+import { Banknote } from "lucide-react";
 import { useStore } from "@/store";
 import { parseISO, format } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,7 @@ export function RevenueChart() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-success" />
+          <Banknote className="h-5 w-5 text-success" />
           {t("dashboard.revenueOverview")}
         </CardTitle>
       </CardHeader>
