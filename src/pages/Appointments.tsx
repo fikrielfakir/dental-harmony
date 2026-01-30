@@ -602,7 +602,7 @@ const Appointments = () => {
                             "text-[10px] font-bold uppercase tracking-widest mb-0.5",
                             isToday ? "text-primary" : "text-muted-foreground/70"
                           )}>
-                            {format(day, "EEE")}
+                            {t(`days.${format(day, "eeee").toLowerCase()}`)}
                           </p>
                           <p
                             className={cn(
@@ -697,9 +697,9 @@ const Appointments = () => {
           {selectedAppointment && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-2xl font-bold tracking-tight">Appointment Info</DialogTitle>
+                <DialogTitle className="text-2xl font-bold tracking-tight">{t('appointments.viewDetails')}</DialogTitle>
                 <DialogDescription>
-                  Detailed view of the scheduled visit.
+                  {t('appointments.subtitle')}
                 </DialogDescription>
               </DialogHeader>
 
@@ -718,7 +718,7 @@ const Appointments = () => {
                     </p>
                     <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
                       <span className="inline-block w-2 h-2 rounded-full bg-success" />
-                      Active Patient
+                      Patient actif
                     </p>
                   </div>
                   <Button variant="ghost" size="icon" className="rounded-full">
@@ -728,24 +728,24 @@ const Appointments = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5 p-3 rounded-xl border border-border/30 bg-background/50">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Date</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">{t('appointments.date')}</Label>
                     <div className="flex items-center gap-2 text-sm font-semibold">
                       <CalendarIcon className="h-4 w-4 text-primary" />
-                      {format(parseISO(selectedAppointment.startTime), "MMM d, yyyy")}
+                      {format(parseISO(selectedAppointment.startTime), "d MMM yyyy")}
                     </div>
                   </div>
                   <div className="space-y-1.5 p-3 rounded-xl border border-border/30 bg-background/50">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Time</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">{t('appointments.time')}</Label>
                     <div className="flex items-center gap-2 text-sm font-semibold">
                       <Clock className="h-4 w-4 text-primary" />
-                      {format(parseISO(selectedAppointment.startTime), "h:mm a")}
+                      {format(parseISO(selectedAppointment.startTime), "HH:mm")}
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Practitioner</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">{t('appointments.practitioner')}</Label>
                     <Badge variant="outline" className="text-[10px] font-bold px-2 py-0.5 rounded-full border-primary/20 bg-primary/5 text-primary">
                       {getPractitioner(selectedAppointment.practitionerId)?.role}
                     </Badge>
@@ -760,7 +760,7 @@ const Appointments = () => {
                         Dr. {getPractitioner(selectedAppointment.practitionerId)?.firstName}{" "}
                         {getPractitioner(selectedAppointment.practitionerId)?.lastName}
                       </p>
-                      <p className="text-xs text-muted-foreground">Dental Specialist</p>
+                      <p className="text-xs text-muted-foreground">Spécialiste Dentaire</p>
                     </div>
                   </div>
                 </div>
@@ -780,7 +780,7 @@ const Appointments = () => {
 
                 {selectedAppointment.notes && (
                   <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-2">Notes</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-2">{t('appointments.notes')}</p>
                     <p className="text-sm leading-relaxed text-foreground/80 italic">
                       "{selectedAppointment.notes}"
                     </p>
@@ -790,7 +790,7 @@ const Appointments = () => {
 
               <DialogFooter className="gap-2 sm:gap-0 mt-2">
                 <Button variant="ghost" className="rounded-xl flex-1" onClick={() => setSelectedAppointment(null)}>
-                  Close
+                  {t('common.cancel')}
                 </Button>
                 {selectedAppointment.status !== 'completed' && selectedAppointment.status !== 'confirmed' && (
                   <div className="flex gap-2 flex-[2]">
@@ -801,10 +801,10 @@ const Appointments = () => {
                         setSelectedAppointment(null);
                       }}
                     >
-                      Complete
+                      {t('common.confirm')}
                     </Button>
                     <Button variant="destructive" className="flex-1 rounded-xl shadow-lg shadow-destructive/10" onClick={handleCancelAppointment}>
-                      Cancel
+                      {t('common.delete')}
                     </Button>
                   </div>
                 )}
@@ -818,15 +818,15 @@ const Appointments = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="mica-card border-border/50 rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold tracking-tight">New Appointment</DialogTitle>
+            <DialogTitle className="text-2xl font-bold tracking-tight">{t('appointments.addNew')}</DialogTitle>
             <DialogDescription>
-              Schedule a new appointment for a patient.
+              {t('appointments.subtitle')}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Patient</Label>
+              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('appointments.patient')}</Label>
               <Select
                 value={newAppointment.patientId}
                 onValueChange={(value) =>
@@ -834,7 +834,7 @@ const Appointments = () => {
                 }
               >
                 <SelectTrigger className="rounded-xl">
-                  <SelectValue placeholder="Select patient" />
+                  <SelectValue placeholder={t('appointments.selectPatient')} />
                 </SelectTrigger>
                 <SelectContent className="mica-card rounded-xl">
                   {patients.map((patient) => (
@@ -847,7 +847,7 @@ const Appointments = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Practitioner</Label>
+              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('appointments.practitioner')}</Label>
               <Select
                 value={newAppointment.practitionerId}
                 onValueChange={(value) =>
@@ -855,7 +855,7 @@ const Appointments = () => {
                 }
               >
                 <SelectTrigger className="rounded-xl">
-                  <SelectValue placeholder="Select practitioner" />
+                  <SelectValue placeholder={t('appointments.selectPractitioner')} />
                 </SelectTrigger>
                 <SelectContent className="mica-card rounded-xl">
                   {practitioners.map((p) => (
@@ -868,7 +868,7 @@ const Appointments = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Appointment Type</Label>
+              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('appointments.type')}</Label>
               <Select
                 value={newAppointment.appointmentType}
                 onValueChange={(value) =>
@@ -879,7 +879,7 @@ const Appointments = () => {
                 }
               >
                 <SelectTrigger className="rounded-xl">
-                  <SelectValue />
+                  <SelectValue placeholder={t('appointments.selectType')} />
                 </SelectTrigger>
                 <SelectContent className="mica-card rounded-xl">
                   {appointmentTypes.map((type) => (
@@ -893,7 +893,7 @@ const Appointments = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Date</Label>
+                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('appointments.date')}</Label>
                 <Input
                   type="date"
                   className="rounded-xl"
