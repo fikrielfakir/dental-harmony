@@ -146,6 +146,12 @@
       "lowerArch": "Lower Arch",
       "history": "Treatment History",
       "records": "records",
+      "addTreatment": "Add Treatment",
+      "treatmentDescription": "Record a new treatment for this tooth",
+      "treatmentType": "Treatment Type",
+      "selectType": "Select treatment type",
+      "notes": "Clinical Notes",
+      "notesPlaceholder": "Add specific details about the procedure...",
       "surfaces": "Surfaces",
       "completed": "completed",
       "planned": "planned",
@@ -158,13 +164,12 @@
         "L": "Lingual"
       },
       "status": {
-        "healthy": "Healthy",
-        "caries": "Caries",
+        "cavity": "Caries",
         "filling": "Filling",
         "crown": "Crown",
-        "extracted": "Extracted",
-        "root-canal": "Root Canal",
-        "missing": "Missing"
+        "extraction": "Extraction",
+        "rootcanal": "Root Canal",
+        "healthy": "Healthy"
       }
     }
   },
