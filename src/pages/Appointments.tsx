@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   format,
   parseISO,
@@ -91,6 +92,7 @@ const statusColors: Record<AppointmentStatus, string> = {
 };
 
 const Appointments = () => {
+  const { t } = useTranslation();
   const { appointments, patients, staff, addAppointment, updateAppointment, deleteAppointment } = useStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('week');
@@ -248,7 +250,7 @@ const Appointments = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="rounded-full px-3 py-1 bg-background/50 border-border/30">
-                  {dayAppointments.length} Appointments
+                  {dayAppointments.length} {t('appointments.appointmentsCount')}
                 </Badge>
               </div>
             </div>
@@ -367,7 +369,7 @@ const Appointments = () => {
                           <div className="flex gap-1 items-center">
                             {isCompleted ? (
                               <span className="text-[11px] font-medium text-emerald-600 uppercase tracking-wide bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded-md">
-                                COMPLETED
+                                {t('appointments.completed')}
                               </span>
                             ) : (
                               <>
@@ -458,7 +460,7 @@ const Appointments = () => {
                 <div className="p-4 flex items-center justify-between">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-primary">{monthAppointments.length}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">Appointments</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">{t('appointments.appointmentsCount')}</p>
                   </div>
                   <div className="h-10 w-px bg-border/30" />
                   <div className="text-right">
@@ -482,19 +484,19 @@ const Appointments = () => {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-1">
         <div>
           <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Appointments
+            {t('appointments.title')}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Schedule and manage patient visits with ease.
+            {t('appointments.subtitle')}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex bg-muted/50 p-1 rounded-xl border border-border/30 shadow-inner">
             {[
-              { id: 'day', icon: Clock, label: 'Day' },
-              { id: 'week', icon: CalendarRange, label: 'Week' },
-              { id: 'month', icon: CalendarDays, label: 'Month' },
-              { id: 'year', icon: LayoutGrid, label: 'Year' },
+              { id: 'day', icon: Clock, label: t('appointments.day') },
+              { id: 'week', icon: CalendarRange, label: t('appointments.week') },
+              { id: 'month', icon: CalendarDays, label: t('appointments.month') },
+              { id: 'year', icon: LayoutGrid, label: t('appointments.year') },
             ].map((view) => (
               <Button
                 key={view.id}
@@ -513,7 +515,7 @@ const Appointments = () => {
           </div>
           <Button onClick={() => setIsAddDialogOpen(true)} className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
             <Plus className="h-4 w-4 mr-2" />
-            New Appointment
+            {t('appointments.addNew')}
           </Button>
         </div>
       </div>
