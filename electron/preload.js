@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  getUsers: () => ipcRenderer.invoke('get-users'),
-  addUser: (user) => ipcRenderer.invoke('add-user', user),
+  getPatients: () => ipcRenderer.invoke('get-patients'),
+  addPatient: (patient) => ipcRenderer.invoke('add-patient', patient),
+  getAppointments: () => ipcRenderer.invoke('get-appointments'),
 });

@@ -35,39 +35,51 @@ function initDb() {
   const dbPath = path.join(app.getPath('userData'), 'database.db');
   db = new Database(dbPath, { verbose: console.log });
   
-  // Create a sample table
+  // Create tables for the Dental Practice Management System
   db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      email TEXT UNIQUE
-    )
+    CREATE TABLE IF NOT EXISTS patients (
+      id TEXT PRIMARY KEY,
+      firstName TEXT,
+      lastName TEXT,
+      email TEXT,
+      phone TEXT,
+      dateOfBirth TEXT,
+      gender TEXT,
+      address TEXT,
+      medicalHistory TEXT,
+      allergies TEXT,
+      medications TEXT,
+      status TEXT,
+      lastVisit TEXT,
+      nextVisit TEXT,
+      createdAt TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS appointments (
+      id TEXT PRIMARY KEY,
+      patientId TEXT,
+      patientName TEXT,
+      dentistId TEXT,
+      dentistName TEXT,
+      date TEXT,
+      startTime TEXT,
+      endTime TEXT,
+      status TEXT,
+      type TEXT,
+      notes TEXT,
+      createdAt TEXT
+    );
   `);
 }
 
-app.on('ready', () => {
-  initDb();
-  createWindow();
+ipcMain.handle('get-patients', () => {
+  return db.prepare('SELECT * FROM patients').all();
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
-
-// IPC handlers for database operations
-ipcMain.handle('get-users', () => {
-  return db.prepare('SELECT * FROM users').all();
-});
-
-ipcMain.handle('add-user', (event, user) => {
-  const stmt = db.prepare('INSERT INTO users (name, email) VALUES (?, ?)');
-  return stmt.run(user.name, user.email);
+ipcMain.handle('add-patient', (event, patient) => {
+  const stmt = db.prepare(`
+    INSERT INTO patients (id, firstName, lastName, email, phone, dateOfBirth, gender, address, medicalHistory, allergies, medications, status, lastVisit, nextVisit, createdAt)
+    VALUES (@id, @firstName, @lastName, @email, @phone, @dateOfBirth, @gender, @address, @medicalHistory, @allergies, @medications, @status, @lastVisit, @nextVisit, @createdAt)
+  `);
+  return stmt.run(patient);
 });
