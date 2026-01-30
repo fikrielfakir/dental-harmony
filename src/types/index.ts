@@ -162,24 +162,27 @@ export interface Invoice {
   invoiceNumber: string;
   items: InvoiceItem[];
   totalAmount: number;
-  taxAmount: number;
-  discountAmount: number;
+  paidAmount: number;
+  balanceDue: number;
   paymentStatus: PaymentStatus;
-  remainingBalance?: number;
-  payments: Payment[];
   invoiceDate: string;
   dueDate: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;
-  insuranceClaim?: InsuranceClaim;
-  appointmentId?: string; // Link to procedure
+  appointmentId?: string;
   creditNotes?: CreditNote[];
+  // Legacy fields for compatibility
+  taxAmount?: number;
+  discountAmount?: number;
+  remainingBalance?: number;
+  payments: Payment[];
 }
 
 export interface InvoiceItem {
   id: string;
   serviceId?: string;
+  serviceName?: string;
   description: string;
   quantity: number;
   unitPrice: number;
@@ -188,7 +191,7 @@ export interface InvoiceItem {
 }
 
 export type PaymentStatus = 
-  | 'pending'
+  | 'unpaid'
   | 'partial'
   | 'paid'
   | 'overdue'
@@ -197,11 +200,13 @@ export type PaymentStatus =
 export interface Payment {
   id: string;
   invoiceId: string;
+  patientId?: string;
   amount: number;
   paymentMethod: PaymentMethod;
   paymentDate: string;
+  paymentNumber?: string;
   notes?: string;
-  remainingBalance?: number;
+  status?: 'completed' | 'pending';
 }
 
 export interface CreditNote {

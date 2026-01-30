@@ -172,21 +172,25 @@ export const useStore = create<AppState>()(
           if (!invoice) return state;
 
           const paymentAmount = paymentData.amount;
-          const totalPaid = invoice.payments.reduce((sum, p) => sum + p.amount, 0) + paymentAmount;
+          const totalPaid = (invoice.paidAmount || 0) + paymentAmount;
           const remaining = invoice.totalAmount - totalPaid;
           
           const newPayment: Payment = {
             ...paymentData,
             id: crypto.randomUUID(),
             invoiceId,
+            patientId: invoice.patientId,
             paymentDate: new Date().toISOString(),
-            remainingBalance: Math.max(0, remaining),
+            paymentNumber: `PAY-${new Date().getTime()}`,
+            status: 'completed'
           };
 
           let newStatus: PaymentStatus = invoice.paymentStatus;
-          if (remaining <= 0) {
+          if (totalPaid === 0) {
+            newStatus = 'unpaid';
+          } else if (remaining <= 0) {
             newStatus = remaining < 0 ? 'overpaid' : 'paid';
-          } else if (totalPaid > 0) {
+          } else {
             newStatus = 'partial';
           }
 
@@ -207,8 +211,10 @@ export const useStore = create<AppState>()(
               ? {
                   ...i,
                   payments: [...i.payments, newPayment],
+                  paidAmount: totalPaid,
+                  balanceDue: Math.max(0, remaining),
                   paymentStatus: newStatus,
-                  remainingBalance: Math.max(0, remaining),
+                  remainingBalance: Math.max(0, remaining), // Support legacy field
                   creditNotes,
                   updatedAt: new Date().toISOString(),
                 }
@@ -240,9 +246,9 @@ export const useStore = create<AppState>()(
               total: service.price,
             }],
             totalAmount: service.price,
-            taxAmount: 0,
-            discountAmount: 0,
-            paymentStatus: 'pending',
+            paidAmount: 0,
+            balanceDue: service.price,
+            paymentStatus: 'unpaid',
             remainingBalance: service.price,
             payments: [],
             createdAt: new Date().toISOString(),

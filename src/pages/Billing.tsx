@@ -292,7 +292,8 @@ const Billing = () => {
                   ) : (
                     filteredInvoices.map((inv) => {
                       const patient = patients.find(p => p.id === inv.patientId);
-                      const paidAmount = inv.totalAmount - (inv.remainingBalance ?? inv.totalAmount);
+                      const paidAmount = inv.paidAmount || 0;
+                      const balanceDue = inv.balanceDue ?? (inv.totalAmount - paidAmount);
                       const percent = (paidAmount / inv.totalAmount) * 100;
                       
                       return (
@@ -300,7 +301,7 @@ const Billing = () => {
                           <TableCell className="font-mono text-xs">{inv.invoiceNumber}</TableCell>
                           <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
                           <TableCell>${inv.totalAmount.toLocaleString()}</TableCell>
-                          <TableCell className="text-destructive font-medium">${(inv.remainingBalance ?? inv.totalAmount).toLocaleString()}</TableCell>
+                          <TableCell className="text-destructive font-medium">${balanceDue.toLocaleString()}</TableCell>
                           <TableCell className="w-[100px]">
                             <Progress value={percent} className="h-2" />
                           </TableCell>
@@ -309,11 +310,11 @@ const Billing = () => {
                               inv.paymentStatus === 'paid' ? 'default' : 
                               inv.paymentStatus === 'partial' ? 'secondary' : 
                               inv.paymentStatus === 'overpaid' ? 'outline' : 
-                              inv.paymentStatus === 'pending' ? 'destructive' : 'default'
+                              inv.paymentStatus === 'unpaid' ? 'destructive' : 'default'
                             } className={cn(
                               inv.paymentStatus === 'paid' && "bg-emerald-500 hover:bg-emerald-600",
                               inv.paymentStatus === 'partial' && "bg-amber-500 hover:bg-amber-600",
-                              inv.paymentStatus === 'pending' && "bg-rose-500 hover:bg-rose-600"
+                              inv.paymentStatus === 'unpaid' && "bg-rose-500 hover:bg-rose-600"
                             )}>
                               {inv.paymentStatus.toUpperCase()}
                             </Badge>
@@ -332,7 +333,7 @@ const Billing = () => {
                                 }}>View Details</DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => {
                                   setSelectedInvoice(inv);
-                                  setPaymentFormData({ ...paymentFormData, amount: (inv.remainingBalance ?? inv.totalAmount).toString() });
+                                  setPaymentFormData({ ...paymentFormData, amount: balanceDue.toString() });
                                   setIsPaymentModalOpen(true);
                                 }}>Record Payment</DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleDownloadPDF(inv)}>Download PDF</DropdownMenuItem>

@@ -1,0 +1,311 @@
+Dental Practice Billing System - Entity Relationship Diagram
+Overview
+This diagram shows how patients, appointments, and billing work together, especially for partial payments (paying in installments).
+
+Core Entities & Relationships
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              PATIENT                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│ • patient_id (PK)                                                        │
+│ • name                                                                   │
+│ • phone, email                                                           │
+│ • medical_history                                                        │
+│ • allergies                                                              │
+│ • insurance_info                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ has many
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                            APPOINTMENT                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│ • appointment_id (PK)                                                    │
+│ • patient_id (FK)                                                        │
+│ • dentist_id (FK)                                                        │
+│ • date, time                                                             │
+│ • status (scheduled, completed, cancelled)                               │
+│ • treatment_type                                                         │
+│ • notes                                                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    │ can generate
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              INVOICE                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│ • invoice_id (PK)                                                        │
+│ • patient_id (FK)                                                        │
+│ • appointment_id (FK) - optional                                         │
+│ • invoice_number                                                         │
+│ • invoice_date                                                           │
+│ • due_date                                                               │
+│ • total_amount                                                           │
+│ • paid_amount                                                            │
+│ • balance_due (total - paid)                                             │
+│ • status (unpaid, partially_paid, paid, overdue)                         │
+│ • notes                                                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+                    │                               │
+                    │ contains                      │ has many
+                    ▼                               ▼
+┌───────────────────────────────────┐  ┌─────────────────────────────────┐
+│       INVOICE_ITEM                │  │         PAYMENT                  │
+├───────────────────────────────────┤  ├─────────────────────────────────┤
+│ • item_id (PK)                    │  │ • payment_id (PK)                │
+│ • invoice_id (FK)                 │  │ • invoice_id (FK)                │
+│ • service_name                    │  │ • patient_id (FK)                │
+│ • description                     │  │ • payment_date                   │
+│ • quantity                        │  │ • amount_paid                    │
+│ • unit_price                      │  │ • payment_method (cash, card,    │
+│ • total (quantity × unit_price)   │  │   bank_transfer, insurance)      │
+│ • tooth_number (optional)         │  │ • payment_number                 │
+└───────────────────────────────────┘  │ • notes                          │
+                                       │ • status (completed, pending)    │
+                                       └─────────────────────────────────┘
+
+Partial Payment Example Scenario
+Example: Root Canal Treatment - 3000 MAD
+Patient: Ahmed Hassan
+Treatment: Root Canal on Tooth #16
+Total Cost: 3000 MAD
+Payment Plan: 3 installments
+INVOICE #INV-2024-001
+├── Created: Jan 15, 2024
+├── Total Amount: 3000 MAD
+├── Paid Amount: 2000 MAD
+├── Balance Due: 1000 MAD
+└── Status: PARTIALLY_PAID
+
+INVOICE ITEMS:
+└── Root Canal Treatment (Tooth #16)
+    • Quantity: 1
+    • Unit Price: 3000 MAD
+    • Total: 3000 MAD
+
+PAYMENTS:
+├── Payment #1 (Jan 15, 2024)
+│   • Amount: 1000 MAD
+│   • Method: Cash
+│   • Status: Completed
+│
+├── Payment #2 (Feb 15, 2024)
+│   • Amount: 1000 MAD
+│   • Method: Cash
+│   • Status: Completed
+│
+└── Payment #3 (Mar 15, 2024) - PENDING
+    • Amount: 1000 MAD
+    • Method: TBD
+    • Status: Pending
+
+Key Database Fields Explained
+Invoice Table
+typescript{
+  invoice_id: string           // Primary key
+  patient_id: string           // Who owes the money
+  appointment_id?: string      // Related appointment (optional)
+  invoice_number: string       // INV-2024-001
+  invoice_date: Date           // When created
+  due_date: Date               // When full payment expected
+  total_amount: number         // Sum of all invoice items
+  paid_amount: number          // Sum of all payments
+  balance_due: number          // total_amount - paid_amount
+  status: 'unpaid' | 'partially_paid' | 'paid' | 'overdue'
+}
+Payment Table
+typescript{
+  payment_id: string           // Primary key
+  invoice_id: string           // Which invoice this pays
+  patient_id: string           // Who paid
+  payment_date: Date           // When paid
+  amount_paid: number          // How much in this payment
+  payment_method: 'cash' | 'card' | 'bank_transfer' | 'insurance'
+  payment_number: string       // PAY-2024-001
+  notes?: string               // Additional info
+  status: 'completed' | 'pending'
+}
+
+Payment Status Logic
+Invoice Status Calculation:
+─────────────────────────────────────────────────────
+IF paid_amount = 0
+  → Status = "UNPAID"
+
+ELSE IF paid_amount < total_amount
+  → Status = "PARTIALLY_PAID"
+
+ELSE IF paid_amount >= total_amount
+  → Status = "PAID"
+
+IF current_date > due_date AND paid_amount < total_amount
+  → Status = "OVERDUE"
+
+Database Relationships Summary
+
+Patient → Appointments (One to Many)
+
+One patient can have many appointments
+
+
+Appointment → Invoice (One to One or One to None)
+
+An appointment can create one invoice (or none if free consultation)
+
+
+Patient → Invoices (One to Many)
+
+One patient can have many invoices over time
+
+
+Invoice → Invoice Items (One to Many)
+
+One invoice can have many services/items
+
+
+Invoice → Payments (One to Many)
+
+One invoice can receive many payments (partial payments)
+
+
+Patient → Payments (One to Many)
+
+One patient can make many payments across different invoices
+
+
+
+
+Zustand Store Structure (Current)
+typescriptinterface BillingState {
+  invoices: Invoice[]
+  payments: Payment[]
+  
+  // Actions
+  addInvoice: (invoice: Invoice) => void
+  updateInvoice: (id: string, updates: Partial<Invoice>) => void
+  deleteInvoice: (id: string) => void
+  
+  addPayment: (payment: Payment) => void
+  updatePayment: (id: string, updates: Partial<Payment>) => void
+  deletePayment: (id: string) => void
+  
+  // Calculations
+  calculateBalance: (invoiceId: string) => number
+  updateInvoiceStatus: (invoiceId: string) => void
+}
+
+Recommended Supabase Tables
+When you connect to Supabase, create these tables:
+1. patients
+sqlCREATE TABLE patients (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  phone TEXT,
+  email TEXT,
+  medical_history JSONB,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+2. appointments
+sqlCREATE TABLE appointments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  patient_id UUID REFERENCES patients(id),
+  dentist_id UUID REFERENCES staff(id),
+  appointment_date DATE NOT NULL,
+  appointment_time TIME NOT NULL,
+  status TEXT DEFAULT 'scheduled',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+3. invoices
+sqlCREATE TABLE invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_number TEXT UNIQUE NOT NULL,
+  patient_id UUID REFERENCES patients(id),
+  appointment_id UUID REFERENCES appointments(id),
+  invoice_date DATE NOT NULL,
+  due_date DATE,
+  total_amount DECIMAL(10,2) NOT NULL,
+  paid_amount DECIMAL(10,2) DEFAULT 0,
+  balance_due DECIMAL(10,2) GENERATED ALWAYS AS (total_amount - paid_amount) STORED,
+  status TEXT DEFAULT 'unpaid',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+4. invoice_items
+sqlCREATE TABLE invoice_items (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_id UUID REFERENCES invoices(id) ON DELETE CASCADE,
+  service_name TEXT NOT NULL,
+  description TEXT,
+  quantity INTEGER DEFAULT 1,
+  unit_price DECIMAL(10,2) NOT NULL,
+  total DECIMAL(10,2) GENERATED ALWAYS AS (quantity * unit_price) STORED,
+  tooth_number TEXT
+);
+5. payments
+sqlCREATE TABLE payments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  payment_number TEXT UNIQUE NOT NULL,
+  invoice_id UUID REFERENCES invoices(id),
+  patient_id UUID REFERENCES patients(id),
+  payment_date DATE NOT NULL,
+  amount_paid DECIMAL(10,2) NOT NULL,
+  payment_method TEXT NOT NULL,
+  notes TEXT,
+  status TEXT DEFAULT 'completed',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+Payment Flow Example
+Step 1: Create Invoice
+typescriptconst invoice = {
+  invoice_number: 'INV-2024-001',
+  patient_id: 'patient-123',
+  appointment_id: 'appt-456',
+  total_amount: 3000,
+  paid_amount: 0,
+  balance_due: 3000,
+  status: 'unpaid'
+}
+Step 2: First Payment (1000 MAD)
+typescriptconst payment1 = {
+  payment_number: 'PAY-2024-001',
+  invoice_id: 'INV-2024-001',
+  amount_paid: 1000,
+  payment_method: 'cash'
+}
+
+// Update invoice:
+invoice.paid_amount = 1000
+invoice.balance_due = 2000
+invoice.status = 'partially_paid'
+Step 3: Second Payment (1000 MAD)
+typescriptconst payment2 = {
+  payment_number: 'PAY-2024-002',
+  invoice_id: 'INV-2024-001',
+  amount_paid: 1000,
+  payment_method: 'cash'
+}
+
+// Update invoice:
+invoice.paid_amount = 2000
+invoice.balance_due = 1000
+invoice.status = 'partially_paid' // Still partial
+Step 4: Final Payment (1000 MAD)
+typescriptconst payment3 = {
+  payment_number: 'PAY-2024-003',
+  invoice_id: 'INV-2024-001',
+  amount_paid: 1000,
+  payment_method: 'cash'
+}
+
+// Update invoice:
+invoice.paid_amount = 3000
+invoice.balance_due = 0
+invoice.status = 'paid' // ✓ Fully paid!
+
+Benefits of This Structure
+✓ Track Multiple Payments: Each payment is recorded separately
+✓ Payment History: See all payments for each invoice
+✓ Flexible Payment Methods: Cash, card, transfer, insurance
+✓ Real-time Balance: Automatically calculate remaining balance
+✓ Patient Payment History: View all payments across all invoices
+✓ Reporting: Generate financial reports easily
+✓ Audit Trail: Complete history of all transactions
