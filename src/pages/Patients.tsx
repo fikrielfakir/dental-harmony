@@ -255,7 +255,7 @@ const Patients = () => {
               className={filterHasAllergies === true ? "bg-accent" : ""}
             >
               <AlertCircle className="h-4 w-4 mr-2" />
-              Has Allergies
+              {t("patients.hasAllergies")}
               {filterHasAllergies === true && <span className="ml-auto">✓</span>}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -263,26 +263,26 @@ const Patients = () => {
               className={filterHasAllergies === false ? "bg-accent" : ""}
             >
               <AlertCircle className="h-4 w-4 mr-2" />
-              No Allergies
+              {t("patients.noAllergiesFilter")}
               {filterHasAllergies === false && <span className="ml-auto">✓</span>}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => setFilterHasInsurance(filterHasInsurance === true ? null : true)}
               className={filterHasInsurance === true ? "bg-accent" : ""}
             >
-              Has Insurance
+              {t("patients.hasInsurance")}
               {filterHasInsurance === true && <span className="ml-auto">✓</span>}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => setFilterHasInsurance(filterHasInsurance === false ? null : false)}
               className={filterHasInsurance === false ? "bg-accent" : ""}
             >
-              No Insurance
+              {t("patients.noInsurance")}
               {filterHasInsurance === false && <span className="ml-auto">✓</span>}
             </DropdownMenuItem>
             {activeFilterCount > 0 && (
-              <DropdownMenuItem onClick={clearFilters} className="text-destructive">
-                Clear Filters
+              <DropdownMenuItem onClick={clearFilters} className="text-destructive font-bold">
+                {t("patients.clearFilters")}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>

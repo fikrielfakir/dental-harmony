@@ -101,6 +101,13 @@
     "newAppointment": "Nouveau Rendez-vous",
     "viewAll": "Voir Tout"
   },
+    "todayRevenueDesc": "Des rendez-vous terminés",
+    "todayRevenueDescMonthly": "Revenu mensuel",
+    "staff": {
+      "dentist": "Dentiste",
+      "hygienist": "Hygiéniste"
+    }
+  },
   "patients": {
     "title": "Patients",
     "subtitle": "Gérez les dossiers et informations des patients",
@@ -118,6 +125,22 @@
     "allergies": "Allergies",
     "lastName": "Nom de famille",
     "editPatient": "Modifier le patient",
+    "hasAllergies": "A des allergies",
+    "noAllergiesFilter": "Pas d'allergies",
+    "hasInsurance": "A une assurance",
+    "noInsurance": "Pas d'assurance",
+    "clearFilters": "Effacer les filtres",
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "fullName": "Nom Complet",
+      "email": "Email",
+      "phone": "Téléphone",
+      "dateOfBirth": "Date de Naissance",
+      "address": "Adresse",
+      "insuranceProvider": "Assureur",
+      "policyNumber": "N° de Police"
+    },
     "patientDetails": {
       "tabs": {
         "profile": "Profil",

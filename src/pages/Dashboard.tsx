@@ -79,7 +79,7 @@ const Dashboard = () => {
         <StatCard
           title={t("dashboard.todayRevenue")}
           value={`$${todayRevenue.toLocaleString()}`}
-          description={t("dashboard.todayRevenueDesc", "From completed appointments")}
+          description={t("dashboard.todayRevenueDesc")}
           icon={DollarSign}
           iconClassName="bg-success/10 text-success"
         />
@@ -142,7 +142,7 @@ const Dashboard = () => {
                             {member.firstName} {member.lastName}
                           </p>
                           <p className="text-sm text-muted-foreground capitalize">
-                            {member.role}
+                            {member.role === 'dentist' ? t('dashboard.staff.dentist') : t('dashboard.staff.hygienist')}
                             {member.specialization && ` • ${member.specialization}`}
                           </p>
                         </div>
