@@ -238,7 +238,7 @@ const ClinicalRecords = () => {
                           <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { notes: record.notes })}>
                             {t("clinical.actions.viewNote")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { status: 'Completed' })}>
+                          <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { notes: record.notes })}>
                             {t("clinical.actions.markCompleted")}
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive" onClick={() => deleteClinicalNote(record.id)}>

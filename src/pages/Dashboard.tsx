@@ -76,6 +76,7 @@ const Dashboard = () => {
           trend={{ value: 12, positive: true }}
           iconClassName="bg-info/10 text-info"
         />
+        <StatCard
           title={t("dashboard.todayRevenue")}
           value={`${todayRevenue.toLocaleString()} DH`}
           description={t("dashboard.todayRevenueDesc")}
