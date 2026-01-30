@@ -115,7 +115,9 @@
     "noPatients": "لا يوجد مرضى",
     "yearsOld": "سنة",
     "searchPlaceholder": "...بحث بالاسم، البريد الإلكتروني، أو الهاتف",
-    "allergies": "حساسية"
+    "allergies": "حساسية",
+    "lastName": "الاسم الأخير",
+    "editPatient": "تعديل بيانات المريض"
   },
   "appointments": {
     "title": "المواعيد",

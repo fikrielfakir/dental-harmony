@@ -115,7 +115,9 @@
     "noPatients": "Aucun patient trouvé",
     "yearsOld": "ans",
     "searchPlaceholder": "...Rechercher par nom, email ou téléphone",
-    "allergies": "Allergies"
+    "allergies": "Allergies",
+    "lastName": "Nom de famille",
+    "editPatient": "Modifier le patient"
   },
   "appointments": {
     "title": "Rendez-vous",

@@ -115,7 +115,9 @@
     "noPatients": "No patients found",
     "yearsOld": "years old",
     "searchPlaceholder": "...Search by name, email, or phone",
-    "allergies": "Allergies"
+    "allergies": "Allergies",
+    "lastName": "Last Name",
+    "editPatient": "Edit Patient"
   },
   "appointments": {
     "title": "Appointments",

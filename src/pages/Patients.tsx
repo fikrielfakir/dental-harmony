@@ -375,11 +375,11 @@ const Patients = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenuItem onClick={() => openViewDialog(patient)}>View Details</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate("/appointments")}>Book Appointment</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openEditDialog(patient)}>Edit Patient</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openViewDialog(patient)}>{t("common.view")}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/appointments")}>{t("appointments.addNew")}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openEditDialog(patient)}>{t("common.edit")}</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive" onClick={() => handleDeletePatient(patient.id)}>
-                          Delete Patient
+                          {t("common.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -560,9 +560,9 @@ const Patients = () => {
 
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
-                  Close
+                  {t("common.cancel")}
                 </Button>
-                <Button onClick={() => navigate("/appointments")}>Book Appointment</Button>
+                <Button onClick={() => navigate("/appointments")}>{t("appointments.addNew")}</Button>
               </DialogFooter>
             </>
           )}
@@ -573,16 +573,16 @@ const Patients = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={closeAddDialog}>
         <DialogContent className="max-w-sm sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl">Add New Patient</DialogTitle>
+            <DialogTitle className="text-xl">{t("patients.addNew")}</DialogTitle>
             <DialogDescription className="text-xs">
-              Fill in the essential details to register a new patient.
+              {t("patients.addPatientDesc", "Fill in the essential details to register a new patient.")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-3 py-2">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="firstName" className="text-xs font-semibold">First Name</Label>
+                <Label htmlFor="firstName" className="text-xs font-semibold">{t("patients.firstName", "First Name")}</Label>
                 <Input
                   id="firstName"
                   placeholder="John"
@@ -594,7 +594,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="lastName" className="text-xs font-semibold">Last Name</Label>
+                <Label htmlFor="lastName" className="text-xs font-semibold">{t("patients.lastName")}</Label>
                 <Input
                   id="lastName"
                   placeholder="Doe"
@@ -609,7 +609,7 @@ const Patients = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="dateOfBirth" className="text-xs font-semibold">Date of Birth</Label>
+                <Label htmlFor="dateOfBirth" className="text-xs font-semibold">{t("patients.dateOfBirth")}</Label>
                 <Input
                   id="dateOfBirth"
                   type="date"
@@ -621,7 +621,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="phone" className="text-xs font-semibold">Phone</Label>
+                <Label htmlFor="phone" className="text-xs font-semibold">{t("patients.phone")}</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -636,7 +636,7 @@ const Patients = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs font-semibold">Email Address</Label>
+              <Label htmlFor="email" className="text-xs font-semibold">{t("patients.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -650,7 +650,7 @@ const Patients = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="address" className="text-xs font-semibold">Home Address</Label>
+              <Label htmlFor="address" className="text-xs font-semibold">{t("settings.practice.address")}</Label>
               <Input
                 id="address"
                 placeholder="123 Street Name, City"
@@ -664,7 +664,7 @@ const Patients = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="insuranceProvider" className="text-xs font-semibold">Insurance</Label>
+                <Label htmlFor="insuranceProvider" className="text-xs font-semibold">{t("settings.tabs.pricingBilling")}</Label>
                 <Input
                   id="insuranceProvider"
                   placeholder="Provider"
@@ -679,7 +679,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="policyNumber" className="text-xs font-semibold">Policy #</Label>
+                <Label htmlFor="policyNumber" className="text-xs font-semibold">{t("patients.policyNumber", "Policy #")}</Label>
                 <Input
                   id="policyNumber"
                   placeholder="Number"
@@ -695,14 +695,14 @@ const Patients = () => {
 
           <DialogFooter className="pt-2 gap-2">
             <Button variant="secondary" className="h-8 text-xs" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               className="h-8 text-xs"
               onClick={handleAddPatient}
               disabled={!newPatient.firstName || !newPatient.lastName}
             >
-              Add Patient
+              {t("common.add")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -712,16 +712,16 @@ const Patients = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={closeEditDialog}>
         <DialogContent className="max-w-sm sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl">Edit Patient</DialogTitle>
+            <DialogTitle className="text-xl">{t("patients.editPatient")}</DialogTitle>
             <DialogDescription className="text-xs">
-              Update the patient's information.
+              {t("patients.editPatientDesc", "Update the patient's information.")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-3 py-2">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="edit-firstName" className="text-xs font-semibold">First Name</Label>
+                <Label htmlFor="edit-firstName" className="text-xs font-semibold">{t("patients.firstName", "First Name")}</Label>
                 <Input
                   id="edit-firstName"
                   className="h-8 text-sm"
@@ -732,7 +732,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="edit-lastName" className="text-xs font-semibold">Last Name</Label>
+                <Label htmlFor="edit-lastName" className="text-xs font-semibold">{t("patients.lastName")}</Label>
                 <Input
                   id="edit-lastName"
                   className="h-8 text-sm"
@@ -746,7 +746,7 @@ const Patients = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="edit-dateOfBirth" className="text-xs font-semibold">Date of Birth</Label>
+                <Label htmlFor="edit-dateOfBirth" className="text-xs font-semibold">{t("patients.dateOfBirth")}</Label>
                 <Input
                   id="edit-dateOfBirth"
                   type="date"
@@ -758,7 +758,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="edit-phone" className="text-xs font-semibold">Phone</Label>
+                <Label htmlFor="edit-phone" className="text-xs font-semibold">{t("patients.phone")}</Label>
                 <Input
                   id="edit-phone"
                   type="tel"
@@ -772,7 +772,7 @@ const Patients = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="edit-email" className="text-xs font-semibold">Email Address</Label>
+              <Label htmlFor="edit-email" className="text-xs font-semibold">{t("patients.email")}</Label>
               <Input
                 id="edit-email"
                 type="email"
@@ -785,7 +785,7 @@ const Patients = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="edit-address" className="text-xs font-semibold">Home Address</Label>
+              <Label htmlFor="edit-address" className="text-xs font-semibold">{t("settings.practice.address")}</Label>
               <Input
                 id="edit-address"
                 className="h-8 text-sm"
@@ -798,7 +798,7 @@ const Patients = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="edit-insurance" className="text-xs font-semibold">Insurance</Label>
+                <Label htmlFor="edit-insurance" className="text-xs font-semibold">{t("settings.tabs.pricingBilling")}</Label>
                 <Input
                   id="edit-insurance"
                   className="h-8 text-sm"
@@ -812,7 +812,7 @@ const Patients = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="edit-policy" className="text-xs font-semibold">Policy #</Label>
+                <Label htmlFor="edit-policy" className="text-xs font-semibold">{t("patients.policyNumber", "Policy #")}</Label>
                 <Input
                   id="edit-policy"
                   className="h-8 text-sm"
@@ -827,14 +827,14 @@ const Patients = () => {
 
           <DialogFooter className="pt-2 gap-2">
             <Button variant="secondary" className="h-8 text-xs" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               className="h-8 text-xs"
               onClick={handleEditPatient}
               disabled={!newPatient.firstName || !newPatient.lastName}
             >
-              Update Patient
+              {t("common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
