@@ -48,6 +48,7 @@ const Billing = () => {
     deleteInvoice, 
     quotations, 
     addQuotation,
+    deleteQuotation,
     appointments,
     recordPayment,
     generateInvoiceFromAppointment
@@ -344,6 +345,102 @@ const Billing = () => {
                         </TableRow>
                       );
                     })
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="quotations" className="mt-4">
+          <Card>
+            <CardHeader className="pb-0">
+              <CardTitle>Treatment Estimates</CardTitle>
+              <CardDescription>View and manage patient quotations</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Quotation #</TableHead>
+                    <TableHead>Patient</TableHead>
+                    <TableHead>Total Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Valid Until</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {quotations.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No estimates found</TableCell>
+                    </TableRow>
+                  ) : (
+                    quotations.map((quo) => {
+                      const patient = patients.find(p => p.id === quo.patientId);
+                      return (
+                        <TableRow key={quo.id}>
+                          <TableCell className="font-mono text-xs">{quo.quotationNumber}</TableCell>
+                          <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
+                          <TableCell>${quo.totalAmount.toLocaleString()}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="capitalize">
+                              {quo.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{new Date(quo.validUntil).toLocaleDateString()}</TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="ghost" size="icon" onClick={() => deleteQuotation(quo.id)}>
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="payments" className="mt-4">
+          <Card>
+            <CardHeader className="pb-0">
+              <CardTitle>Payment History</CardTitle>
+              <CardDescription>Recent financial transactions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Patient</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Method</TableHead>
+                    <TableHead>Invoice #</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {invoices.flatMap(inv => inv.payments).length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">No payment history found</TableCell>
+                    </TableRow>
+                  ) : (
+                    invoices.flatMap(inv => inv.payments.map(p => ({ ...p, invoice: inv })))
+                      .sort((a, b) => new Date(b.paymentDate).getTime() - new Date(a.paymentDate).getTime())
+                      .map((p) => {
+                        const patient = patients.find(pat => pat.id === p.invoice.patientId);
+                        return (
+                          <TableRow key={p.id}>
+                            <TableCell>{new Date(p.paymentDate).toLocaleDateString()}</TableCell>
+                            <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
+                            <TableCell className="text-emerald-600 font-bold">${p.amount.toLocaleString()}</TableCell>
+                            <TableCell className="capitalize">{p.paymentMethod}</TableCell>
+                            <TableCell className="font-mono text-xs">{p.invoice.invoiceNumber}</TableCell>
+                          </TableRow>
+                        );
+                      })
                   )}
                 </TableBody>
               </Table>
