@@ -78,7 +78,7 @@ const Dashboard = () => {
         />
         <StatCard
           title={t("dashboard.todayRevenue")}
-          value={`$${todayRevenue.toLocaleString()}`}
+          value={`${todayRevenue.toLocaleString()} DH`}
           description={t("dashboard.todayRevenueDesc")}
           icon={DollarSign}
           iconClassName="bg-success/10 text-success"

@@ -82,9 +82,9 @@ const Billing = () => {
       "INVOICE: " + invoice.invoiceNumber + "\n" +
       "Date: " + new Date(invoice.invoiceDate).toLocaleDateString() + "\n" +
       "Patient: " + (patient ? (patient.firstName + " " + patient.lastName) : 'N/A') + "\n" +
-      "Total Amount: $" + invoice.totalAmount.toFixed(2) + "\n" +
-      "Paid Amount: $" + (invoice.paidAmount || 0).toFixed(2) + "\n" +
-      "Balance Due: $" + (invoice.balanceDue ?? (invoice.totalAmount - (invoice.paidAmount || 0))).toLocaleString() + "\n" +
+      "Total Amount: " + invoice.totalAmount.toFixed(2) + " DH\n" +
+      "Paid Amount: " + (invoice.paidAmount || 0).toFixed(2) + " DH\n" +
+      "Balance Due: " + (invoice.balanceDue ?? (invoice.totalAmount - (invoice.paidAmount || 0))).toLocaleString() + " DH\n" +
       "Status: " + invoice.paymentStatus.toUpperCase();
     
     const blob = new Blob([content], { type: 'text/plain' });
@@ -209,7 +209,7 @@ const Billing = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalOutstanding.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+            <div className="text-2xl font-bold">{totalOutstanding.toLocaleString(undefined, { minimumFractionDigits: 2 })} DH</div>
           </CardContent>
         </Card>
         <Card className="bg-green-500/5 border-green-500/20">
@@ -219,7 +219,7 @@ const Billing = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">${monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+            <div className="text-2xl font-bold text-green-600">{monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })} DH</div>
           </CardContent>
         </Card>
         <Card>
@@ -301,8 +301,8 @@ const Billing = () => {
                         <TableRow key={inv.id}>
                           <TableCell className="font-mono text-xs">{inv.invoiceNumber}</TableCell>
                           <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
-                          <TableCell>${inv.totalAmount.toLocaleString()}</TableCell>
-                          <TableCell className="text-destructive font-medium">${balanceDue.toLocaleString()}</TableCell>
+                          <TableCell>{inv.totalAmount.toLocaleString()} DH</TableCell>
+                          <TableCell className="text-destructive font-medium">{balanceDue.toLocaleString()} DH</TableCell>
                           <TableCell className="w-[100px]">
                             <Progress value={percent} className="h-2" />
                           </TableCell>
@@ -384,7 +384,7 @@ const Billing = () => {
                         <TableRow key={quo.id}>
                           <TableCell className="font-mono text-xs">{quo.quotationNumber}</TableCell>
                           <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
-                          <TableCell>${quo.totalAmount.toLocaleString()}</TableCell>
+                          <TableCell>{quo.totalAmount.toLocaleString()} DH</TableCell>
                           <TableCell>
                             <Badge variant="outline" className="capitalize">
                               {quo.status}
@@ -437,7 +437,7 @@ const Billing = () => {
                           <TableRow key={p.id}>
                             <TableCell>{new Date(p.paymentDate).toLocaleDateString()}</TableCell>
                             <TableCell className="font-medium">{patient ? (patient.firstName + " " + patient.lastName) : "N/A"}</TableCell>
-                            <TableCell className="text-emerald-600 font-bold">${p.amount.toLocaleString()}</TableCell>
+                            <TableCell className="text-emerald-600 font-bold">{p.amount.toLocaleString()} DH</TableCell>
                             <TableCell className="capitalize">{p.paymentMethod}</TableCell>
                             <TableCell className="font-mono text-xs">{p.invoice.invoiceNumber}</TableCell>
                           </TableRow>

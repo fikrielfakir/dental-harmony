@@ -64,7 +64,7 @@ export function RevenueChart() {
               <YAxis
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
+                tickFormatter={(value) => `${(value / 1000).toFixed(1)}k DH`}
                 className="text-xs fill-muted-foreground"
               />
               <Tooltip
@@ -74,7 +74,7 @@ export function RevenueChart() {
                   borderRadius: "8px",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
-                formatter={(value: number) => [`$${value.toLocaleString()}`, t("dashboard.revenue")]}
+                formatter={(value: number) => [`${value.toLocaleString()} DH`, t("dashboard.revenue")]}
               />
               <Area
                 type="monotone"
