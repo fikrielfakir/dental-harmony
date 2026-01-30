@@ -6,6 +6,7 @@ import {
   MoreVertical, CheckCircle2, Clock,
   ArrowUpRight, ListChecks
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -306,9 +307,14 @@ const Billing = () => {
                             <Badge variant={
                               inv.paymentStatus === 'paid' ? 'default' : 
                               inv.paymentStatus === 'partial' ? 'secondary' : 
-                              inv.paymentStatus === 'overpaid' ? 'outline' : 'destructive'
-                            }>
-                              {inv.paymentStatus}
+                              inv.paymentStatus === 'overpaid' ? 'outline' : 
+                              inv.paymentStatus === 'pending' ? 'destructive' : 'default'
+                            } className={cn(
+                              inv.paymentStatus === 'paid' && "bg-emerald-500 hover:bg-emerald-600",
+                              inv.paymentStatus === 'partial' && "bg-amber-500 hover:bg-amber-600",
+                              inv.paymentStatus === 'pending' && "bg-rose-500 hover:bg-rose-600"
+                            )}>
+                              {inv.paymentStatus.toUpperCase()}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
