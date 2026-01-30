@@ -177,17 +177,17 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h3 className="text-xl font-extrabold text-gray-900 tracking-tight">{t("patients.dentalChart.title")}</h3>
-        <p className="text-sm text-muted-foreground font-medium">{t("patients.dentalChart.subtitle")}</p>
+    <div className="space-y-4">
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-extrabold text-gray-900 tracking-tight">{t("patients.dentalChart.title")}</h3>
+        <p className="text-[10px] text-muted-foreground font-medium">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
-      <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-4">
-        <div className="flex flex-col gap-6 overflow-x-auto pb-2 scrollbar-thin">
+      <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-3">
+        <div className="flex flex-col gap-4 overflow-x-auto pb-2 scrollbar-thin">
           {/* Upper Teeth */}
-          <div className="flex flex-col items-center min-w-[500px] mx-auto space-y-3">
-            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-3">{t("patients.dentalChart.upperArch")}</span>
+          <div className="flex flex-col items-center min-w-[450px] mx-auto space-y-2">
+            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-2">{t("patients.dentalChart.upperArch")}</span>
             <div className="flex justify-center gap-0.5">
               <div className="flex gap-0.5">
                 {FDI_NUMBERING.upperRight.map(n => (
@@ -200,7 +200,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                   />
                 ))}
               </div>
-              <div className="w-px bg-slate-200 mx-2 self-stretch" />
+              <div className="w-px bg-slate-200 mx-1.5 self-stretch" />
               <div className="flex gap-0.5">
                 {FDI_NUMBERING.upperLeft.map(n => (
                   <ToothSVG 
@@ -215,10 +215,10 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
             </div>
           </div>
 
-          <div className="border-t border-dashed border-slate-200 w-full min-w-[500px] mx-auto" />
+          <div className="border-t border-dashed border-slate-200 w-full min-w-[450px] mx-auto" />
 
           {/* Lower Teeth */}
-          <div className="flex flex-col items-center min-w-[500px] mx-auto space-y-3">
+          <div className="flex flex-col items-center min-w-[450px] mx-auto space-y-2">
             <div className="flex justify-center gap-0.5">
               <div className="flex gap-0.5">
                 {FDI_NUMBERING.lowerRight.map(n => (
@@ -231,7 +231,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                   />
                 ))}
               </div>
-              <div className="w-px bg-slate-200 mx-2 self-stretch" />
+              <div className="w-px bg-slate-200 mx-1.5 self-stretch" />
               <div className="flex gap-0.5">
                 {FDI_NUMBERING.lowerLeft.map(n => (
                   <ToothSVG 
@@ -244,20 +244,20 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                 ))}
               </div>
             </div>
-            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-3">{t("patients.dentalChart.lowerArch")}</span>
+            <span className="text-[8px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-2">{t("patients.dentalChart.lowerArch")}</span>
           </div>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-4 justify-center py-4 px-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+      <div className="flex flex-wrap gap-2.5 justify-center py-2 px-2 bg-white rounded-lg border border-slate-100 shadow-sm">
         {Object.entries(DENTAL_COLORS).map(([key, color]) => (
-          <div key={key} className="flex items-center gap-2">
+          <div key={key} className="flex items-center gap-1">
             <div 
-              className="w-4 h-4 rounded-full border border-slate-200 shadow-inner" 
+              className="w-2.5 h-2.5 rounded-full border border-slate-200 shadow-inner" 
               style={{ backgroundColor: color }} 
             />
-            <span className="text-xs font-medium text-gray-700">
+            <span className="text-[9px] font-medium text-gray-700">
               {t(`patients.dentalChart.status.${key}`, TOOTH_STATUS_LABELS[key as keyof typeof TOOTH_STATUS_LABELS] || key)}
             </span>
           </div>

@@ -430,8 +430,8 @@ const Patients = () => {
                 </div>
 
                 <ScrollArea className="flex-1 min-h-0">
-                  <div className="p-6">
-                    <TabsContent value="profile" className="m-0 focus-visible:outline-none">
+                  <div className="p-4">
+                    <TabsContent value="profile" className="m-0 focus-visible:outline-none px-2">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Personal Info */}
                         <div className="space-y-4">
