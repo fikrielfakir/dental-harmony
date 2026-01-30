@@ -146,6 +146,12 @@
       "lowerArch": "Arcade Inférieure",
       "history": "Historique des Soins",
       "records": "enregistrements",
+      "addTreatment": "Ajouter un Soin",
+      "treatmentDescription": "Enregistrer un nouveau soin pour cette dent",
+      "treatmentType": "Type de Soin",
+      "selectType": "Sélectionner le type de soin",
+      "notes": "Notes Cliniques",
+      "notesPlaceholder": "Ajouter des détails spécifiques sur la procédure...",
       "surfaces": "Surfaces",
       "completed": "terminé",
       "planned": "planifié",
@@ -158,13 +164,12 @@
         "L": "Lingual"
       },
       "status": {
-        "healthy": "Sain",
-        "caries": "Carie",
+        "cavity": "Carie",
         "filling": "Obturation",
         "crown": "Couronne",
-        "extracted": "Extraite",
-        "root-canal": "Dévitalisation",
-        "missing": "Manquante"
+        "extraction": "Extraction",
+        "rootcanal": "Dévitalisation",
+        "healthy": "Sain"
       }
     }
   },
