@@ -291,11 +291,11 @@ const Patients = () => {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Search className="h-12 w-12 text-muted-foreground/30 mb-4" />
-              <p className="text-lg font-medium">No patients found</p>
+              <p className="text-lg font-medium">{t("patients.noPatients")}</p>
               <p className="text-muted-foreground">
                 {searchQuery
-                  ? "Try a different search term"
-                  : "Add your first patient to get started"}
+                  ? t("common.tryDifferentSearch", "Try a different search term")
+                  : t("common.addFirstPatient", "Add your first patient to get started")}
               </p>
             </CardContent>
           </Card>
