@@ -319,7 +319,10 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                         variant="ghost" 
                         size="icon" 
                         className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/10 rounded-full transition-colors"
-                        onClick={() => handleDelete(entry.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(entry.id);
+                        }}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -329,7 +332,95 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
             </div>
           )}
         </div>
-      </div>
+      <Dialog open={selectedTooth !== null} onOpenChange={() => setSelectedTooth(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary font-bold">
+                #{selectedTooth}
+              </span>
+              {t("patients.dentalChart.addTreatment")}
+            </DialogTitle>
+            <DialogDescription>
+              {t("patients.dentalChart.treatmentDescription")}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-6 py-4">
+            <div className="space-y-3">
+              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                {t("patients.dentalChart.treatmentType")}
+              </Label>
+              <Select 
+                value={formData.treatmentType} 
+                onValueChange={(v) => setFormData(prev => ({ ...prev, treatmentType: v }))}
+              >
+                <SelectTrigger className="w-full h-11">
+                  <SelectValue placeholder={t("patients.dentalChart.selectType")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="filling">{t("patients.dentalChart.status.filling")}</SelectItem>
+                  <SelectItem value="cavity">{t("patients.dentalChart.status.cavity")}</SelectItem>
+                  <SelectItem value="crown">{t("patients.dentalChart.status.crown")}</SelectItem>
+                  <SelectItem value="extraction">{t("patients.dentalChart.status.extraction")}</SelectItem>
+                  <SelectItem value="rootcanal">{t("patients.dentalChart.status.rootcanal")}</SelectItem>
+                  <SelectItem value="healthy">{t("patients.dentalChart.status.healthy")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-3">
+              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                {t("patients.dentalChart.surfaces")}
+              </Label>
+              <div className="flex flex-wrap gap-2">
+                {SURFACES.map(surface => (
+                  <label 
+                    key={surface}
+                    className={`
+                      flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all
+                      ${formData.surfaces.includes(surface) 
+                        ? 'bg-primary/10 border-primary text-primary' 
+                        : 'bg-white border-slate-200 hover:border-slate-300'}
+                    `}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleSurface(surface);
+                    }}
+                  >
+                    <Checkbox 
+                      checked={formData.surfaces.includes(surface)}
+                    />
+                    <span className="text-sm font-medium">{surface}</span>
+                    <span className="text-xs text-muted-foreground">({t(`patients.dentalChart.surfaceLabels.${surface}`, SURFACE_LABELS[surface])})</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                {t("patients.dentalChart.notes")}
+              </Label>
+              <Textarea 
+                placeholder={t("patients.dentalChart.notesPlaceholder")}
+                value={formData.notes}
+                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                className="resize-none h-24"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setSelectedTooth(null)} className="flex-1 sm:flex-none">
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={handleSave} className="flex-1 sm:flex-none px-8">
+              {t("common.save")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
