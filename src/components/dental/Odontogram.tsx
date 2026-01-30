@@ -70,8 +70,8 @@ const ToothSVG = ({
         {fdiNumber}
       </span>
       <svg 
-        width="36" 
-        height="44" 
+        width="28" 
+        height="34" 
         viewBox="0 0 36 44"
         className="drop-shadow-sm group-hover:drop-shadow-md transition-all"
       >
@@ -183,13 +183,13 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
         <p className="text-sm text-muted-foreground font-medium">{t("patients.dentalChart.subtitle")}</p>
       </div>
       
-      <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-6">
-        <div className="flex flex-col gap-8 overflow-x-auto pb-4 scrollbar-thin">
+      <div className="bg-slate-50/50 rounded-xl border border-slate-100 p-4">
+        <div className="flex flex-col gap-6 overflow-x-auto pb-2 scrollbar-thin">
           {/* Upper Teeth */}
-          <div className="flex flex-col items-center min-w-[600px] mx-auto space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-1 px-4">{t("patients.dentalChart.upperArch")}</span>
-            <div className="flex justify-center gap-1">
-              <div className="flex gap-1">
+          <div className="flex flex-col items-center min-w-[500px] mx-auto space-y-3">
+            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-3">{t("patients.dentalChart.upperArch")}</span>
+            <div className="flex justify-center gap-0.5">
+              <div className="flex gap-0.5">
                 {FDI_NUMBERING.upperRight.map(n => (
                   <ToothSVG 
                     key={n} 
@@ -200,8 +200,8 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                   />
                 ))}
               </div>
-              <div className="w-px bg-slate-200 mx-3 self-stretch" />
-              <div className="flex gap-1">
+              <div className="w-px bg-slate-200 mx-2 self-stretch" />
+              <div className="flex gap-0.5">
                 {FDI_NUMBERING.upperLeft.map(n => (
                   <ToothSVG 
                     key={n} 
@@ -215,12 +215,12 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
             </div>
           </div>
 
-          <div className="border-t border-dashed border-slate-200 w-full min-w-[600px] mx-auto" />
+          <div className="border-t border-dashed border-slate-200 w-full min-w-[500px] mx-auto" />
 
           {/* Lower Teeth */}
-          <div className="flex flex-col items-center min-w-[600px] mx-auto space-y-4">
-            <div className="flex justify-center gap-1">
-              <div className="flex gap-1">
+          <div className="flex flex-col items-center min-w-[500px] mx-auto space-y-3">
+            <div className="flex justify-center gap-0.5">
+              <div className="flex gap-0.5">
                 {FDI_NUMBERING.lowerRight.map(n => (
                   <ToothSVG 
                     key={n} 
@@ -231,8 +231,8 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                   />
                 ))}
               </div>
-              <div className="w-px bg-slate-200 mx-3 self-stretch" />
-              <div className="flex gap-1">
+              <div className="w-px bg-slate-200 mx-2 self-stretch" />
+              <div className="flex gap-0.5">
                 {FDI_NUMBERING.lowerLeft.map(n => (
                   <ToothSVG 
                     key={n} 
@@ -244,7 +244,7 @@ export const Odontogram = ({ patientId }: OdontogramProps) => {
                 ))}
               </div>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-1 px-4">{t("patients.dentalChart.lowerArch")}</span>
+            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-500 border-y border-slate-200/60 py-0.5 px-3">{t("patients.dentalChart.lowerArch")}</span>
           </div>
         </div>
       </div>
