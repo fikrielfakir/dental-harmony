@@ -121,7 +121,7 @@ export const useStore = create<AppState>()(
           { day: "Friday", open: "09:00", close: "17:00", isOpen: true },
         ],
         billing: {
-          currency: "USD ($)",
+          currency: "MAD",
           automaticInvoicing: true,
         },
         notifications: {
