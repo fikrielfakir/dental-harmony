@@ -41,10 +41,12 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Odontogram } from "@/components/dental/Odontogram";
 import { Patient } from "@/types";
+import { useTranslation } from "react-i18next";
 
 import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmationDialog";
 
 const Patients = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { patients, addPatient, updatePatient, deletePatient, dentalChart } = useStore();
 
@@ -210,14 +212,14 @@ const Patients = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Patients</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("patients.title")}</h1>
           <p className="text-muted-foreground">
-            Manage your patient records and information
+            {t("patients.subtitle")}
           </p>
         </div>
         <Button onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Add Patient
+          {t("patients.addNew")}
         </Button>
       </div>
 
@@ -226,7 +228,7 @@ const Patients = () => {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name, email, or phone..."
+            placeholder={t("patients.searchPlaceholder")}
             className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -321,14 +323,14 @@ const Patients = () => {
                       {patient.allergies.length > 0 && (
                         <Badge variant="destructive" className="text-xs">
                           <AlertCircle className="h-3 w-3 mr-1" />
-                          Allergies
+                          {t("patients.allergies")}
                         </Badge>
                       )}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5" />
-                        {calculateAge(patient.dateOfBirth)} years old
+                        {calculateAge(patient.dateOfBirth)} {t("patients.yearsOld")}
                       </span>
                       <span className="flex items-center gap-1">
                         <Phone className="h-3.5 w-3.5" />

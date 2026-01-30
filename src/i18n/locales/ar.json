@@ -112,7 +112,10 @@
     "dateOfBirth": "تاريخ الميلاد",
     "lastVisit": "آخر زيارة",
     "actions": "الإجراءات",
-    "noPatients": "لا يوجد مرضى"
+    "noPatients": "لا يوجد مرضى",
+    "yearsOld": "سنة",
+    "searchPlaceholder": "...بحث بالاسم، البريد الإلكتروني، أو الهاتف",
+    "allergies": "حساسية"
   },
   "appointments": {
     "title": "المواعيد",

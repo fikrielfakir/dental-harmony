@@ -112,7 +112,10 @@
     "dateOfBirth": "Date de Naissance",
     "lastVisit": "Dernière Visite",
     "actions": "Actions",
-    "noPatients": "Aucun patient trouvé"
+    "noPatients": "Aucun patient trouvé",
+    "yearsOld": "ans",
+    "searchPlaceholder": "...Rechercher par nom, email ou téléphone",
+    "allergies": "Allergies"
   },
   "appointments": {
     "title": "Rendez-vous",

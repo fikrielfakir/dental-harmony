@@ -112,7 +112,10 @@
     "dateOfBirth": "Date of Birth",
     "lastVisit": "Last Visit",
     "actions": "Actions",
-    "noPatients": "No patients found"
+    "noPatients": "No patients found",
+    "yearsOld": "years old",
+    "searchPlaceholder": "...Search by name, email, or phone",
+    "allergies": "Allergies"
   },
   "appointments": {
     "title": "Appointments",
