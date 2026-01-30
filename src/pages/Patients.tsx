@@ -554,7 +554,11 @@ const Patients = () => {
                 </TabsContent>
 
                 <TabsContent value="chart" className="mt-4">
-                  <Odontogram patientId={selectedPatient.id} />
+                  <ScrollArea className="max-h-[60vh]">
+                    <div className="pr-4">
+                      <Odontogram patientId={selectedPatient.id} />
+                    </div>
+                  </ScrollArea>
                 </TabsContent>
               </Tabs>
 
