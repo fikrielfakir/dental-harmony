@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
-  const { appointments, patients, staff } = useStore();
+  const { appointments, patients, staff, invoices } = useStore();
 
   // Calculate today's stats
   const today = startOfToday();
@@ -26,10 +26,26 @@ const Dashboard = () => {
     (apt) => apt.status === "completed"
   ).length;
 
-  // Mock financial data (would come from backend in real app)
-  const todayRevenue = 2450;
-  const monthlyRevenue = 28900;
-  const pendingPayments = 5;
+  // Real financial data from store
+  const pendingPayments = invoices.filter(
+    (inv) => inv.paymentStatus === 'unpaid' || inv.paymentStatus === 'partial'
+  ).length;
+
+  const todayRevenue = invoices
+    .flatMap(inv => inv.payments)
+    .filter(p => {
+      const pDate = parseISO(p.paymentDate);
+      return pDate >= today && pDate < tomorrow;
+    })
+    .reduce((sum, p) => sum + p.amount, 0);
+
+  const monthlyRevenue = invoices
+    .flatMap(inv => inv.payments)
+    .filter(p => {
+      const pDate = parseISO(p.paymentDate);
+      return pDate.getMonth() === today.getMonth() && pDate.getFullYear() === today.getFullYear();
+    })
+    .reduce((sum, p) => sum + p.amount, 0);
 
   return (
     <div className="space-y-6">
