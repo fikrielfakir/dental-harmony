@@ -1,4 +1,53 @@
 {
+  "clinical": {
+    "title": "Dossiers Cliniques",
+    "subtitle": "Gérez les antécédents, les notes et les plans de traitement",
+    "addNew": "Ajouter Note Clinique",
+    "searchPlaceholder": "Rechercher dossiers, procédures ou notes...",
+    "activeTreatments": "Traitements Actifs",
+    "completedThisMonth": "Terminés (Ce Mois)",
+    "pendingPlans": "Plans en Attente",
+    "recentActivity": "Activité Clinique Récente",
+    "recentActivityDesc": "Vue chronologique des traitements et notes récents.",
+    "advancedSearch": "Recherche Avancée",
+    "noRecords": "Aucun dossier trouvé",
+    "table": {
+      "recordId": "ID Dossier",
+      "patient": "Patient",
+      "procedure": "Procédure / Note",
+      "cost": "Coût",
+      "date": "Date",
+      "doctor": "Docteur",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "Ajouter une Note Clinique",
+      "description": "Créer un nouveau dossier clinique ou une note de traitement.",
+      "patient": "Patient",
+      "selectPatient": "Sélectionner un patient",
+      "procedure": "Procédure / Type de Note",
+      "procedurePlaceholder": "ex: Dévitalisation, Contrôle, Note de soin",
+      "doctor": "Docteur",
+      "doctorPlaceholder": "ex: Dr. Martin",
+      "cost": "Coût Estimé (€)",
+      "status": "Statut",
+      "selectStatus": "Sélectionner le statut",
+      "notes": "Notes Cliniques",
+      "notesPlaceholder": "Saisir les notes cliniques détaillées...",
+      "addRecord": "Ajouter Dossier"
+    },
+    "status": {
+      "scheduled": "Planifié",
+      "inProgress": "En Cours",
+      "completed": "Terminé"
+    },
+    "actions": {
+      "viewNote": "Voir la Note",
+      "markCompleted": "Marquer comme Terminé",
+      "deleteRecord": "Supprimer le Dossier"
+    }
+  },
   "nav": {
     "dashboard": "Tableau de bord",
     "patients": "Patients",

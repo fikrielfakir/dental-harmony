@@ -29,8 +29,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useStore } from "@/store";
+import { useTranslation } from "react-i18next";
 
 const ClinicalRecords = () => {
+  const { t } = useTranslation();
   const { patients, clinicalNotes, addClinicalNote, updateClinicalNote, deleteClinicalNote } = useStore();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -112,18 +114,27 @@ const ClinicalRecords = () => {
   const completedCount = clinicalNotes.filter((r: any) => r.status === "Completed").length;
   const scheduledCount = clinicalNotes.filter((r: any) => r.status === "Scheduled").length;
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "Scheduled": return t("clinical.status.scheduled");
+      case "In Progress": return t("clinical.status.inProgress");
+      case "Completed": return t("clinical.status.completed");
+      default: return status;
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Clinical Records</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("clinical.title")}</h1>
           <p className="text-muted-foreground">
-            Manage patient clinical history, notes, and treatment plans
+            {t("clinical.subtitle")}
           </p>
         </div>
         <Button className="flex items-center gap-2" onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="h-4 w-4" />
-          Add Clinical Note
+          {t("clinical.addNew")}
         </Button>
       </div>
 
@@ -132,7 +143,7 @@ const ClinicalRecords = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Activity className="h-4 w-4" />
-              Active Treatments
+              {t("clinical.activeTreatments")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -143,7 +154,7 @@ const ClinicalRecords = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <History className="h-4 w-4" />
-              Completed (This Month)
+              {t("clinical.completedThisMonth")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -154,7 +165,7 @@ const ClinicalRecords = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
               <FileText className="h-4 w-4" />
-              Pending Plans
+              {t("clinical.pendingPlans")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -167,39 +178,39 @@ const ClinicalRecords = () => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input 
-            placeholder="Search patient records, procedures, or notes..." 
+            placeholder={t("clinical.searchPlaceholder")}
             className="pl-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button variant="outline">Advanced Search</Button>
+        <Button variant="outline">{t("clinical.advancedSearch")}</Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Clinical Activity</CardTitle>
-          <CardDescription>A chronological view of recent patient treatments and notes.</CardDescription>
+          <CardTitle>{t("clinical.recentActivity")}</CardTitle>
+          <CardDescription>{t("clinical.recentActivityDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Record ID</TableHead>
-                <TableHead>Patient</TableHead>
-                <TableHead>Procedure / Note</TableHead>
-                <TableHead>Cost</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Doctor</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("clinical.table.recordId")}</TableHead>
+                <TableHead>{t("clinical.table.patient")}</TableHead>
+                <TableHead>{t("clinical.table.procedure")}</TableHead>
+                <TableHead>{t("clinical.table.cost")}</TableHead>
+                <TableHead>{t("clinical.table.date")}</TableHead>
+                <TableHead>{t("clinical.table.doctor")}</TableHead>
+                <TableHead>{t("clinical.table.status")}</TableHead>
+                <TableHead className="text-right">{t("clinical.table.actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredRecords.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                    No records found
+                  <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    {t("clinical.noRecords")}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -208,12 +219,12 @@ const ClinicalRecords = () => {
                     <TableCell className="font-mono text-xs">{record.id.slice(0, 8)}</TableCell>
                     <TableCell className="font-medium">{record.patientName}</TableCell>
                     <TableCell>{record.procedure}</TableCell>
-                    <TableCell className="font-medium">${(record.cost || 0).toLocaleString()}</TableCell>
+                    <TableCell className="font-medium">€{(record.cost || 0).toLocaleString()}</TableCell>
                     <TableCell>{new Date(record.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{record.doctor}</TableCell>
                     <TableCell>
                       <Badge variant={record.status === "Completed" ? "default" : record.status === "In Progress" ? "secondary" : "outline"}>
-                        {record.status}
+                        {getStatusLabel(record.status)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -225,13 +236,13 @@ const ClinicalRecords = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { notes: record.notes })}>
-                            View Note
+                            {t("clinical.actions.viewNote")}
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateClinicalNote(record.id, { status: 'Completed' })}>
-                            Mark as Completed
+                            {t("clinical.actions.markCompleted")}
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive" onClick={() => deleteClinicalNote(record.id)}>
-                            Delete Record
+                            {t("clinical.actions.deleteRecord")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -247,21 +258,21 @@ const ClinicalRecords = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={closeAddDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Add Clinical Note</DialogTitle>
+            <DialogTitle>{t("clinical.form.title")}</DialogTitle>
             <DialogDescription>
-              Create a new clinical record or treatment note.
+              {t("clinical.form.description")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="patient">Patient</Label>
+              <Label htmlFor="patient">{t("clinical.form.patient")}</Label>
               <Select
                 value={newRecord.patientId}
                 onValueChange={(value) => setNewRecord({ ...newRecord, patientId: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a patient" />
+                  <SelectValue placeholder={t("clinical.form.selectPatient")} />
                 </SelectTrigger>
                 <SelectContent>
                   {patients.map((patient) => (
@@ -274,27 +285,27 @@ const ClinicalRecords = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="procedure">Procedure / Note Type</Label>
+              <Label htmlFor="procedure">{t("clinical.form.procedure")}</Label>
               <Input
                 id="procedure"
-                placeholder="e.g., Root Canal, Check-up, Treatment Note"
+                placeholder={t("clinical.form.procedurePlaceholder")}
                 value={newRecord.procedure}
                 onChange={(e) => setNewRecord({ ...newRecord, procedure: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="doctor">Doctor</Label>
+              <Label htmlFor="doctor">{t("clinical.form.doctor")}</Label>
               <Input
                 id="doctor"
-                placeholder="e.g., Dr. Smith"
+                placeholder={t("clinical.form.doctorPlaceholder")}
                 value={newRecord.doctor}
                 onChange={(e) => setNewRecord({ ...newRecord, doctor: e.target.value })}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="cost">Estimated Cost ($)</Label>
+              <Label htmlFor="cost">{t("clinical.form.cost")}</Label>
               <Input
                 id="cost"
                 type="number"
@@ -305,27 +316,27 @@ const ClinicalRecords = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("clinical.form.status")}</Label>
               <Select
                 value={newRecord.status}
                 onValueChange={(value: "Scheduled" | "In Progress" | "Completed") => setNewRecord({ ...newRecord, status: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("clinical.form.selectStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Scheduled">Scheduled</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
+                  <SelectItem value="Scheduled">{t("clinical.status.scheduled")}</SelectItem>
+                  <SelectItem value="In Progress">{t("clinical.status.inProgress")}</SelectItem>
+                  <SelectItem value="Completed">{t("clinical.status.completed")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Clinical Notes</Label>
+              <Label htmlFor="notes">{t("clinical.form.notes")}</Label>
               <Textarea
                 id="notes"
-                placeholder="Enter detailed clinical notes..."
+                placeholder={t("clinical.form.notesPlaceholder")}
                 rows={4}
                 value={newRecord.notes}
                 onChange={(e) => setNewRecord({ ...newRecord, notes: e.target.value })}
@@ -335,13 +346,13 @@ const ClinicalRecords = () => {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={handleAddRecord}
               disabled={!newRecord.patientId || !newRecord.procedure || !newRecord.doctor}
             >
-              Add Record
+              {t("clinical.form.addRecord")}
             </Button>
           </DialogFooter>
         </DialogContent>
