@@ -421,10 +421,10 @@ const Patients = () => {
 
               <Tabs defaultValue="profile" className="flex-1 flex flex-col min-h-0">
                 <TabsList className="grid w-full grid-cols-4 sticky top-0 bg-background z-20 border-b shrink-0">
-                  <TabsTrigger value="profile">{t("patients.tabs.profile")}</TabsTrigger>
-                  <TabsTrigger value="appointments">{t("patients.tabs.appointments")}</TabsTrigger>
-                  <TabsTrigger value="notes">{t("patients.tabs.notes")}</TabsTrigger>
-                  <TabsTrigger value="chart">{t("patients.tabs.dentalChart")}</TabsTrigger>
+                  <TabsTrigger value="profile">{t("patients.patientDetails.tabs.profile")}</TabsTrigger>
+                  <TabsTrigger value="appointments">{t("patients.patientDetails.tabs.appointments")}</TabsTrigger>
+                  <TabsTrigger value="notes">{t("patients.patientDetails.tabs.notes")}</TabsTrigger>
+                  <TabsTrigger value="chart">{t("patients.patientDetails.tabs.chart")}</TabsTrigger>
                 </TabsList>
 
                 <ScrollArea className="flex-1 min-h-0 px-1">
