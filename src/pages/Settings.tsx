@@ -82,31 +82,41 @@ const Settings = () => {
   };
 
   const handleCreateBackup = async () => {
-    if (!window.electronAPI) {
-      toast({
-        title: "Error",
-        description: "Backup functionality is only available in the desktop app",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsBackingUp(true);
     try {
-      const result = await window.electronAPI.backupDatabase();
-      if (result.success) {
-        toast({
-          title: "Backup Created",
-          description: result.message || "Database backup created successfully",
-        });
-        await loadBackups();
-      } else {
-        toast({
-          title: "Backup Failed",
-          description: result.message || "Failed to create backup",
-          variant: "destructive"
-        });
+      if (window.electronAPI) {
+        const result = await window.electronAPI.backupDatabase();
+        if (result.success) {
+          toast({
+            title: "Backup Created",
+            description: result.message || "Database backup created successfully",
+          });
+          await loadBackups();
+          return;
+        }
       }
+
+      // Fallback for web environment or if electron fails
+      const data = {
+        settings,
+        timestamp: new Date().toISOString(),
+        version: "1.0.0"
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `dentalcare-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Backup Downloaded",
+        description: "Your settings backup has been downloaded to your computer.",
+      });
+
     } catch (error: any) {
       toast({
         title: "Backup Failed",
