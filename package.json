@@ -1,7 +1,10 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "dentalcare-practice-management",
+  "productName": "DentalCare Practice Management",
+  "description": "Complete dental practice management system with patient records, appointments, billing, and more",
+  "version": "1.0.0",
+  "author": "Your Name",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -10,6 +13,9 @@
     "dev:electron": "vite & sleep 5 && electron .",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:electron": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:portable": "npm run build && electron-builder --win portable",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
@@ -50,7 +56,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
-    "electron": "^40.1.0",
     "electron-is-dev": "^3.0.1",
     "embla-carousel-react": "^8.6.0",
     "i18next": "^25.8.0",
@@ -83,6 +88,8 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
+    "electron": "^40.1.0",
+    "electron-builder": "^26.7.0",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -95,5 +102,41 @@
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",
     "vitest": "^3.2.4"
+  },
+  "build": {
+    "appId": "com.dentalcare.practice",
+    "productName": "DentalCare Practice Management",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "public/favicon.ico",
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DentalCare"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
   }
 }

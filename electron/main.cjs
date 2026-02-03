@@ -83,3 +83,21 @@ ipcMain.handle('add-patient', (event, patient) => {
   `);
   return stmt.run(patient);
 });
+
+// App lifecycle
+app.on('ready', () => {
+  initDb();
+  createWindow();
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
