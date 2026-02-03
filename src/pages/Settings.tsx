@@ -208,37 +208,64 @@ const Settings = () => {
   };
 
   const handleImportDatabase = async () => {
-    if (!window.electronAPI) {
-      toast({
-        title: "Feature Unavailable",
-        description: "Database import is only available in the desktop application.",
-        variant: "destructive"
-      });
-      return;
-    }
+    // Create hidden file input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.db,.json';
+    
+    input.onchange = async (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-    try {
-      const result = await window.electronAPI.importDatabase();
-      if (result.success) {
-        toast({
-          title: "Database Imported",
-          description: result.message,
-        });
-        await loadBackups();
-      } else if (!result.message.includes('cancelled')) {
+      try {
+        if (file.name.endsWith('.db')) {
+          if (!window.electronAPI) {
+            toast({
+              title: "SQLite Import Limited",
+              description: "Direct .db import is only fully supported in the desktop app. Please use the desktop version for full database restoration.",
+              variant: "destructive"
+            });
+            return;
+          }
+          const result = await window.electronAPI.importDatabase();
+          if (result.success) {
+            toast({ title: "Database Imported", description: result.message });
+            await loadBackups();
+          }
+        } else if (file.name.endsWith('.json')) {
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            try {
+              const content = JSON.parse(event.target?.result as string);
+              if (content.settings) {
+                updateSettings(content.settings);
+                toast({
+                  title: "Settings Imported",
+                  description: "Your settings have been restored from the backup file.",
+                });
+              } else {
+                throw new Error("Invalid backup file format");
+              }
+            } catch (err) {
+              toast({
+                title: "Import Failed",
+                description: "The file format is invalid.",
+                variant: "destructive"
+              });
+            }
+          };
+          reader.readAsText(file);
+        }
+      } catch (error: any) {
         toast({
           title: "Import Failed",
-          description: result.message,
+          description: error.message,
           variant: "destructive"
         });
       }
-    } catch (error: any) {
-      toast({
-        title: "Import Failed",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
+    };
+    
+    input.click();
   };
 
 
@@ -518,14 +545,14 @@ const Settings = () => {
 
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
-                  <h3 className="font-medium">Import Database</h3>
+                  <h3 className="font-medium">Import Backup</h3>
                   <p className="text-sm text-muted-foreground">
-                    Import an existing database file (.db)
+                    Import an existing database (.db) or settings (.json) backup file
                   </p>
                 </div>
                 <Button onClick={handleImportDatabase} variant="outline" className="gap-2">
                   <Upload className="h-4 w-4" />
-                  Import Database
+                  Import Backup
                 </Button>
               </div>
 
