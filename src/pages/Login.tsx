@@ -40,8 +40,8 @@ export default function Login() {
       <Card className="w-full max-w-md mica-card shadow-xl">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
-              <Stethoscope className="h-8 w-8" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 shadow-sm overflow-hidden border border-primary/20">
+              <img src="/assets/logo.png" alt="DentalCare Logo" className="h-full w-full object-cover p-2" />
             </div>
           </div>
           <div>

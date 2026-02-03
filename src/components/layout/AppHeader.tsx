@@ -46,8 +46,8 @@ export function AppHeader() {
     <header className="flex items-center justify-between h-14 px-4 mica border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-2 pr-4 border-r border-border/50">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm">
-            <Stethoscope className="h-5 w-5" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 shadow-sm overflow-hidden border border-primary/20">
+            <img src="/assets/logo.png" alt="DentalCare Logo" className="h-full w-full object-cover p-1" />
           </div>
           <span className="font-bold text-base leading-none hidden md:block">DentalCare</span>
         </div>
