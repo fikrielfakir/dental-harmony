@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Building2, Clock, Banknote, Bell, Shield, Save, Globe } from "lucide-react";
+import { Building2, Clock, Banknote, Bell, Shield, Save, Globe, Database, Download, Upload, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { Language } from "@/types";
 import { useStore } from "@/store";
 import { useToast } from "@/hooks/use-toast";
@@ -17,10 +19,18 @@ const Settings = () => {
   const { settings, updateSettings } = useStore();
   const { toast } = useToast();
   const [localSettings, setLocalSettings] = useState(settings);
+  const [backups, setBackups] = useState<any[]>([]);
+  const [isBackingUp, setIsBackingUp] = useState(false);
+  const [isLoadingBackups, setIsLoadingBackups] = useState(false);
 
   useEffect(() => {
     setLocalSettings(settings);
   }, [settings]);
+
+  useEffect(() => {
+    loadBackups();
+  }, []);
+
 
   useEffect(() => {
     i18n.changeLanguage(settings.language);
@@ -54,6 +64,140 @@ const Settings = () => {
     return t(`days.${dayKey}`);
   };
 
+  // Backup handlers
+  const loadBackups = async () => {
+    if (!window.electronAPI) return;
+    
+    setIsLoadingBackups(true);
+    try {
+      const result = await window.electronAPI.listBackups();
+      if (result.success) {
+        setBackups(result.backups);
+      }
+    } catch (error) {
+      console.error('Failed to load backups:', error);
+    } finally {
+      setIsLoadingBackups(false);
+    }
+  };
+
+  const handleCreateBackup = async () => {
+    if (!window.electronAPI) {
+      toast({
+        title: "Error",
+        description: "Backup functionality is only available in the desktop app",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsBackingUp(true);
+    try {
+      const result = await window.electronAPI.backupDatabase();
+      if (result.success) {
+        toast({
+          title: "Backup Created",
+          description: result.message || "Database backup created successfully",
+        });
+        await loadBackups();
+      } else {
+        toast({
+          title: "Backup Failed",
+          description: result.message || "Failed to create backup",
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Backup Failed",
+        description: error.message || "An error occurred while creating backup",
+        variant: "destructive"
+      });
+    } finally {
+      setIsBackingUp(false);
+    }
+  };
+
+  const handleRestoreBackup = async (backupPath: string) => {
+    if (!window.electronAPI) return;
+
+    try {
+      const result = await window.electronAPI.restoreBackup(backupPath);
+      if (result.success) {
+        toast({
+          title: "Backup Restored",
+          description: result.message,
+        });
+      } else {
+        toast({
+          title: "Restore Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Restore Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteBackup = async (backupName: string) => {
+    if (!window.electronAPI) return;
+
+    try {
+      const result = await window.electronAPI.deleteBackup(backupName);
+      if (result.success) {
+        toast({
+          title: "Backup Deleted",
+          description: result.message,
+        });
+        await loadBackups();
+      } else {
+        toast({
+          title: "Delete Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Delete Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleExportBackup = async (backupPath: string) => {
+    if (!window.electronAPI) return;
+
+    try {
+      const result = await window.electronAPI.exportBackup(backupPath);
+      if (result.success) {
+        toast({
+          title: "Backup Exported",
+          description: result.message,
+        });
+      } else if (!result.message.includes('cancelled')) {
+        toast({
+          title: "Export Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Export Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -75,6 +219,7 @@ const Settings = () => {
           <TabsTrigger value="billing">{t('settings.tabs.pricingBilling')}</TabsTrigger>
           <TabsTrigger value="notifications">{t('settings.tabs.notifications')}</TabsTrigger>
           <TabsTrigger value="language">{t('settings.tabs.language')}</TabsTrigger>
+          <TabsTrigger value="backup">Database Backup</TabsTrigger>
           <TabsTrigger value="security">{t('settings.tabs.security')}</TabsTrigger>
         </TabsList>
 
@@ -304,7 +449,148 @@ const Settings = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="security">
+        <TabsContent value="backup">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Database className="h-5 w-5" />
+                Database Backup
+              </CardTitle>
+              <CardDescription>Create and manage database backups for data security</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div>
+                  <h3 className="font-medium">Create Backup</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Manually create a backup of your database
+                  </p>
+                </div>
+                <Button onClick={handleCreateBackup} disabled={isBackingUp} className="gap-2">
+                  <Download className="h-4 w-4" />
+                  {isBackingUp ? 'Creating...' : 'Create Backup'}
+                </Button>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-medium">Backup History</h3>
+                  <Button variant="outline" size="sm" onClick={loadBackups} disabled={isLoadingBackups}>
+                    {isLoadingBackups ? 'Loading...' : 'Refresh'}
+                  </Button>
+                </div>
+
+                {backups.length > 0 ? (
+                  <div className="border rounded-lg">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date & Time</TableHead>
+                          <TableHead>File Size</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {backups.map((backup) => (
+                          <TableRow key={backup.name}>
+                            <TableCell className="font-medium">
+                              {new Date(backup.date).toLocaleString()}
+                            </TableCell>
+                            <TableCell>{backup.formattedSize}</TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm" className="gap-1">
+                                      <Upload className="h-3 w-3" />
+                                      Restore
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Restore Database?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This will replace your current database with this backup. 
+                                        A safety backup will be created automatically. 
+                                        You'll need to restart the app after restore.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => handleRestoreBackup(backup.path)}>
+                                        Restore
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  className="gap-1"
+                                  onClick={() => handleExportBackup(backup.path)}
+                                >
+                                  <Download className="h-3 w-3" />
+                                  Export
+                                </Button>
+
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm" className="gap-1 text-destructive">
+                                      <Trash2 className="h-3 w-3" />
+                                      Delete
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Delete Backup?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete this backup file.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction 
+                                        onClick={() => handleDeleteBackup(backup.name)}
+                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                      >
+                                        Delete
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border rounded-lg bg-muted/30">
+                    <Database className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">No backups found</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Create your first backup to get started
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 border rounded-lg bg-muted/30">
+                <h4 className="font-medium mb-2">📌 Important Notes</h4>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Backups are stored in your app data folder</li>
+                  <li>• The system automatically keeps the last 10 backups</li>
+                  <li>• Use "Export" to save backups to a custom location</li>
+                  <li>• A safety backup is created before any restore operation</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="security">\
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
