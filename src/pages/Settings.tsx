@@ -97,8 +97,18 @@ const Settings = () => {
       }
 
       // Fallback for web environment or if electron fails
+      const state = useStore.getState();
       const data = {
-        settings,
+        patients: state.patients,
+        appointments: state.appointments,
+        staff: state.staff,
+        clinicalNotes: state.clinicalNotes,
+        invoices: state.invoices,
+        prescriptions: state.prescriptions,
+        quotations: state.quotations,
+        services: state.services,
+        dentalChart: state.dentalChart,
+        settings: state.settings,
         timestamp: new Date().toISOString(),
         version: "1.0.0"
       };
@@ -237,7 +247,29 @@ const Settings = () => {
           reader.onload = async (event) => {
             try {
               const content = JSON.parse(event.target?.result as string);
-              if (content.settings) {
+              
+              // Handle full database export (patients, appointments, etc.)
+              if (content.patients || content.appointments || content.staff || content.clinicalNotes) {
+                useStore.setState({
+                  patients: content.patients || [],
+                  appointments: content.appointments || [],
+                  staff: content.staff || [],
+                  clinicalNotes: content.clinicalNotes || [],
+                  invoices: content.invoices || [],
+                  prescriptions: content.prescriptions || [],
+                  quotations: content.quotations || [],
+                  services: content.services || [],
+                  dentalChart: content.dentalChart || [],
+                  settings: content.settings || useStore.getState().settings,
+                });
+                
+                toast({
+                  title: "Data Restored",
+                  description: "All application data has been successfully restored.",
+                });
+              } 
+              // Handle settings-only export
+              else if (content.settings) {
                 updateSettings(content.settings);
                 toast({
                   title: "Settings Imported",
