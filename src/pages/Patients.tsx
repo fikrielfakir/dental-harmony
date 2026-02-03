@@ -52,7 +52,7 @@ import { DeleteConfirmationDialog } from "@/components/modals/DeleteConfirmation
 const Patients = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { patients, addPatient, updatePatient, deletePatient, dentalChart } = useStore();
+  const { patients, appointments, addPatient, updatePatient, deletePatient, dentalChart } = useStore();
 
   const getLatestTreatment = (patientId: string) => {
     const patientEntries = dentalChart.filter(e => e.patientId === patientId);
