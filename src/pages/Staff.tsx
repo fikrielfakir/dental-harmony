@@ -71,7 +71,7 @@ const Staff = () => {
                           <Avatar className="h-12 w-12">
                             <AvatarFallback
                               style={{ backgroundColor: member.color }}
-                              className="text-white font-medium"
+                              className="text-white font-medium drop-shadow-sm"
                             >
                               {member.firstName.charAt(0)}
                               {member.lastName.charAt(0)}

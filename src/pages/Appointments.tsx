@@ -339,7 +339,7 @@ const Appointments = () => {
                             isCompleted && "ring-emerald-500/20"
                           )}>
                             <AvatarFallback 
-                              className="text-[10px] font-extrabold text-white"
+                              className="text-[10px] font-extrabold text-white drop-shadow-sm"
                               style={{ backgroundColor: isCompleted ? completedColor : practitioner?.color }}
                             >
                               {practitioner?.firstName.charAt(0)}{practitioner?.lastName.charAt(0)}

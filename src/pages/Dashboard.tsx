@@ -131,7 +131,7 @@ const Dashboard = () => {
                         <Avatar className="h-10 w-10">
                           <AvatarFallback
                             style={{ backgroundColor: member.color }}
-                            className="text-white"
+                            className="text-white drop-shadow-sm"
                           >
                             {member.firstName.charAt(0)}
                             {member.lastName.charAt(0)}
