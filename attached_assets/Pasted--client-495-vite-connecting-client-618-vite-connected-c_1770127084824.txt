@@ -1,0 +1,95 @@
+﻿
+client:495 [vite] connecting...
+client:618 [vite] connected.
+chunk-T2SWDQEL.js?v=54d3aa06:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+react-router-dom.js?v=54d3aa06:4393 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+react-router-dom.js?v=54d3aa06:4393 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+Patients.tsx:502 Warning: React has detected a change in the order of Hooks called by Patients. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useMemo                    useMemo
+3. useMemo                    useMemo
+4. useRef                     useRef
+5. useCallback                useCallback
+6. useRef                     useRef
+7. useCallback                useCallback
+8. useState                   useState
+9. useSyncExternalStore       useSyncExternalStore
+10. useEffect                 useEffect
+11. useRef                    useRef
+12. useRef                    useRef
+13. useMemo                   useMemo
+14. useContext                useContext
+15. useContext                useContext
+16. useContext                useContext
+17. useContext                useContext
+18. useContext                useContext
+19. useContext                useContext
+20. useContext                useContext
+21. useRef                    useRef
+22. useContext                useContext
+23. useLayoutEffect           useLayoutEffect
+24. useCallback               useCallback
+25. useCallback               useCallback
+26. useCallback               useCallback
+27. useSyncExternalStore      useSyncExternalStore
+28. useDebugValue             useDebugValue
+29. useState                  useState
+30. useState                  useState
+31. useState                  useState
+32. useState                  useState
+33. useState                  useState
+34. useState                  useState
+35. useState                  useState
+36. useState                  useState
+37. useState                  useState
+38. useState                  useState
+39. undefined                 useCallback
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    at Patients (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/src/pages/Patients.tsx:43:19)
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Outlet (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4494:26)
+    at div
+    at main
+    at div
+    at MainLayout
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Routes (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4558:5)
+    at Router (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4501:15)
+    at BrowserRouter (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:5247:5)
+    at Provider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=54d3aa06:38:15)
+    at TooltipProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=54d3aa06:65:5)
+    at QueryClientProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=54d3aa06:2934:3)
+    at App
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at Patients.tsx:502:52
+    at Patients (Patients.tsx:502:52)
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at Patients.tsx:502:52
+    at Patients (Patients.tsx:502:52)
+chunk-T2SWDQEL.js?v=54d3aa06:14032 The above error occurred in the <Patients> component:
+
+    at Patients (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/src/pages/Patients.tsx:43:19)
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Outlet (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4494:26)
+    at div
+    at main
+    at div
+    at MainLayout
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Routes (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4558:5)
+    at Router (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4501:15)
+    at BrowserRouter (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:5247:5)
+    at Provider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=54d3aa06:38:15)
+    at TooltipProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=54d3aa06:65:5)
+    at QueryClientProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=54d3aa06:2934:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at Patients.tsx:502:52
+    at Patients (Patients.tsx:502:52)

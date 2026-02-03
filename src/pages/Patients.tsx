@@ -499,7 +499,6 @@ const Patients = () => {
                     <TabsContent value="appointments" className="m-0 focus-visible:outline-none">
                       <div className="space-y-4 py-2">
                         {(() => {
-                          const { appointments } = useStore();
                           const patientAppointments = appointments
                             .filter(a => a.patientId === selectedPatient.id)
                             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
