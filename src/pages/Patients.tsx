@@ -529,10 +529,10 @@ const Patients = () => {
                                   <div className="flex items-center gap-4">
                                     <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-slate-50 border border-slate-100">
                                       <span className="text-[10px] font-bold uppercase text-slate-400">
-                                        {format(parseISO(app.date), "MMM")}
+                                        {app.date ? format(parseISO(app.date), "MMM") : "---"}
                                       </span>
                                       <span className="text-lg font-bold text-slate-700 leading-none">
-                                        {format(parseISO(app.date), "dd")}
+                                        {app.date ? format(parseISO(app.date), "dd") : "--"}
                                       </span>
                                     </div>
                                     <div>
