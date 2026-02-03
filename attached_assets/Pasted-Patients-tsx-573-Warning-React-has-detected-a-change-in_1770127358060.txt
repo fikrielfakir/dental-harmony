@@ -1,0 +1,208 @@
+Patients.tsx:573 Warning: React has detected a change in the order of Hooks called by Patients. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useMemo                    useMemo
+3. useMemo                    useMemo
+4. useRef                     useRef
+5. useCallback                useCallback
+6. useRef                     useRef
+7. useCallback                useCallback
+8. useState                   useState
+9. useSyncExternalStore       useSyncExternalStore
+10. useEffect                 useEffect
+11. useRef                    useRef
+12. useRef                    useRef
+13. useMemo                   useMemo
+14. useContext                useContext
+15. useContext                useContext
+16. useContext                useContext
+17. useContext                useContext
+18. useContext                useContext
+19. useContext                useContext
+20. useContext                useContext
+21. useRef                    useRef
+22. useContext                useContext
+23. useLayoutEffect           useLayoutEffect
+24. useCallback               useCallback
+25. useCallback               useCallback
+26. useCallback               useCallback
+27. useSyncExternalStore      useSyncExternalStore
+28. useDebugValue             useDebugValue
+29. useState                  useState
+30. useState                  useState
+31. useState                  useState
+32. useState                  useState
+33. useState                  useState
+34. useState                  useState
+35. useState                  useState
+36. useState                  useState
+37. useState                  useState
+38. useState                  useState
+39. undefined                 useCallback
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    at Patients (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/src/pages/Patients.tsx:43:19)
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Outlet (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4494:26)
+    at div
+    at main
+    at div
+    at MainLayout
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Routes (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4558:5)
+    at Router (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4501:15)
+    at BrowserRouter (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:5247:5)
+    at Provider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=54d3aa06:38:15)
+    at TooltipProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=54d3aa06:65:5)
+    at QueryClientProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=54d3aa06:2934:3)
+    at App
+printWarning @ chunk-T2SWDQEL.js?v=54d3aa06:521
+error @ chunk-T2SWDQEL.js?v=54d3aa06:505
+warnOnHookMismatchInDev @ chunk-T2SWDQEL.js?v=54d3aa06:11495
+updateHookTypesDev @ chunk-T2SWDQEL.js?v=54d3aa06:11465
+useCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12692
+useCallback @ chunk-QCHXOAYK.js?v=54d3aa06:1090
+useStore @ zustand.js?v=54d3aa06:38
+useBoundStore @ zustand.js?v=54d3aa06:46
+(anonymous) @ Patients.tsx:573
+Patients @ Patients.tsx:573
+renderWithHooks @ chunk-T2SWDQEL.js?v=54d3aa06:11548
+updateFunctionComponent @ chunk-T2SWDQEL.js?v=54d3aa06:14582
+beginWork @ chunk-T2SWDQEL.js?v=54d3aa06:15924
+beginWork$1 @ chunk-T2SWDQEL.js?v=54d3aa06:19753
+performUnitOfWork @ chunk-T2SWDQEL.js?v=54d3aa06:19198
+workLoopSync @ chunk-T2SWDQEL.js?v=54d3aa06:19137
+renderRootSync @ chunk-T2SWDQEL.js?v=54d3aa06:19116
+performSyncWorkOnRoot @ chunk-T2SWDQEL.js?v=54d3aa06:18874
+flushSyncCallbacks @ chunk-T2SWDQEL.js?v=54d3aa06:9119
+(anonymous) @ chunk-T2SWDQEL.js?v=54d3aa06:18627
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at updateWorkInProgressHook (chunk-T2SWDQEL.js?v=54d3aa06:11678:21)
+    at updateCallback (chunk-T2SWDQEL.js?v=54d3aa06:12177:22)
+    at Object.useCallback (chunk-T2SWDQEL.js?v=54d3aa06:12693:22)
+    at Object.useCallback (chunk-QCHXOAYK.js?v=54d3aa06:1090:29)
+    at useStore (zustand.js?v=54d3aa06:38:26)
+    at useBoundStore (zustand.js?v=54d3aa06:46:39)
+    at Patients.tsx:573:51
+    at Patients (Patients.tsx:573:51)
+    at renderWithHooks (chunk-T2SWDQEL.js?v=54d3aa06:11548:26)
+    at updateFunctionComponent (chunk-T2SWDQEL.js?v=54d3aa06:14582:28)
+updateWorkInProgressHook @ chunk-T2SWDQEL.js?v=54d3aa06:11678
+updateCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12177
+useCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12693
+useCallback @ chunk-QCHXOAYK.js?v=54d3aa06:1090
+useStore @ zustand.js?v=54d3aa06:38
+useBoundStore @ zustand.js?v=54d3aa06:46
+(anonymous) @ Patients.tsx:573
+Patients @ Patients.tsx:573
+renderWithHooks @ chunk-T2SWDQEL.js?v=54d3aa06:11548
+updateFunctionComponent @ chunk-T2SWDQEL.js?v=54d3aa06:14582
+beginWork @ chunk-T2SWDQEL.js?v=54d3aa06:15924
+callCallback2 @ chunk-T2SWDQEL.js?v=54d3aa06:3674
+invokeGuardedCallbackDev @ chunk-T2SWDQEL.js?v=54d3aa06:3699
+invokeGuardedCallback @ chunk-T2SWDQEL.js?v=54d3aa06:3733
+beginWork$1 @ chunk-T2SWDQEL.js?v=54d3aa06:19765
+performUnitOfWork @ chunk-T2SWDQEL.js?v=54d3aa06:19198
+workLoopSync @ chunk-T2SWDQEL.js?v=54d3aa06:19137
+renderRootSync @ chunk-T2SWDQEL.js?v=54d3aa06:19116
+performSyncWorkOnRoot @ chunk-T2SWDQEL.js?v=54d3aa06:18874
+flushSyncCallbacks @ chunk-T2SWDQEL.js?v=54d3aa06:9119
+(anonymous) @ chunk-T2SWDQEL.js?v=54d3aa06:18627
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at updateWorkInProgressHook (chunk-T2SWDQEL.js?v=54d3aa06:11678:21)
+    at updateCallback (chunk-T2SWDQEL.js?v=54d3aa06:12177:22)
+    at Object.useCallback (chunk-T2SWDQEL.js?v=54d3aa06:12693:22)
+    at Object.useCallback (chunk-QCHXOAYK.js?v=54d3aa06:1090:29)
+    at useStore (zustand.js?v=54d3aa06:38:26)
+    at useBoundStore (zustand.js?v=54d3aa06:46:39)
+    at Patients.tsx:573:51
+    at Patients (Patients.tsx:573:51)
+    at renderWithHooks (chunk-T2SWDQEL.js?v=54d3aa06:11548:26)
+    at updateFunctionComponent (chunk-T2SWDQEL.js?v=54d3aa06:14582:28)
+updateWorkInProgressHook @ chunk-T2SWDQEL.js?v=54d3aa06:11678
+updateCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12177
+useCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12693
+useCallback @ chunk-QCHXOAYK.js?v=54d3aa06:1090
+useStore @ zustand.js?v=54d3aa06:38
+useBoundStore @ zustand.js?v=54d3aa06:46
+(anonymous) @ Patients.tsx:573
+Patients @ Patients.tsx:573
+renderWithHooks @ chunk-T2SWDQEL.js?v=54d3aa06:11548
+updateFunctionComponent @ chunk-T2SWDQEL.js?v=54d3aa06:14582
+beginWork @ chunk-T2SWDQEL.js?v=54d3aa06:15924
+callCallback2 @ chunk-T2SWDQEL.js?v=54d3aa06:3674
+invokeGuardedCallbackDev @ chunk-T2SWDQEL.js?v=54d3aa06:3699
+invokeGuardedCallback @ chunk-T2SWDQEL.js?v=54d3aa06:3733
+beginWork$1 @ chunk-T2SWDQEL.js?v=54d3aa06:19765
+performUnitOfWork @ chunk-T2SWDQEL.js?v=54d3aa06:19198
+workLoopSync @ chunk-T2SWDQEL.js?v=54d3aa06:19137
+renderRootSync @ chunk-T2SWDQEL.js?v=54d3aa06:19116
+recoverFromConcurrentError @ chunk-T2SWDQEL.js?v=54d3aa06:18736
+performSyncWorkOnRoot @ chunk-T2SWDQEL.js?v=54d3aa06:18879
+flushSyncCallbacks @ chunk-T2SWDQEL.js?v=54d3aa06:9119
+(anonymous) @ chunk-T2SWDQEL.js?v=54d3aa06:18627
+chunk-T2SWDQEL.js?v=54d3aa06:14032 The above error occurred in the <Patients> component:
+
+    at Patients (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/src/pages/Patients.tsx:43:19)
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Outlet (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4494:26)
+    at div
+    at main
+    at div
+    at MainLayout
+    at RenderedRoute (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4088:5)
+    at Routes (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4558:5)
+    at Router (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:4501:15)
+    at BrowserRouter (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=54d3aa06:5247:5)
+    at Provider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=54d3aa06:38:15)
+    at TooltipProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=54d3aa06:65:5)
+    at QueryClientProvider (https://ac5eb8c9-c82a-4005-9998-50d6d656758c-00-2gcxjtwh3seu9.riker.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=54d3aa06:2934:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-T2SWDQEL.js?v=54d3aa06:14032
+update.callback @ chunk-T2SWDQEL.js?v=54d3aa06:14052
+callCallback @ chunk-T2SWDQEL.js?v=54d3aa06:11248
+commitUpdateQueue @ chunk-T2SWDQEL.js?v=54d3aa06:11265
+commitLayoutEffectOnFiber @ chunk-T2SWDQEL.js?v=54d3aa06:17093
+commitLayoutMountEffects_complete @ chunk-T2SWDQEL.js?v=54d3aa06:17980
+commitLayoutEffects_begin @ chunk-T2SWDQEL.js?v=54d3aa06:17969
+commitLayoutEffects @ chunk-T2SWDQEL.js?v=54d3aa06:17920
+commitRootImpl @ chunk-T2SWDQEL.js?v=54d3aa06:19353
+commitRoot @ chunk-T2SWDQEL.js?v=54d3aa06:19277
+performSyncWorkOnRoot @ chunk-T2SWDQEL.js?v=54d3aa06:18895
+flushSyncCallbacks @ chunk-T2SWDQEL.js?v=54d3aa06:9119
+(anonymous) @ chunk-T2SWDQEL.js?v=54d3aa06:18627
+chunk-T2SWDQEL.js?v=54d3aa06:11678 Uncaught Error: Rendered more hooks than during the previous render.
+    at updateWorkInProgressHook (chunk-T2SWDQEL.js?v=54d3aa06:11678:21)
+    at updateCallback (chunk-T2SWDQEL.js?v=54d3aa06:12177:22)
+    at Object.useCallback (chunk-T2SWDQEL.js?v=54d3aa06:12693:22)
+    at Object.useCallback (chunk-QCHXOAYK.js?v=54d3aa06:1090:29)
+    at useStore (zustand.js?v=54d3aa06:38:26)
+    at useBoundStore (zustand.js?v=54d3aa06:46:39)
+    at Patients.tsx:573:51
+    at Patients (Patients.tsx:573:51)
+    at renderWithHooks (chunk-T2SWDQEL.js?v=54d3aa06:11548:26)
+    at updateFunctionComponent (chunk-T2SWDQEL.js?v=54d3aa06:14582:28)
+updateWorkInProgressHook @ chunk-T2SWDQEL.js?v=54d3aa06:11678
+updateCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12177
+useCallback @ chunk-T2SWDQEL.js?v=54d3aa06:12693
+useCallback @ chunk-QCHXOAYK.js?v=54d3aa06:1090
+useStore @ zustand.js?v=54d3aa06:38
+useBoundStore @ zustand.js?v=54d3aa06:46
+(anonymous) @ Patients.tsx:573
+Patients @ Patients.tsx:573
+renderWithHooks @ chunk-T2SWDQEL.js?v=54d3aa06:11548
+updateFunctionComponent @ chunk-T2SWDQEL.js?v=54d3aa06:14582
+beginWork @ chunk-T2SWDQEL.js?v=54d3aa06:15924
+beginWork$1 @ chunk-T2SWDQEL.js?v=54d3aa06:19753
+performUnitOfWork @ chunk-T2SWDQEL.js?v=54d3aa06:19198
+workLoopSync @ chunk-T2SWDQEL.js?v=54d3aa06:19137
+renderRootSync @ chunk-T2SWDQEL.js?v=54d3aa06:19116
+recoverFromConcurrentError @ chunk-T2SWDQEL.js?v=54d3aa06:18736
+performSyncWorkOnRoot @ chunk-T2SWDQEL.js?v=54d3aa06:18879
+flushSyncCallbacks @ chunk-T2SWDQEL.js?v=54d3aa06:9119
+(anonymous) @ chunk-T2SWDQEL.js?v=54d3aa06:18627

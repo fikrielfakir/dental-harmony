@@ -570,7 +570,6 @@ const Patients = () => {
                     <TabsContent value="notes" className="m-0 focus-visible:outline-none">
                       <div className="space-y-4 py-2">
                         {(() => {
-                          const { dentalChart } = useStore();
                           const procedureNotes = dentalChart
                             .filter(e => e.patientId === selectedPatient?.id && e.notes)
                             .sort((a, b) => {
