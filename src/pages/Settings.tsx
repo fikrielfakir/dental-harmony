@@ -208,7 +208,14 @@ const Settings = () => {
   };
 
   const handleImportDatabase = async () => {
-    if (!window.electronAPI) return;
+    if (!window.electronAPI) {
+      toast({
+        title: "Feature Unavailable",
+        description: "Database import is only available in the desktop application.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     try {
       const result = await window.electronAPI.importDatabase();

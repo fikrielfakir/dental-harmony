@@ -284,17 +284,30 @@ ipcMain.handle('import-database', async () => {
     const importPath = result.filePaths[0];
     const dbPath = getDbPath();
 
+    console.log('Importing database from:', importPath);
+    console.log('Target database path:', dbPath);
+
     // Create a safety backup before importing
-    const safetyBackupPath = path.join(getBackupDir(), `database-before-import-${Date.now()}.db`);
+    const backupDir = getBackupDir();
+    const safetyBackupPath = path.join(backupDir, `database-before-import-${Date.now()}.db`);
+    
     if (db) {
+      console.log('Closing current database connection');
       db.close();
+      db = null;
     }
-    fs.copyFileSync(dbPath, safetyBackupPath);
+
+    if (fs.existsSync(dbPath)) {
+      console.log('Creating safety backup at:', safetyBackupPath);
+      fs.copyFileSync(dbPath, safetyBackupPath);
+    }
 
     // Copy imported file to database path
+    console.log('Copying imported file to target path');
     fs.copyFileSync(importPath, dbPath);
 
     // Reopen database
+    console.log('Reopening database');
     db = new Database(dbPath, { verbose: console.log });
 
     return {
