@@ -86,6 +86,7 @@ interface AppState {
   // Actions - UI
   toggleSidebar: () => void;
   setCurrentUser: (user: Staff | null) => void;
+  logout: () => void;
 }
 
 export const useStore = create<AppState>()(
@@ -346,6 +347,8 @@ export const useStore = create<AppState>()(
         set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
       setCurrentUser: (user) =>
         set({ currentUser: user }),
+      logout: () =>
+        set({ currentUser: null }),
     }),
     {
       name: 'dental-practice-storage',

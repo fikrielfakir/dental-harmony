@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "@/store";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const navigationItems = [
@@ -30,11 +30,17 @@ const navigationItems = [
 
 export function AppHeader() {
   const { t } = useTranslation();
-  const { currentUser } = useStore();
+  const navigate = useNavigate();
+  const { currentUser, logout } = useStore();
   
   const initials = currentUser
     ? `${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}`
     : "U";
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <header className="flex items-center justify-between h-14 px-4 mica border-b border-border sticky top-0 z-50 shadow-sm">
@@ -124,7 +130,7 @@ export function AppHeader() {
               Profile
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>
