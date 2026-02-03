@@ -9,6 +9,7 @@ declare global {
       restoreBackup: (backupPath: string) => Promise<{success: boolean; message: string}>;
       deleteBackup: (backupName: string) => Promise<{success: boolean; message: string}>;
       exportBackup: (backupPath: string) => Promise<{success: boolean; message: string; exportPath?: string}>;
+      importDatabase: () => Promise<{success: boolean; message: string}>;
     };
   }
 }
