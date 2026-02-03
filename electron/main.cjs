@@ -266,6 +266,51 @@ ipcMain.handle('export-backup', async (event, backupPath) => {
 });
 
 
+ipcMain.handle('import-database', async () => {
+  try {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Import Database',
+      filters: [
+        { name: 'Database Files', extensions: ['db'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile']
+    });
+
+    if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
+      return { success: false, message: 'Import cancelled' };
+    }
+
+    const importPath = result.filePaths[0];
+    const dbPath = getDbPath();
+
+    // Create a safety backup before importing
+    const safetyBackupPath = path.join(getBackupDir(), `database-before-import-${Date.now()}.db`);
+    if (db) {
+      db.close();
+    }
+    fs.copyFileSync(dbPath, safetyBackupPath);
+
+    // Copy imported file to database path
+    fs.copyFileSync(importPath, dbPath);
+
+    // Reopen database
+    db = new Database(dbPath, { verbose: console.log });
+
+    return {
+      success: true,
+      message: 'Database imported successfully. Please restart the application.'
+    };
+  } catch (error) {
+    console.error('Import error:', error);
+    if (!db) {
+      const dbPath = getDbPath();
+      db = new Database(dbPath, { verbose: console.log });
+    }
+    return { success: false, message: `Import failed: ${error.message}` };
+  }
+});
+
 // App lifecycle
 app.on('ready', () => {
   initDb();

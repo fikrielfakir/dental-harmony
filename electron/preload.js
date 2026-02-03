@@ -9,5 +9,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listBackups: () => ipcRenderer.invoke('list-backups'),
   restoreBackup: (backupPath) => ipcRenderer.invoke('restore-backup', backupPath),
   deleteBackup: (backupName) => ipcRenderer.invoke('delete-backup', backupName),
-  exportBackup: (backupPath) => ipcRenderer.invoke('export-backup', backupPath)
+  exportBackup: (backupPath) => ipcRenderer.invoke('export-backup', backupPath),
+  importDatabase: () => ipcRenderer.invoke('import-database')
 });

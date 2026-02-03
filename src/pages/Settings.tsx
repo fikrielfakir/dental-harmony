@@ -207,6 +207,33 @@ const Settings = () => {
     }
   };
 
+  const handleImportDatabase = async () => {
+    if (!window.electronAPI) return;
+
+    try {
+      const result = await window.electronAPI.importDatabase();
+      if (result.success) {
+        toast({
+          title: "Database Imported",
+          description: result.message,
+        });
+        await loadBackups();
+      } else if (!result.message.includes('cancelled')) {
+        toast({
+          title: "Import Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Import Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
 
   return (
     <div className="space-y-6">
@@ -479,6 +506,19 @@ const Settings = () => {
                 <Button onClick={handleCreateBackup} disabled={isBackingUp} className="gap-2">
                   <Download className="h-4 w-4" />
                   {isBackingUp ? 'Creating...' : 'Create Backup'}
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 border rounded-lg">
+                <div>
+                  <h3 className="font-medium">Import Database</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Import an existing database file (.db)
+                  </p>
+                </div>
+                <Button onClick={handleImportDatabase} variant="outline" className="gap-2">
+                  <Upload className="h-4 w-4" />
+                  Import Database
                 </Button>
               </div>
 
