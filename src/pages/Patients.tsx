@@ -500,8 +500,12 @@ const Patients = () => {
                       <div className="space-y-4 py-2">
                         {(() => {
                           const patientAppointments = appointments
-                            .filter(a => a.patientId === selectedPatient.id)
-                            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                            .filter(a => a.patientId === selectedPatient?.id)
+                            .sort((a, b) => {
+                              const dateA = a.date ? new Date(a.date).getTime() : 0;
+                              const dateB = b.date ? new Date(b.date).getTime() : 0;
+                              return dateB - dateA;
+                            });
                           
                           if (patientAppointments.length === 0) {
                             return (
@@ -529,18 +533,18 @@ const Patients = () => {
                                   <div className="flex items-center gap-4">
                                     <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-slate-50 border border-slate-100">
                                       <span className="text-[10px] font-bold uppercase text-slate-400">
-                                        {app.date ? format(parseISO(app.date), "MMM") : "---"}
+                                        {app.startTime ? format(parseISO(app.startTime), "MMM") : "---"}
                                       </span>
                                       <span className="text-lg font-bold text-slate-700 leading-none">
-                                        {app.date ? format(parseISO(app.date), "dd") : "--"}
+                                        {app.startTime ? format(parseISO(app.startTime), "dd") : "--"}
                                       </span>
                                     </div>
                                     <div>
-                                      <p className="font-bold text-sm text-slate-900">{app.type}</p>
+                                      <p className="font-bold text-sm text-slate-900">{app.type || t("appointments.status.scheduled")}</p>
                                       <div className="flex items-center gap-2 mt-0.5">
-                                        <span className="text-xs text-slate-500 font-medium">{app.time}</span>
+                                        <span className="text-xs text-slate-500 font-medium">{app.startTime ? format(parseISO(app.startTime), "HH:mm") : "--:--"}</span>
                                         <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                        <span className="text-xs text-slate-500 font-medium">{app.practitioner}</span>
+                                        <span className="text-xs text-slate-500 font-medium">{(app.dentist as any)?.name || t("common.unassigned")}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -568,8 +572,12 @@ const Patients = () => {
                         {(() => {
                           const { dentalChart } = useStore();
                           const procedureNotes = dentalChart
-                            .filter(e => e.patientId === selectedPatient.id && e.notes)
-                            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                            .filter(e => e.patientId === selectedPatient?.id && e.notes)
+                            .sort((a, b) => {
+                              const dateA = a.date ? new Date(a.date).getTime() : 0;
+                              const dateB = b.date ? new Date(b.date).getTime() : 0;
+                              return dateB - dateA;
+                            });
                           
                           if (procedureNotes.length === 0) {
                             return (
@@ -598,23 +606,23 @@ const Patients = () => {
                                     </time>
                                   </div>
                                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                    <p className="text-xs text-slate-600 leading-relaxed italic">
-                                      "{note.notes}"
-                                    </p>
+                                      <p className="text-xs text-slate-600 leading-relaxed italic">
+                                        "{note.notes}"
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </TabsContent>
+                                ))}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </TabsContent>
 
-                    <TabsContent value="chart" className="m-0 focus-visible:outline-none">
-                      <Odontogram patientId={selectedPatient.id} />
-                    </TabsContent>
-                  </div>
-                </ScrollArea>
+                      <TabsContent value="chart" className="m-0 focus-visible:outline-none">
+                        {selectedPatient && <Odontogram patientId={selectedPatient.id} />}
+                      </TabsContent>
+                    </div>
+                  </ScrollArea>
               </Tabs>
 
               <DialogFooter className="p-4 pt-2 border-t bg-muted/5 shadow-[0_-1px_0_rgba(0,0,0,0.05)]">
